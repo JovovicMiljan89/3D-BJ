@@ -7,29 +7,104 @@
   <meta name="theme-color" content="#070b14" />
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="{{meta.description}}" />
+  <link rel="canonical" href="{{seo.canonicalUrl}}" />
+
+  <!-- Open Graph / Twitter [#11] -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="{{brand.name}}" />
+  <meta property="og:title" content="{{meta.title}}" />
+  <meta property="og:description" content="{{meta.description}}" />
+  <meta property="og:url" content="{{seo.canonicalUrl}}" />
+  <meta property="og:image" content="{{seo.ogImageAbsolute}}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="sr_RS" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{meta.title}}" />
+  <meta name="twitter:description" content="{{meta.description}}" />
+  <meta name="twitter:image" content="{{seo.ogImageAbsolute}}" />
+
   <link rel="icon" href="{{brand.favicon}}" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="{{brand.touchIcon}}" />
   <link rel="stylesheet" href="/css/styles.css" />
+
+  <!-- LocalBusiness structured data [#11] — computed by scripts/build.mjs, not admin-editable, safe to render raw -->
+  <script type="application/ld+json">{{{seo.jsonLd}}}</script>
 </head>
 <body>
+
+  <a class="skip-link" href="#top">Preskoči na sadržaj</a>
+
+  <!-- Service icon sprite [#6] -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="icon-gear" viewBox="0 0 24 24">
+      <polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <polyline points="4,7.5 12,12 20,7.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.6" />
+    </symbol>
+    <symbol id="icon-wrench" viewBox="0 0 24 24">
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" />
+    </symbol>
+    <symbol id="icon-gift" viewBox="0 0 24 24">
+      <rect x="4" y="10" width="16" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1.6" />
+      <line x1="4" y1="14" x2="20" y2="14" stroke="currentColor" stroke-width="1.6" />
+      <line x1="12" y1="10" x2="12" y2="20" stroke="currentColor" stroke-width="1.6" />
+      <path d="M12 10c-1.5-3-5-3.5-5-1s3 1 5 1Zm0 0c1.5-3 5-3.5 5-1s-3 1-5 1Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-layers" viewBox="0 0 24 24">
+      <polygon points="12,3 21,8 12,13 3,8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <polyline points="3,13 12,18 21,13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" />
+      <polyline points="3,17.3 12,22 21,17.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" opacity=".6" />
+    </symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+      <path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+      <path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-scan" viewBox="0 0 24 24">
+      <path d="M4 8V5a1 1 0 0 1 1-1h3M20 8V5a1 1 0 0 0-1-1h-3M4 16v3a1 1 0 0 0 1 1h3M20 16v3a1 1 0 0 1-1 1h-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.6" />
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 20 20">
+      <circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.3" />
+      <path d="M6 10.3l2.4 2.4L14 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-call" viewBox="0 0 24 24">
+      <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.9c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-viber" viewBox="0 0 24 24">
+      <path d="M12 4c4.4 0 8 3.1 8 7 0 3.5-2.9 6.4-6.8 6.9-.6.1-1.2.1-1.8 0l-3 2v-2.7C6.3 16 4 13.3 4 10c0-3.8 3.6-7 8-7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+      <path d="M8.6 9c0 2.6 1.9 4.4 4.4 4.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+    </symbol>
+    <symbol id="icon-message" viewBox="0 0 24 24">
+      <path d="M4 5h16v11H8l-4 4V5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+    </symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4" />
+      <path d="M6 15H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1" fill="none" stroke="currentColor" stroke-width="1.4" />
+    </symbol>
+  </svg>
 
   <!-- ===== Header ===== -->
   <header class="header">
     <div class="container header__inner">
       <a href="#top" class="logo">
-        <img src="{{brand.logo}}" alt="{{brand.name}}" height="40" />
+        <img src="{{brand.logo}}" alt="{{brand.name}}" height="40" width="157" />
       </a>
-      <nav class="nav">
-        <a href="#services">{{nav.servicesLabel}}</a>
-        <a href="#workshop">{{nav.workshopLabel}}</a>
-        <a href="#gallery">{{nav.galleryLabel}}</a>
-        <a href="#how">{{nav.howLabel}}</a>
-        <button class="btn btn--small" data-open-contact>{{nav.contactLabel}}</button>
+      <button type="button" class="hamburger" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Otvori meni">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" id="siteNav">
+        <a href="#usluge">{{nav.servicesLabel}}</a>
+        <a href="#galerija">{{nav.galleryLabel}}</a>
+        {{#if prices.visible}}<a href="#cene">{{nav.pricesLabel}}</a>{{/if}}
+        <a href="#radionica">{{nav.workshopLabel}}</a>
+        <a href="#pitanja">{{nav.faqLabel}}</a>
+        <a href="#kontakt">{{nav.contactLabel}}</a>
       </nav>
     </div>
   </header>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
 
     <!-- ===== Hero ===== -->
     <section class="hero">
@@ -39,22 +114,28 @@
           <h1>{{hero.headline}}</h1>
           <p class="lead">{{hero.lead}}</p>
           <div class="hero__actions">
-            <button class="btn" data-open-contact>{{hero.primaryButton}}</button>
-            <a href="#workshop" class="btn btn--ghost">{{hero.secondaryButton}}</a>
+            <button class="btn" data-focus-form>{{hero.primaryButton}}</button>
+            <a href="#radionica" class="btn btn--ghost">{{hero.secondaryButton}}</a>
           </div>
+          <!-- Trust row [#5] -->
+          <ul class="trust">
+            {{#each trust}}
+            <li><svg class="trust__icon" aria-hidden="true"><use href="#icon-check"></use></svg><span>{{this}}</span></li>
+            {{/each}}
+          </ul>
         </div>
-        <img class="hero__img" src="{{hero.image}}" alt="{{hero.imageAlt}}" />
+        <img class="hero__img" src="{{hero.image}}" alt="{{hero.imageAlt}}" width="{{hero.imageWidth}}" height="{{hero.imageHeight}}" fetchpriority="high" />
       </div>
     </section>
 
     <!-- ===== Services ===== -->
-    <section id="services" class="section">
+    <section id="usluge" class="section">
       <div class="container">
         <h2>{{servicesSection.heading}}</h2>
         <div class="cards">
           {{#each services}}
           <article class="card">
-            <div class="card__icon">{{icon}}</div>
+            <svg class="card__icon" aria-hidden="true"><use href="#icon-{{icon}}"></use></svg>
             <h3>{{title}}</h3>
             <p>{{text}}</p>
           </article>
@@ -63,22 +144,72 @@
       </div>
     </section>
 
+    <!-- ===== Gallery ===== -->
+    <section id="galerija" class="section section--alt">
+      <div class="container">
+        <h2>{{gallerySection.heading}}</h2>
+        <p class="muted">{{gallerySection.subheading}}</p>
+        <div class="gallery">
+          {{#each gallery}}
+          <figure class="gallery__item" tabindex="0" role="button" aria-label="Uvećaj: {{caption}}">
+            <img src="{{image}}" alt="{{alt}}" width="{{width}}" height="{{height}}" loading="lazy" />
+            <figcaption>{{caption}}</figcaption>
+          </figure>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section id="kako-radi" class="section">
+      <div class="container">
+        <h2>{{howSection.heading}}</h2>
+        <ol class="steps">
+          {{#each steps}}
+          <li><span>{{@index1}}</span><strong>{{title}}</strong> {{text}}</li>
+          {{/each}}
+        </ol>
+        <div class="center">
+          <button class="btn" data-focus-form>{{howSection.buttonLabel}}</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Prices [#7] — build.mjs hides this whole section unless at least one card has a real price ===== -->
+    {{#if prices.visible}}
+    <section id="cene" class="section section--alt">
+      <div class="container">
+        <h2>{{prices.heading}}</h2>
+        <p class="muted">{{prices.note}}</p>
+        <div class="prices">
+          {{#each prices.visibleItems}}
+          <article class="price-card{{#if featured}} featured{{/if}}">
+            <h3>{{title}}</h3>
+            <p class="price-card__hint">{{hint}}</p>
+            <p class="price-card__from">od <strong>{{from}}</strong> din</p>
+            <button class="btn btn--full" data-focus-form>Pošalji upit</button>
+          </article>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+    {{/if}}
 
     <!-- ===== Workshop / Equipment ===== -->
-    <section id="workshop" class="section section--alt">
+    <section id="radionica" class="section">
       <div class="container">
         <h2>{{workshop.heading}}</h2>
         <p class="muted">{{workshop.subheading}}</p>
 
         <figure class="workshop-hero">
-          <img src="{{workshop.photo}}" alt="{{workshop.photoAlt}}" />
+          <img src="{{workshop.photo}}" alt="{{workshop.photoAlt}}" width="{{workshop.photoWidth}}" height="{{workshop.photoHeight}}" loading="lazy" />
           <figcaption>{{workshop.photoCaption}}</figcaption>
         </figure>
 
         <div class="equipment">
           {{#each workshop.equipment}}
           <article class="equip">
-            <img src="{{image}}" alt="{{imageAlt}}" />
+            <img src="{{image}}" alt="{{imageAlt}}" width="{{width}}" height="{{height}}" loading="lazy" />
             <div class="equip__body">
               <span class="tag">{{tag}}</span>
               <h3>{{title}}</h3>
@@ -97,118 +228,192 @@
           <div><strong>{{value}}</strong><span>{{label}}</span></div>
           {{/each}}
         </div>
-        <p class="muted small">{{workshop.footnote}}</p>
 
         <!-- Meet the maker -->
         <div class="maker">
-          <img class="maker__avatar" src="{{maker.avatar}}" alt="" width="72" height="72" />
+          <img class="maker__avatar" src="{{maker.avatarResolved}}" alt="" width="72" height="72" loading="lazy" />
           <div>
             <span class="tag">{{maker.roleTag}}</span>
             <h3>{{maker.name}}</h3>
             <p class="muted">{{maker.bio}}</p>
           </div>
-          <button class="btn" data-open-contact>{{maker.buttonLabel}}</button>
+          <button class="btn" data-focus-form>{{maker.buttonLabel}}</button>
         </div>
 
       </div>
     </section>
 
-    <!-- ===== Gallery ===== -->
-    <section id="gallery" class="section">
+    <!-- ===== FAQ [#8] ===== -->
+    <section id="pitanja" class="section section--alt">
       <div class="container">
-        <h2>{{gallerySection.heading}}</h2>
-        <p class="muted">{{gallerySection.subheading}}</p>
-        <div class="gallery">
-          {{#each gallery}}
-          <figure class="gallery__item">
-            <img src="{{image}}" alt="{{alt}}" />
-            <figcaption>{{caption}}</figcaption>
-          </figure>
+        <h2>{{faqSection.heading}}</h2>
+        <div class="faq">
+          {{#each faq}}
+          <details class="faq__item"{{#if isFirst}} open{{/if}}>
+            <summary>{{q}}</summary>
+            <p>{{a}}</p>
+          </details>
           {{/each}}
         </div>
       </div>
     </section>
 
-    <!-- ===== How it works ===== -->
-    <section id="how" class="section section--alt">
+    <!-- ===== Contact [#3] — replaces the old modal ===== -->
+    <section id="kontakt" class="section">
       <div class="container">
-        <h2>{{howSection.heading}}</h2>
-        <ol class="steps">
-          {{#each steps}}
-          <li><span>{{@index1}}</span><strong>{{title}}</strong> {{text}}</li>
-          {{/each}}
-        </ol>
-        <div class="center">
-          <button class="btn" data-open-contact>{{howSection.buttonLabel}}</button>
+        <h2>{{contact.sectionHeading}}</h2>
+        <p class="muted">{{contact.sectionSubheading}}</p>
+
+        <div class="contact-grid">
+          <div class="contact-channels">
+            {{#if contact.phoneTel}}
+            <a class="channel" href="tel:{{contact.phoneTel}}">
+              <svg class="channel__icon" aria-hidden="true"><use href="#icon-call"></use></svg>
+              <span><small>{{contact.channelLabels.phone}}</small><br />{{contact.phoneDisplay}}</span>
+            </a>
+            {{/if}}
+            {{#if contact.viber}}
+            <a class="channel" href="viber://chat?number=%2B{{contact.viber}}">
+              <svg class="channel__icon" aria-hidden="true"><use href="#icon-viber"></use></svg>
+              <span><small>{{contact.channelLabels.viber}}</small><br />{{contact.viber}}</span>
+            </a>
+            {{/if}}
+            {{#if contact.whatsapp}}
+            <a class="channel" href="https://wa.me/{{contact.whatsapp}}">
+              <svg class="channel__icon" aria-hidden="true"><use href="#icon-message"></use></svg>
+              <span><small>{{contact.channelLabels.whatsapp}}</small><br />{{contact.whatsapp}}</span>
+            </a>
+            {{/if}}
+            {{#if contact.email}}
+            <div class="channel channel--email">
+              <a href="mailto:{{contact.email}}">
+                <svg class="channel__icon" aria-hidden="true"><use href="#icon-message"></use></svg>
+                <span><small>{{contact.channelLabels.email}}</small><br />{{contact.email}}</span>
+              </a>
+              <button type="button" class="copy-btn" data-copy-text="{{contact.email}}" data-copied-label="{{contact.channelLabels.copiedLabel}}" aria-label="Kopiraj email adresu">
+                <svg aria-hidden="true"><use href="#icon-copy"></use></svg>
+                <span>{{contact.channelLabels.copyButton}}</span>
+              </button>
+            </div>
+            {{/if}}
+            {{#if contact.instagram}}
+            <a class="channel" href="{{contact.instagram}}" target="_blank" rel="noopener">
+              <span><small>{{contact.channelLabels.instagram}}</small><br />Instagram</span>
+            </a>
+            {{/if}}
+            {{#if contact.city}}
+            <p class="channel-meta">{{contact.channelLabels.city}}: {{contact.city}}</p>
+            {{/if}}
+
+            {{#if contact.hours}}
+            <div class="hours">
+              <h3>{{contact.channelLabels.hoursHeading}}</h3>
+              <ul>
+                {{#each contact.hours}}
+                <li><span>{{days}}</span><span>{{time}}</span></li>
+                {{/each}}
+              </ul>
+            </div>
+            {{/if}}
+          </div>
+
+          <form id="inquiryForm" class="form" data-sending-label="{{contact.sendingLabel}}" novalidate>
+            <input type="hidden" name="access_key" value="{{contact.web3formsKey}}" />
+            <input type="checkbox" name="botcheck" class="botcheck-field" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <div class="form__row">
+              <label for="f-name">{{contact.fieldLabels.name}}
+                <input type="text" id="f-name" name="name" placeholder="{{contact.namePlaceholder}}" autocomplete="name" required />
+              </label>
+              <label for="f-email">{{contact.fieldLabels.email}}
+                <input type="email" id="f-email" name="email" placeholder="{{contact.emailPlaceholder}}" autocomplete="email" required />
+              </label>
+            </div>
+            <div class="form__row">
+              <label for="f-material">{{contact.fieldLabels.material}}
+                <select id="f-material" name="material" autocomplete="off">
+                  {{#each contact.materialOptions}}
+                  <option>{{this}}</option>
+                  {{/each}}
+                </select>
+              </label>
+              <label for="f-service">{{contact.fieldLabels.service}}
+                <select id="f-service" name="service" autocomplete="off">
+                  {{#each contact.serviceOptions}}
+                  <option>{{this}}</option>
+                  {{/each}}
+                </select>
+              </label>
+            </div>
+            <label for="f-file-link">{{contact.fieldLabels.fileLink}}
+              <input type="url" id="f-file-link" name="file_link" placeholder="{{contact.fileLinkPlaceholder}}" autocomplete="off" />
+            </label>
+            <label for="f-message">{{contact.fieldLabels.message}}
+              <textarea id="f-message" name="message" rows="3" placeholder="{{contact.messagePlaceholder}}" required></textarea>
+            </label>
+            <p class="form__error" id="formError" hidden>{{contact.errorMessage}}</p>
+            <p class="form__error" id="formNetworkError" hidden>{{contact.networkErrorMessage}}</p>
+            <button type="submit" class="btn btn--full" id="submitBtn">{{contact.submitLabel}}</button>
+          </form>
         </div>
+        <p class="form__success" id="formSuccess" hidden>{{contact.successMessage}}</p>
       </div>
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer [#10] ===== -->
   <footer class="footer">
-    <div class="container footer__inner">
-      <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}} — {{footer.text}}</p>
-      <p>
-        <a href="tel:{{contact.phoneTel}}">{{contact.phoneDisplay}}</a> ·
-        <a href="mailto:{{contact.email}}">{{contact.email}}</a>
-      </p>
+    <div class="container footer__grid">
+      <div class="footer__col">
+        <img src="{{brand.logo}}" alt="{{brand.name}}" height="32" width="126" loading="lazy" />
+        <p class="muted">{{footer.tagline}}</p>
+      </div>
+      <div class="footer__col">
+        <h3>{{footer.kontaktHeading}}</h3>
+        {{#if contact.phoneTel}}<a href="tel:{{contact.phoneTel}}">{{contact.phoneDisplay}}</a>{{/if}}
+        {{#if contact.email}}<a href="mailto:{{contact.email}}">{{contact.email}}</a>{{/if}}
+        {{#if contact.city}}<span class="muted">{{contact.city}}</span>{{/if}}
+      </div>
+      <div class="footer__col">
+        <h3>{{footer.hoursHeading}}</h3>
+        <ul class="footer__hours">
+          {{#each contact.hours}}
+          <li><span>{{days}}</span><span>{{time}}</span></li>
+          {{/each}}
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h3>{{footer.socialHeading}}</h3>
+        {{#if contact.instagram}}<a href="{{contact.instagram}}" target="_blank" rel="noopener">Instagram</a>{{/if}}
+        {{#if contact.facebook}}<a href="{{contact.facebook}}" target="_blank" rel="noopener">Facebook</a>{{/if}}
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}} — {{footer.rightsText}}{{#if contact.pib}} · {{footer.pibLabel}}: {{contact.pib}}{{/if}}</p>
     </div>
   </footer>
 
-  <!-- ===== Contact modal ===== -->
-  <div class="modal" id="contactModal" aria-hidden="true">
-    <div class="modal__backdrop" data-close-modal></div>
-    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
-      <button class="modal__close" aria-label="Close" data-close-modal>&times;</button>
-      <h2 id="contactTitle">{{contact.modalTitle}}</h2>
-      <p class="muted">{{contact.modalSubtitle}}</p>
+  <!-- ===== Gallery lightbox (built by js/main.js) ===== -->
 
-      <div class="contact-options">
-        <a class="contact-option" href="tel:{{contact.phoneTel}}">
-          <span class="contact-option__icon">📞</span>
-          <span><small>{{contact.phoneTileLabel}}</small><br />{{contact.phoneDisplay}}</span>
-        </a>
-        <a class="contact-option" href="mailto:{{contact.email}}?subject=3D%20print%20inquiry">
-          <span class="contact-option__icon">✉️</span>
-          <span><small>{{contact.emailTileLabel}}</small><br />{{contact.email}}</span>
-        </a>
-      </div>
-
-      <form id="inquiryForm" class="form" data-sending-label="{{contact.sendingLabel}}" novalidate>
-        <input type="hidden" name="access_key" value="{{contact.web3formsKey}}" />
-        <input type="checkbox" name="botcheck" class="botcheck-field" style="display:none" tabindex="-1" autocomplete="off" />
-
-        <label>{{contact.fieldLabels.name}}
-          <input type="text" name="name" placeholder="{{contact.namePlaceholder}}" required />
-        </label>
-        <label>{{contact.fieldLabels.email}}
-          <input type="email" name="email" placeholder="{{contact.emailPlaceholder}}" required />
-        </label>
-        <label>{{contact.fieldLabels.material}}
-          <select name="material">
-            {{#each contact.materialOptions}}
-            <option>{{this}}</option>
-            {{/each}}
-          </select>
-        </label>
-        <label>{{contact.fieldLabels.service}}
-          <select name="service">
-            {{#each contact.serviceOptions}}
-            <option>{{this}}</option>
-            {{/each}}
-          </select>
-        </label>
-        <label>{{contact.fieldLabels.message}}
-          <textarea name="message" rows="3" placeholder="{{contact.messagePlaceholder}}" required></textarea>
-        </label>
-        <p class="form__error" id="formError" hidden>{{contact.errorMessage}}</p>
-        <p class="form__error" id="formNetworkError" hidden>{{contact.networkErrorMessage}}</p>
-        <button type="submit" class="btn btn--full" id="submitBtn">{{contact.submitLabel}}</button>
-      </form>
-      <p class="form__success" id="formSuccess" hidden>{{contact.successMessage}}</p>
-    </div>
-  </div>
+  <!-- ===== Mobile bottom bar [#2] ===== -->
+  <nav class="bottombar" aria-label="Brzi kontakt">
+    {{#if contact.phoneTel}}
+    <a class="bottombar__item" href="tel:{{contact.phoneTel}}">
+      <svg aria-hidden="true"><use href="#icon-call"></use></svg>
+      <span>{{bottomBar.callLabel}}</span>
+    </a>
+    {{/if}}
+    {{#if contact.viber}}
+    <a class="bottombar__item" href="viber://chat?number=%2B{{contact.viber}}">
+      <svg aria-hidden="true"><use href="#icon-viber"></use></svg>
+      <span>{{bottomBar.viberLabel}}</span>
+    </a>
+    {{/if}}
+    <button type="button" class="bottombar__item" data-focus-form>
+      <svg aria-hidden="true"><use href="#icon-message"></use></svg>
+      <span>{{bottomBar.inquiryLabel}}</span>
+    </button>
+  </nav>
 
   <script src="/js/main.js"></script>
 </body>
