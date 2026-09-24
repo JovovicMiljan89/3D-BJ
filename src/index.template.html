@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="{{meta.lang}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{meta.title}}</title>
+  <meta name="theme-color" content="#070b14" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="{{meta.description}}" />
+  <link rel="icon" href="{{brand.favicon}}" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="{{brand.touchIcon}}" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#top" class="logo">
+        <img src="{{brand.logo}}" alt="{{brand.name}}" height="40" />
+      </a>
+      <nav class="nav">
+        <a href="#services">{{nav.servicesLabel}}</a>
+        <a href="#workshop">{{nav.workshopLabel}}</a>
+        <a href="#gallery">{{nav.galleryLabel}}</a>
+        <a href="#how">{{nav.howLabel}}</a>
+        <button class="btn btn--small" data-open-contact>{{nav.contactLabel}}</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="eyebrow">{{hero.eyebrow}}</p>
+          <h1>{{hero.headline}}</h1>
+          <p class="lead">{{hero.lead}}</p>
+          <div class="hero__actions">
+            <button class="btn" data-open-contact>{{hero.primaryButton}}</button>
+            <a href="#workshop" class="btn btn--ghost">{{hero.secondaryButton}}</a>
+          </div>
+        </div>
+        <img class="hero__img" src="{{hero.image}}" alt="{{hero.imageAlt}}" />
+      </div>
+    </section>
+
+    <!-- ===== Services ===== -->
+    <section id="services" class="section">
+      <div class="container">
+        <h2>{{servicesSection.heading}}</h2>
+        <div class="cards">
+          {{#each services}}
+          <article class="card">
+            <div class="card__icon">{{icon}}</div>
+            <h3>{{title}}</h3>
+            <p>{{text}}</p>
+          </article>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== Workshop / Equipment ===== -->
+    <section id="workshop" class="section section--alt">
+      <div class="container">
+        <h2>{{workshop.heading}}</h2>
+        <p class="muted">{{workshop.subheading}}</p>
+
+        <figure class="workshop-hero">
+          <img src="{{workshop.photo}}" alt="{{workshop.photoAlt}}" />
+          <figcaption>{{workshop.photoCaption}}</figcaption>
+        </figure>
+
+        <div class="equipment">
+          {{#each workshop.equipment}}
+          <article class="equip">
+            <img src="{{image}}" alt="{{imageAlt}}" />
+            <div class="equip__body">
+              <span class="tag">{{tag}}</span>
+              <h3>{{title}}</h3>
+              <ul class="specs">
+                {{#each specs}}
+                <li><span>{{label}}</span><strong>{{value}}</strong></li>
+                {{/each}}
+              </ul>
+            </div>
+          </article>
+          {{/each}}
+        </div>
+
+        <div class="stats">
+          {{#each workshop.stats}}
+          <div><strong>{{value}}</strong><span>{{label}}</span></div>
+          {{/each}}
+        </div>
+        <p class="muted small">{{workshop.footnote}}</p>
+
+        <!-- Meet the maker -->
+        <div class="maker">
+          <img class="maker__avatar" src="{{maker.avatar}}" alt="" width="72" height="72" />
+          <div>
+            <span class="tag">{{maker.roleTag}}</span>
+            <h3>{{maker.name}}</h3>
+            <p class="muted">{{maker.bio}}</p>
+          </div>
+          <button class="btn" data-open-contact>{{maker.buttonLabel}}</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== Gallery ===== -->
+    <section id="gallery" class="section">
+      <div class="container">
+        <h2>{{gallerySection.heading}}</h2>
+        <p class="muted">{{gallerySection.subheading}}</p>
+        <div class="gallery">
+          {{#each gallery}}
+          <figure class="gallery__item">
+            <img src="{{image}}" alt="{{alt}}" />
+            <figcaption>{{caption}}</figcaption>
+          </figure>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section id="how" class="section section--alt">
+      <div class="container">
+        <h2>{{howSection.heading}}</h2>
+        <ol class="steps">
+          {{#each steps}}
+          <li><span>{{@index1}}</span><strong>{{title}}</strong> {{text}}</li>
+          {{/each}}
+        </ol>
+        <div class="center">
+          <button class="btn" data-open-contact>{{howSection.buttonLabel}}</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}} — {{footer.text}}</p>
+      <p>
+        <a href="tel:{{contact.phoneTel}}">{{contact.phoneDisplay}}</a> ·
+        <a href="mailto:{{contact.email}}">{{contact.email}}</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ===== Contact modal ===== -->
+  <div class="modal" id="contactModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+      <button class="modal__close" aria-label="Close" data-close-modal>&times;</button>
+      <h2 id="contactTitle">{{contact.modalTitle}}</h2>
+      <p class="muted">{{contact.modalSubtitle}}</p>
+
+      <div class="contact-options">
+        <a class="contact-option" href="tel:{{contact.phoneTel}}">
+          <span class="contact-option__icon">📞</span>
+          <span><small>{{contact.phoneTileLabel}}</small><br />{{contact.phoneDisplay}}</span>
+        </a>
+        <a class="contact-option" href="mailto:{{contact.email}}?subject=3D%20print%20inquiry">
+          <span class="contact-option__icon">✉️</span>
+          <span><small>{{contact.emailTileLabel}}</small><br />{{contact.email}}</span>
+        </a>
+      </div>
+
+      <form id="inquiryForm" class="form" data-sending-label="{{contact.sendingLabel}}" novalidate>
+        <input type="hidden" name="access_key" value="{{contact.web3formsKey}}" />
+        <input type="checkbox" name="botcheck" class="botcheck-field" style="display:none" tabindex="-1" autocomplete="off" />
+
+        <label>{{contact.fieldLabels.name}}
+          <input type="text" name="name" placeholder="{{contact.namePlaceholder}}" required />
+        </label>
+        <label>{{contact.fieldLabels.email}}
+          <input type="email" name="email" placeholder="{{contact.emailPlaceholder}}" required />
+        </label>
+        <label>{{contact.fieldLabels.material}}
+          <select name="material">
+            {{#each contact.materialOptions}}
+            <option>{{this}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{contact.fieldLabels.service}}
+          <select name="service">
+            {{#each contact.serviceOptions}}
+            <option>{{this}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label>{{contact.fieldLabels.message}}
+          <textarea name="message" rows="3" placeholder="{{contact.messagePlaceholder}}" required></textarea>
+        </label>
+        <p class="form__error" id="formError" hidden>{{contact.errorMessage}}</p>
+        <p class="form__error" id="formNetworkError" hidden>{{contact.networkErrorMessage}}</p>
+        <button type="submit" class="btn btn--full" id="submitBtn">{{contact.submitLabel}}</button>
+      </form>
+      <p class="form__success" id="formSuccess" hidden>{{contact.successMessage}}</p>
+    </div>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
