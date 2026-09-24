@@ -4,10 +4,6 @@
     "description": "Usluga 3D štampe, skeniranja i modelovanja — prototipovi, rezervni delovi, pokloni i dekoracija.",
     "lang": "sr"
   },
-  "seo": {
-    "siteUrl": "https://3d-bj.printmodel.workers.dev/",
-    "ogImage": "/assets/og/og-image.png"
-  },
   "brand": {
     "name": "3D-BJ",
     "logo": "/assets/logo/3d-bj-wordmark.svg",
@@ -19,9 +15,7 @@
   "nav": {
     "servicesLabel": "Usluge",
     "galleryLabel": "Galerija",
-    "pricesLabel": "Cene",
     "workshopLabel": "Radionica",
-    "faqLabel": "Česta pitanja",
     "contactLabel": "Kontakt"
   },
   "hero": {
@@ -33,11 +27,6 @@
     "image": "/assets/images/hero-printer.svg",
     "imageAlt": "Ilustracija 3D štampača koji štampa predmet"
   },
-  "trust": [
-    "Direktna komunikacija sa Bojanom, bez posrednika",
-    "Besplatna konsultacija pre izrade — bez obaveze",
-    "Odgovor na upit u kratkom roku"
-  ],
   "servicesSection": {
     "heading": "Šta štampamo"
   },
@@ -121,30 +110,6 @@
       "text": "Dostava ili lično preuzimanje."
     }
   ],
-  "prices": {
-    "heading": "Cene",
-    "note": "Konačna cena zavisi od veličine, materijala i količine — pošaljite upit za tačnu ponudu.",
-    "items": [
-      {
-        "title": "Mali radovi",
-        "hint": "Sitni pokloni, figurice, rezervni delovi manjih dimenzija",
-        "from": 0,
-        "featured": false
-      },
-      {
-        "title": "Standardna izrada",
-        "hint": "Prototipovi, kućišta i funkcionalni delovi",
-        "from": 0,
-        "featured": true
-      },
-      {
-        "title": "Skeniranje + štampa",
-        "hint": "Kompletna usluga, od 3D skena do gotovog dela",
-        "from": 0,
-        "featured": false
-      }
-    ]
-  },
   "workshop": {
     "heading": "Naša radionica",
     "subheading": "Oprema i mogućnosti kojima raspolažemo.",
@@ -249,79 +214,22 @@
     "roleTag": "Vlasnik · Operater štampe",
     "bio": "Svaki posao prolazi kroz moje ruke — od skeniranja i modelovanja do sečenja, štampe i finalne kontrole kvaliteta. Jedna osoba odgovorna, od vaše prve poruke do isporuke.",
     "avatar": "/assets/logo/3d-bj-mark.svg",
-    "photo": "",
     "buttonLabel": "Kontaktirajte Bojana"
   },
-  "faqSection": {
-    "heading": "Česta pitanja"
-  },
-  "faq": [
-    {
-      "q": "Koje materijale koristite?",
-      "a": "Radimo sa PLA, PETG, ABS, ASA i TPU (fleksibilnim) materijalima, u zavisnosti od namene dela."
-    },
-    {
-      "q": "Kako se formira cena?",
-      "a": "Cena zavisi od veličine, materijala, boje i složenosti izrade. Pošaljite upit sa detaljima i dobijate ponudu bez obaveze."
-    },
-    {
-      "q": "Mogu li da pošaljem gotov 3D fajl?",
-      "a": "Naravno — prihvatamo STL, OBJ i 3MF fajlove. Ako nemate fajl, možemo da skeniramo postojeći predmet ili modelujemo po vašem opisu."
-    },
-    {
-      "q": "Koliko traje izrada?",
-      "a": "Zavisi od veličine i složenosti dela. Tačan rok dobijate uz ponudu, nakon što pošaljete upit."
-    },
-    {
-      "q": "Da li radite višebojnu štampu?",
-      "a": "Da, do 4 boje u jednom štampanju — idealno za logotipe, figure i personalizovane poklone."
-    }
-  ],
   "contact": {
-    "sectionHeading": "Kontakt",
-    "sectionSubheading": "Pozovite, pošaljite poruku, ili popunite formu — javljamo se u kratkom roku.",
     "phoneDisplay": "+1 (555) 010-0199",
     "phoneTel": "+15550100199",
-    "viber": "",
-    "whatsapp": "",
-    "email": "",
-    "instagram": "",
-    "facebook": "",
-    "city": "",
-    "pib": "",
-    "hours": [
-      {
-        "days": "Pon–Pet",
-        "time": "9–18h"
-      },
-      {
-        "days": "Sub",
-        "time": "10–14h"
-      }
-    ],
-    "channelLabels": {
-      "phone": "Telefon",
-      "viber": "Viber",
-      "whatsapp": "WhatsApp",
-      "email": "Email",
-      "instagram": "Instagram",
-      "city": "Grad",
-      "hoursHeading": "Radno vreme",
-      "copyButton": "Kopiraj",
-      "copiedLabel": "Kopirano!"
-    },
+    "web3formsKey": "YOUR_WEB3FORMS_ACCESS_KEY",
     "fieldLabels": {
       "name": "Ime",
       "email": "Email",
       "material": "Materijal",
       "service": "Usluga",
-      "message": "Poruka",
-      "fileLink": "Link ka fajlu (opciono)"
+      "message": "Poruka"
     },
     "namePlaceholder": "Petar Petrović",
     "emailPlaceholder": "petar@gmail.com",
     "messagePlaceholder": "Opišite šta želite da odštampate...",
-    "fileLinkPlaceholder": "Link ka STL/OBJ fajlu, Google Drive, itd. (opciono)",
     "materialOptions": [
       "Nisam siguran",
       "PLA",
@@ -336,24 +244,10 @@
       "Skeniranje + štampa",
       "Modelovanje"
     ],
-    "web3formsKey": "YOUR_WEB3FORMS_ACCESS_KEY",
     "submitLabel": "Pošalji upit",
     "sendingLabel": "Šalje se…",
     "errorMessage": "Molimo popunite sva polja ispravnim email-om.",
     "networkErrorMessage": "Nešto je pošlo po zlu prilikom slanja poruke. Molimo pokušajte preko telefona ili email-a.",
     "successMessage": "✅ Hvala! Primili smo vaš upit i javićemo vam se uskoro."
-  },
-  "bottomBar": {
-    "callLabel": "Pozovi",
-    "viberLabel": "Viber",
-    "inquiryLabel": "Upit"
-  },
-  "footer": {
-    "tagline": "Print · Scan · Model",
-    "kontaktHeading": "Kontakt",
-    "hoursHeading": "Radno vreme",
-    "socialHeading": "Društvene mreže",
-    "pibLabel": "PIB",
-    "rightsText": "Sva prava zadržana."
   }
 }
