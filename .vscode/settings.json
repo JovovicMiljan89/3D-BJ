@@ -4,5 +4,5 @@
   "editor.tabSize": 2,
   "files.eol": "\n",
   "liveServer.settings.port": 5500,
-  "liveServer.settings.root": "/public"
+  "liveServer.settings.root": "/"
 }

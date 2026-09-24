@@ -1,81 +1,75 @@
-# 3D-BJ — 3D Printing Webapp
+# 3D-BJ — 3D Printing Mockup (Single Page)
 
-A small commercial webapp for **3D-BJ**, a 3D print / scan / model service run by **Bojan Jovović**.
+A simple, dependency-free single-page mockup for **3D-BJ**, a 3D print / scan / model service run by **Bojan Jovović** (owner & print operator).
+Phone number and email are fake placeholders.
 
-- **Public site**: hero, services, workshop/about, **products** (image + description, click for details), how-it-works, and a contact form.
-- **Admin panel** (`/admin/`): a single admin login to upload/edit/delete product photos & descriptions, edit the site's text (headline, about, phone, email, footer), and read contact-form inquiries.
+## Quick start (VS Code)
 
-## Tech
-
-- Backend: Node.js + Express, session-based auth (bcrypt-hashed password), Multer for image uploads.
-- Data storage: a single JSON file (`data/db.json`), auto-created on first run. No database server to install — fine for one admin and a product catalog of this size.
-- Front end: plain HTML/CSS/vanilla JS (no build step), same dark theme as before.
-
-## Setup
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Create your `.env` from the example and fill in real values:
-   ```bash
-   cp .env.example .env
-   ```
-   - `SESSION_SECRET` — generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
-   - `ADMIN_USERNAME` / `ADMIN_PASSWORD` — used **only the first time** the server runs, to create the admin account. Change the password afterwards from the admin panel (Account tab) — after that, `.env`'s password is no longer read.
-3. Start the server:
-   ```bash
-   npm start
-   ```
-   Or with auto-restart on file changes: `npm run dev`
-4. Open:
-   - Public site: http://localhost:3000/
-   - Admin panel: http://localhost:3000/admin/ (also linked at the bottom of the public site footer)
+1. Open this folder in VS Code (`File → Open Folder…`).
+2. Install the recommended extensions when prompted (Live Server, Prettier).
+3. Right-click `index.html` → **Open with Live Server**
+   — or run in terminal: `npm start` (requires Node.js, no install step needed).
+4. Or simply double-click `index.html` to open it in a browser.
 
 ## Project structure
 
 ```
 print3d-mockup/
-├── server/
-│   ├── index.js             # Express app, sessions, static files, routes
-│   ├── store.js              # JSON-file data layer (products, site text, admin account, messages)
-│   ├── middleware/auth.js    # requireAuth guard for admin-only routes
-│   └── routes/
-│       ├── auth.js           # login / logout / me / change-password
-│       ├── products.js       # product CRUD + image upload (multer)
-│       ├── content.js        # site text get/update
-│       └── contact.js        # public inquiry submit + admin message list
-├── data/
-│   └── db.json               # auto-created on first run — NOT committed to git
-├── public/
-│   ├── index.html            # public site
-│   ├── admin/                # admin panel (login + dashboard)
-│   ├── css/styles.css
-│   ├── js/main.js            # fetches content/products from the API, submits contact form
-│   ├── assets/                # logo + seed illustrations
-│   └── uploads/               # product photos uploaded via the admin panel — NOT committed
-├── .env.example
-├── package.json
-└── SPEC.md                    # original mockup spec (kept for reference)
+├── index.html              # The whole page (header, hero, services, workshop, gallery, steps, footer, modal)
+├── css/styles.css          # All styles + responsive rules
+├── js/main.js              # Contact modal, inquiry form → mailto, gallery lightbox
+├── assets/logo/            # 3D-BJ logo set (see Logo section below)
+├── assets/images/          # Mock SVG illustrations (replace with real photos later)
+│   ├── favicon.svg
+│   ├── hero-printer.svg
+│   ├── vase.svg
+│   ├── gear.svg
+│   ├── figurine.svg
+│   ├── phone-stand.svg
+│   ├── workshop.jpg        # Stills from the workshop video (low-res, replace later)
+│   ├── printers-multicolor.jpg
+│   ├── printer-enclosed.jpg
+│   └── scanner.jpg
+├── SPEC.md                 # Functional spec & acceptance criteria
+├── package.json             # Optional npm scripts (start / format)
+├── .vscode/                # Recommended extensions + editor settings
+├── .prettierrc
+└── .gitignore
 ```
 
-## Admin panel features
+## Where to change mock data
 
-- **Log in** with the single admin account (username/password).
-- **Products** tab — add a product (image + title + description), edit or delete existing ones. These are exactly what visitors see under "Products" on the public site.
-- **Site text** tab — edit business name, tagline, hero headline/text, about/maker text, phone, email, footer note. Saved instantly and reflected on the public site on next load.
-- **Messages** tab — every contact-form submission from visitors, with a "mark read/unread" and delete action. Unread count shown as a badge on the tab.
-- **Account** tab — change the admin password (requires the current password).
-
-## Security notes
-
-- Only one admin account exists by design (as requested) — there's no sign-up flow.
-- Passwords are hashed with bcrypt; sessions use an `httpOnly` cookie.
-- Login is rate-limited (5 attempts / 15 min per IP) to slow down brute-forcing.
-- Before deploying publicly: set `NODE_ENV=production` (enables secure cookies over HTTPS), use a strong random `SESSION_SECRET`, and put the app behind HTTPS (e.g. a reverse proxy like Nginx/Caddy, or a platform that terminates TLS for you).
-- `data/db.json` and `public/uploads/` hold your real business data — back them up; they're intentionally excluded from git.
+| What            | Where                                                        |
+|-----------------|--------------------------------------------------------------|
+| Business name   | `index.html` (logo, title, footer)                            |
+| Phone           | `index.html` → search `tel:+15550100199`                      |
+| Email           | `index.html` → search `3d-bj.example` + `CONTACT_EMAIL` in `js/main.js` |
+| Images          | Replace files in `assets/images/` (keep names or update `src`) |
+| Equipment specs | `index.html` → section `#workshop` (all values are indicative/mock) |
+| Colors          | `css/styles.css` → `:root` variables (dark-only: black / navy / red) |
 
 ## Notes
 
-- The contact form now submits directly to the backend (`POST /api/contact`) and is stored for the admin to read in the Messages tab, instead of the old `mailto:` mockup behavior. The phone/email contact tiles still use `tel:`/`mailto:` links, built from whatever you set in the Site text tab.
-- `SPEC.md` documents the original static-mockup design and is kept for reference; some of it (e.g. "no backend") no longer applies now that the admin panel exists.
+- No backend: the inquiry form opens the visitor's email client with a pre-filled message (`mailto:`).
+  To use a real backend later, replace the `submit` handler in `js/main.js` with a `fetch()` call
+  (e.g. Formspree, Netlify Forms, or your own API).
+- `tel:` links dial on mobile; on desktop they open the default calling app (if any).
+
+## Logo (assets/logo/)
+
+| File | Use |
+|------|-----|
+| `3d-bj-horizontal.svg` / `.png` | Main logo: cube + wordmark + tagline "PRINT · SCAN · MODEL" |
+| `3d-bj-wordmark.svg` | Compact version for the site header |
+| `3d-bj-stacked.svg` / `.png` | Stacked version with the name "Bojan Jovović" (business card, social cover) |
+| `3d-bj-mark.svg` | Cube symbol only (avatar, stickers, watermark) |
+| `3d-bj-icon.svg` / `3d-bj-icon-512.png` | App icon / favicon (dark rounded square); copied to `assets/images/favicon.svg` |
+| `3d-bj-logo-sheet.png` | Overview of all variants + color palette |
+| `3d-bj-horizontal-mono.svg` | Single-color white version (engraving, printing on colored backgrounds) |
+
+**Concept:** an isometric cube built from visible print layers (navy sides) with a red top layer and a
+white dot for the nozzle, which is a part being printed seen from above. The wordmark uses custom geometric lettering
+with chamfered corners, drawn as paths so it needs no font. "3D" is light, "-BJ" is red.
+
+**Colors:** red `#e11d2e` / `#b3121f`, navy `#2f4f9a` / `#1b2d55`, text `#e7ecf6`, background `#070b14`.
+Tagline and name use the system UI font.

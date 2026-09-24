@@ -2,13 +2,3 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
-
-# Local secrets
-.env
-
-# Runtime data (admin account, products, site text, messages) — do not commit
-data/db.json
-
-# Uploaded product photos — do not commit
-public/uploads/*
-!public/uploads/.gitkeep

@@ -1,19 +1,10 @@
 {
-  "name": "3d-bj-webapp",
-  "version": "1.0.0",
+  "name": "3d-bj-mockup",
+  "version": "0.1.0",
   "private": true,
-  "description": "3D-BJ — commercial webapp with a single admin login (product photos, texts, contact inquiries).",
-  "main": "server/index.js",
+  "description": "Single-page mockup website for 3D-BJ, a 3D printing service by Bojan Jovović.",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js",
+    "start": "npx --yes live-server --port=5500 --open=./index.html",
     "format": "npx --yes prettier --write ."
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "multer": "^2.4.0"
   }
 }

@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D-BJ — 3D Print · Scan · Model | Bojan Jovović</title>
+  <title>3D-BJ — 3D Print · Scan · Model | Bojan Jovović (Mockup)</title>
   <meta name="theme-color" content="#070b14" />
   <meta name="color-scheme" content="dark" />
-  <meta name="description" content="3D printing, scanning and modeling service — prototypes, spare parts, gifts and décor." />
+  <meta name="description" content="Mockup landing page for a fictional 3D printing service." />
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/logo/3d-bj-icon-512.png" />
   <link rel="stylesheet" href="css/styles.css" />
@@ -22,7 +22,7 @@
       <nav class="nav">
         <a href="#services">Services</a>
         <a href="#workshop">Workshop</a>
-        <a href="#products">Products</a>
+        <a href="#gallery">Gallery</a>
         <a href="#how">How it works</a>
         <button class="btn btn--small" data-open-contact>Contact</button>
       </nav>
@@ -35,9 +35,9 @@
     <section class="hero">
       <div class="container hero__inner">
         <div class="hero__text">
-          <p class="eyebrow" id="heroEyebrow">3D-BJ · Print · Scan · Model</p>
-          <h1 id="heroHeadline">Your ideas, printed layer by layer.</h1>
-          <p class="lead" id="heroLead">Prototypes, spare parts, gifts and décor. Send us a file or an idea — we'll scan, model and print it — in up to 4 colors, or in tough engineering materials.</p>
+          <p class="eyebrow">3D-BJ · Print · Scan · Model</p>
+          <h1>Your ideas, printed layer by layer.</h1>
+          <p class="lead">Prototypes, spare parts, gifts and décor. Send us a file or an idea — we'll scan, model and print it — in up to 4 colors, or in tough engineering materials.</p>
           <div class="hero__actions">
             <button class="btn" data-open-contact>Request a quote</button>
             <a href="#workshop" class="btn btn--ghost">See our workshop</a>
@@ -154,23 +154,38 @@
         <div class="maker">
           <img class="maker__avatar" src="assets/logo/3d-bj-mark.svg" alt="" width="72" height="72" />
           <div>
-            <span class="tag" id="aboutTag">Owner · Print operator</span>
-            <h3 id="aboutName">Bojan Jovović</h3>
-            <p class="muted" id="aboutText">Every job goes through my hands — from scanning and modeling to slicing, printing and final quality check. One person responsible, from your first message to delivery.</p>
+            <span class="tag">Owner · Print operator</span>
+            <h3>Bojan Jovović</h3>
+            <p class="muted">Every job goes through my hands — from scanning and modeling to slicing, printing and final quality check. One person responsible, from your first message to delivery.</p>
           </div>
-          <button class="btn" data-open-contact>Contact</button>
+          <button class="btn" data-open-contact>Contact Bojan</button>
         </div>
 
       </div>
     </section>
 
-    <!-- ===== Products ===== -->
-    <section id="products" class="section">
+    <!-- ===== Gallery ===== -->
+    <section id="gallery" class="section">
       <div class="container">
-        <h2>Products</h2>
-        <p class="muted">Click a product to view details.</p>
-        <div class="gallery" id="productGrid">
-          <p class="muted">Loading products…</p>
+        <h2>Gallery</h2>
+        <p class="muted">Click an image to enlarge.</p>
+        <div class="gallery">
+          <figure class="gallery__item">
+            <img src="assets/images/vase.svg" alt="Spiral vase" />
+            <figcaption>Spiral vase · PLA</figcaption>
+          </figure>
+          <figure class="gallery__item">
+            <img src="assets/images/gear.svg" alt="Mechanical gear" />
+            <figcaption>Gear set · PETG</figcaption>
+          </figure>
+          <figure class="gallery__item">
+            <img src="assets/images/figurine.svg" alt="Robot figurine" />
+            <figcaption>Robot figurine · PLA multicolor</figcaption>
+          </figure>
+          <figure class="gallery__item">
+            <img src="assets/images/phone-stand.svg" alt="Phone stand" />
+            <figcaption>Phone stand · PLA</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -195,12 +210,11 @@
   <!-- ===== Footer ===== -->
   <footer class="footer">
     <div class="container footer__inner">
-      <p>© <span id="year"></span> <span id="footerBusinessName">3D-BJ</span> — <span id="footerNote">mockup, contact data is fictional.</span></p>
+      <p>© <span id="year"></span> 3D-BJ · Bojan Jovović — mockup, contact data is fictional.</p>
       <p>
-        <a href="tel:+15550100199" id="footerPhone">+1 (555) 010-0199</a> ·
-        <a href="mailto:hello@3d-bj.example" id="footerEmail">hello@3d-bj.example</a>
+        <a href="tel:+15550100199">+1 (555) 010-0199</a> ·
+        <a href="mailto:hello@3d-bj.example">hello@3d-bj.example</a>
       </p>
-      <p><a href="admin/" class="muted small">Admin</a></p>
     </div>
   </footer>
 
@@ -213,13 +227,13 @@
       <p class="muted">Call, email, or send a quick message.</p>
 
       <div class="contact-options">
-        <a class="contact-option" href="tel:+15550100199" id="contactPhoneLink">
+        <a class="contact-option" href="tel:+15550100199">
           <span class="contact-option__icon">📞</span>
-          <span><small>Phone</small><br /><span id="contactPhoneText">+1 (555) 010-0199</span></span>
+          <span><small>Phone</small><br />+1 (555) 010-0199</span>
         </a>
-        <a class="contact-option" href="mailto:hello@3d-bj.example?subject=3D%20print%20inquiry" id="contactEmailLink">
+        <a class="contact-option" href="mailto:hello@3d-bj.example?subject=3D%20print%20inquiry">
           <span class="contact-option__icon">✉️</span>
-          <span><small>Email</small><br /><span id="contactEmailText">hello@3d-bj.example</span></span>
+          <span><small>Email</small><br />hello@3d-bj.example</span>
         </a>
       </div>
 
@@ -253,7 +267,7 @@
         <p class="form__error" id="formError" hidden>Please fill in all fields with a valid email.</p>
         <button type="submit" class="btn btn--full">Send inquiry</button>
       </form>
-      <p class="form__success" id="formSuccess" hidden>✅ Thanks! We received your inquiry and will get back to you soon.</p>
+      <p class="form__success" id="formSuccess" hidden>✅ Thanks! Your email app should open with the inquiry pre-filled.</p>
     </div>
   </div>
 
