@@ -15,25 +15,60 @@ test("page loads with no console errors", async ({ page }) => {
   expect(pageErrors, `page errors: ${pageErrors.join(" | ")}`).toEqual([]);
 });
 
-test("every [data-open-contact] button opens the contact modal", async ({ page }) => {
+test("hamburger menu opens and closes the mobile nav", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 800 });
   await page.goto("/");
-  const modal = page.locator("#contactModal");
-  const triggers = page.locator("[data-open-contact]");
-  const count = await triggers.count();
-  expect(count).toBeGreaterThan(0);
 
-  for (let i = 0; i < count; i++) {
-    await triggers.nth(i).click();
-    await expect(modal).toHaveClass(/is-open/);
-    await expect(modal).toHaveAttribute("aria-hidden", "false");
-    await page.keyboard.press("Escape");
-    await expect(modal).not.toHaveClass(/is-open/);
-  }
+  const toggle = page.locator("#navToggle");
+  const nav = page.locator("#siteNav");
+
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(nav).not.toHaveClass(/is-open/);
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(nav).toHaveClass(/is-open/);
+
+  // Regression check: the open nav must actually be laid out across the
+  // viewport (not squished into a sliver by a stray containing-block from
+  // an ancestor's backdrop-filter/filter) and its links must be visible.
+  const box = await nav.boundingBox();
+  expect(box.width).toBeGreaterThan(300);
+  expect(box.height).toBeGreaterThan(200);
+  await expect(nav.locator("a", { hasText: "Kontakt" })).toBeVisible();
+
+  // Closes on Escape.
+  await page.keyboard.press("Escape");
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(nav).not.toHaveClass(/is-open/);
+
+  // Closes on link click too.
+  await toggle.click();
+  await expect(nav).toHaveClass(/is-open/);
+  await nav.locator("a").first().click();
+  await expect(nav).not.toHaveClass(/is-open/);
+});
+
+test("bottom bar is visible at 375px and hidden at 1280px", async ({ page }) => {
+  await page.goto("/");
+
+  await page.setViewportSize({ width: 375, height: 800 });
+  await expect(page.locator(".bottombar")).toBeVisible();
+
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(page.locator(".bottombar")).toBeHidden();
+});
+
+test("a CTA scrolls to the contact form and focuses the name field", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("[data-focus-form]").first().click();
+
+  await expect(page.locator("#f-name")).toBeFocused({ timeout: 2000 });
+  await expect(page.locator("#kontakt")).toBeInViewport();
 });
 
 test("submitting the empty inquiry form shows a validation error", async ({ page }) => {
   await page.goto("/");
-  await page.locator("[data-open-contact]").first().click();
 
   const formError = page.locator("#formError");
   await expect(formError).toBeHidden();
@@ -42,7 +77,7 @@ test("submitting the empty inquiry form shows a validation error", async ({ page
   await expect(formError).toBeVisible();
 });
 
-test("a valid submission posts to Web3Forms and shows the success message", async ({ page }) => {
+test("a valid submission posts to Web3Forms (including file_link) and shows the success message", async ({ page }) => {
   let requestBody = null;
   await page.route("https://api.web3forms.com/submit", async (route) => {
     requestBody = route.request().postDataJSON();
@@ -54,10 +89,9 @@ test("a valid submission posts to Web3Forms and shows the success message", asyn
   });
 
   await page.goto("/");
-  await page.locator("[data-open-contact]").first().click();
-
   await page.locator('#inquiryForm input[name="name"]').fill("Test Person");
   await page.locator('#inquiryForm input[name="email"]').fill("test@example.com");
+  await page.locator('#inquiryForm input[name="file_link"]').fill("https://drive.example/my-model.stl");
   await page.locator('#inquiryForm textarea[name="message"]').fill("Playwright smoke test message.");
   await page.locator("#inquiryForm button[type=submit]").click();
 
@@ -65,6 +99,20 @@ test("a valid submission posts to Web3Forms and shows the success message", asyn
   expect(requestBody).not.toBeNull();
   expect(requestBody.name).toBe("Test Person");
   expect(requestBody.email).toBe("test@example.com");
+  expect(requestBody.file_link).toBe("https://drive.example/my-model.stl");
+});
+
+test("FAQ items toggle open/closed, first one open by default", async ({ page }) => {
+  await page.goto("/");
+  const items = page.locator(".faq__item");
+  const first = items.first();
+  const second = items.nth(1);
+
+  await expect(first).toHaveJSProperty("open", true);
+  await expect(second).toHaveJSProperty("open", false);
+
+  await second.locator("summary").click();
+  await expect(second).toHaveJSProperty("open", true);
 });
 
 test("no horizontal scroll at 375px viewport width", async ({ page }) => {
@@ -78,14 +126,27 @@ test("no horizontal scroll at 375px viewport width", async ({ page }) => {
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
 });
 
-test("clicking a gallery image opens the lightbox with its caption", async ({ page }) => {
+test("gallery lightbox opens with the Enter key and shows the right caption", async ({ page }) => {
   await page.goto("/");
   const firstItem = page.locator(".gallery__item").first();
   const caption = await firstItem.locator("figcaption").textContent();
 
-  await firstItem.click();
+  await firstItem.focus();
+  await page.keyboard.press("Enter");
 
   const lightbox = page.locator(".modal--image");
   await expect(lightbox).toHaveClass(/is-open/);
   await expect(lightbox.locator("p")).toHaveText(caption.trim());
+
+  // Escape closes it and returns focus to the triggering gallery item.
+  await page.keyboard.press("Escape");
+  await expect(lightbox).not.toHaveClass(/is-open/);
+  await expect(firstItem).toBeFocused();
+});
+
+test("no leftover placeholder text (\"0 din\" or \"example\") anywhere on the page", async ({ page }) => {
+  await page.goto("/");
+  const bodyText = await page.locator("body").innerText();
+  expect(bodyText).not.toMatch(/0\s*din/i);
+  expect(bodyText.toLowerCase()).not.toContain("example");
 });

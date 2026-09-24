@@ -1,6 +1,10 @@
 # Pages CMS config — https://pagescms.org/docs/
 # Bojan edits everything here through the Pages CMS admin UI; it commits
-# straight to this GitHub repo, which triggers a Cloudflare Pages build.
+# straight to this GitHub repo, which triggers a Cloudflare build.
+#
+# Fields left blank on purpose (price amounts, Viber/WhatsApp/Instagram/
+# Facebook, city, PIB, his photo) simply don't show up on the live site
+# until filled in — see ADMIN-UPUTSTVO.sr.md.
 
 media:
   input: assets/uploads
@@ -20,7 +24,20 @@ content:
         fields:
           - { name: title, label: "Naslov stranice (tab u browseru)", type: string }
           - { name: description, label: "Opis za pretragu (SEO)", type: text }
-          - { name: lang, label: "Jezik stranice (npr. en, sr)", type: string }
+          - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
+
+      - name: seo
+        label: "SEO / deljenje na društvenim mrežama"
+        type: object
+        fields:
+          - name: siteUrl
+            label: "Adresa sajta (sa kosom crtom na kraju)"
+            type: string
+            description: "Ne menjati bez dogovora sa Miljanom — mora da odgovara stvarnoj adresi sajta."
+          - name: ogImage
+            label: "Slika za deljenje (Open Graph)"
+            type: image
+            description: "Slika koja se vidi kad se link ka sajtu podeli na Viberu/Facebooku/itd. Preporučeno 1200×630px."
 
       - name: brand
         label: "Brend"
@@ -38,10 +55,11 @@ content:
         type: object
         fields:
           - { name: servicesLabel, label: "Labela: Usluge", type: string }
-          - { name: workshopLabel, label: "Labela: Radionica", type: string }
           - { name: galleryLabel, label: "Labela: Galerija", type: string }
-          - { name: howLabel, label: "Labela: Kako radi", type: string }
-          - { name: contactLabel, label: "Labela: Kontakt (dugme)", type: string }
+          - { name: pricesLabel, label: "Labela: Cene", type: string }
+          - { name: workshopLabel, label: "Labela: Radionica", type: string }
+          - { name: faqLabel, label: "Labela: Česta pitanja", type: string }
+          - { name: contactLabel, label: "Labela: Kontakt", type: string }
 
       - name: hero
         label: "Naslovna sekcija (hero)"
@@ -55,6 +73,12 @@ content:
           - { name: image, label: "Slika", type: image }
           - { name: imageAlt, label: "Opis slike (alt tekst)", type: string }
 
+      - name: trust
+        label: "Red poverenja (ispod dugmadi na naslovnoj sekciji)"
+        type: string
+        list: true
+        description: "Kratke rečenice sa kvačicom, npr. 'Odgovor u kratkom roku'."
+
       - name: servicesSection
         label: "Sekcija: Usluge (naslov)"
         type: object
@@ -66,9 +90,72 @@ content:
         type: object
         list: true
         fields:
-          - { name: icon, label: "Ikonica (emoji)", type: string }
+          - name: icon
+            label: "Ikonica"
+            type: select
+            options:
+              values:
+                - { name: gear, label: "Zupčanik (prototipovi)" }
+                - { name: wrench, label: "Ključ (rezervni delovi)" }
+                - { name: gift, label: "Poklon" }
+                - { name: layers, label: "Slojevi (višebojna štampa)" }
+                - { name: shield, label: "Štit (izdržljivi materijali)" }
+                - { name: scan, label: "Skener" }
           - { name: title, label: "Naslov", type: string }
           - { name: text, label: "Opis", type: text }
+
+      - name: gallerySection
+        label: "Sekcija: Galerija (naslov)"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: subheading, label: "Podnaslov", type: string }
+
+      - name: gallery
+        label: "Galerija (radovi)"
+        type: object
+        list: true
+        fields:
+          - { name: image, label: "Slika", type: image }
+          - { name: alt, label: "Opis slike (alt tekst)", type: string }
+          - { name: caption, label: "Natpis ispod slike", type: string }
+
+      - name: howSection
+        label: "Sekcija: Kako radi (naslov)"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: buttonLabel, label: "Tekst dugmeta na dnu", type: string }
+
+      - name: steps
+        label: "Koraci (Kako radi)"
+        type: object
+        list: true
+        fields:
+          - { name: title, label: "Naslov koraka", type: string }
+          - { name: text, label: "Opis koraka", type: text }
+
+      - name: prices
+        label: "Cene"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: note, label: "Napomena ispod naslova", type: string }
+          - name: items
+            label: "Cenovne kartice"
+            type: object
+            list: true
+            fields:
+              - { name: title, label: "Naziv paketa", type: string }
+              - { name: hint, label: "Kratak opis", type: text }
+              - name: from
+                label: "Cena od (u dinarima)"
+                type: number
+                description: "Ostavi na 0 dok cena nije poznata — kartica se ne prikazuje na sajtu dok ne upišeš pravu cenu."
+              - name: featured
+                label: "Istaknuta kartica?"
+                type: boolean
+                description: "Uključi za jedan paket koji želiš da bude posebno istaknut."
 
       - name: workshop
         label: "Radionica"
@@ -102,7 +189,6 @@ content:
             fields:
               - { name: value, label: "Broj", type: string }
               - { name: label, label: "Opis broja", type: string }
-          - { name: footnote, label: "Napomena ispod brojki", type: string }
 
       - name: maker
         label: "O vlasniku"
@@ -111,55 +197,84 @@ content:
           - { name: name, label: "Ime", type: string }
           - { name: roleTag, label: "Uloga (oznaka)", type: string }
           - { name: bio, label: "Kratka biografija", type: text }
-          - { name: avatar, label: "Slika / avatar", type: image }
+          - { name: avatar, label: "Rezervna slika (ako nema fotografije)", type: image }
+          - name: photo
+            label: "Fotografija Bojana"
+            type: image
+            description: "Opciono. Dok je prazno, prikazuje se logo umesto fotografije."
           - { name: buttonLabel, label: "Tekst dugmeta", type: string }
 
-      - name: gallerySection
-        label: "Sekcija: Galerija (naslov)"
+      - name: faqSection
+        label: "Sekcija: Česta pitanja (naslov)"
         type: object
         fields:
           - { name: heading, label: "Naslov sekcije", type: string }
-          - { name: subheading, label: "Podnaslov", type: string }
 
-      - name: gallery
-        label: "Galerija (radovi)"
+      - name: faq
+        label: "Česta pitanja"
         type: object
         list: true
         fields:
-          - { name: image, label: "Slika", type: image }
-          - { name: alt, label: "Opis slike (alt tekst)", type: string }
-          - { name: caption, label: "Natpis ispod slike", type: string }
-
-      - name: howSection
-        label: "Sekcija: Kako radi (naslov)"
-        type: object
-        fields:
-          - { name: heading, label: "Naslov sekcije", type: string }
-          - { name: buttonLabel, label: "Tekst dugmeta na dnu", type: string }
-
-      - name: steps
-        label: "Koraci (Kako radi)"
-        type: object
-        list: true
-        fields:
-          - { name: title, label: "Naslov koraka", type: string }
-          - { name: text, label: "Opis koraka", type: text }
+          - { name: q, label: "Pitanje", type: string }
+          - { name: a, label: "Odgovor", type: text }
 
       - name: contact
         label: "Kontakt i forma za upit"
         type: object
         fields:
+          - { name: sectionHeading, label: "Naslov sekcije", type: string }
+          - { name: sectionSubheading, label: "Podnaslov sekcije", type: string }
           - { name: phoneDisplay, label: "Telefon (prikazan tekst)", type: string }
           - { name: phoneTel, label: "Telefon (za pozivanje, npr. +381601234567)", type: string }
-          - { name: email, label: "Email adresa", type: string }
+          - name: viber
+            label: "Viber broj (samo cifre, bez '+', npr. 381601234567)"
+            type: string
+            description: "Ostavi prazno da se Viber dugme ne prikazuje."
+          - name: whatsapp
+            label: "WhatsApp broj (samo cifre, bez '+', npr. 381601234567)"
+            type: string
+            description: "Ostavi prazno da se WhatsApp dugme ne prikazuje."
+          - name: email
+            label: "Email adresa"
+            type: string
+            description: "Ostavi prazno da se email ne prikazuje na sajtu."
+          - name: instagram
+            label: "Instagram (pun link, npr. https://instagram.com/tvoj-nalog)"
+            type: string
+          - name: facebook
+            label: "Facebook (pun link ka stranici)"
+            type: string
+          - name: city
+            label: "Grad"
+            type: string
+          - name: pib
+            label: "PIB"
+            type: string
+            description: "Prikazuje se u podnožju sajta ako je popunjeno."
+          - name: hours
+            label: "Radno vreme"
+            type: object
+            list: true
+            fields:
+              - { name: days, label: "Dani (npr. Pon–Pet)", type: string }
+              - { name: time, label: "Vreme (npr. 9–18h)", type: string }
+          - name: channelLabels
+            label: "Labele za kontakt kanale"
+            type: object
+            fields:
+              - { name: phone, label: "Labela: Telefon", type: string }
+              - { name: viber, label: "Labela: Viber", type: string }
+              - { name: whatsapp, label: "Labela: WhatsApp", type: string }
+              - { name: email, label: "Labela: Email", type: string }
+              - { name: instagram, label: "Labela: Instagram", type: string }
+              - { name: city, label: "Labela: Grad", type: string }
+              - { name: hoursHeading, label: "Naslov: Radno vreme", type: string }
+              - { name: copyButton, label: "Tekst dugmeta: Kopiraj", type: string }
+              - { name: copiedLabel, label: "Tekst posle kopiranja", type: string }
           - name: web3formsKey
             label: "Web3Forms pristupni ključ (access key)"
             type: string
             description: "Dobija se besplatno na web3forms.com. Ovaj ključ je javan po dizajnu."
-          - { name: modalTitle, label: "Naslov prozora za kontakt", type: string }
-          - { name: modalSubtitle, label: "Podnaslov prozora za kontakt", type: string }
-          - { name: phoneTileLabel, label: "Labela: Telefon (u prozoru)", type: string }
-          - { name: emailTileLabel, label: "Labela: Email (u prozoru)", type: string }
           - name: fieldLabels
             label: "Labele polja u formi"
             type: object
@@ -169,9 +284,11 @@ content:
               - { name: material, label: "Labela: Materijal", type: string }
               - { name: service, label: "Labela: Usluga", type: string }
               - { name: message, label: "Labela: Poruka", type: string }
+              - { name: fileLink, label: "Labela: Link ka fajlu", type: string }
           - { name: namePlaceholder, label: "Primer teksta: Ime", type: string }
           - { name: emailPlaceholder, label: "Primer teksta: Email", type: string }
           - { name: messagePlaceholder, label: "Primer teksta: Poruka", type: string }
+          - { name: fileLinkPlaceholder, label: "Primer teksta: Link ka fajlu", type: string }
           - name: materialOptions
             label: "Opcije: Materijal"
             type: string
@@ -186,8 +303,21 @@ content:
           - { name: networkErrorMessage, label: "Poruka greške (slanje nije uspelo)", type: string }
           - { name: successMessage, label: "Poruka uspeha (poslato)", type: string }
 
+      - name: bottomBar
+        label: "Traka na dnu ekrana (mobilni)"
+        type: object
+        fields:
+          - { name: callLabel, label: "Tekst: Pozovi", type: string }
+          - { name: viberLabel, label: "Tekst: Viber", type: string }
+          - { name: inquiryLabel, label: "Tekst: Upit", type: string }
+
       - name: footer
         label: "Podnožje (footer)"
         type: object
         fields:
-          - { name: text, label: "Tekst u podnožju (posle imena i vlasnika)", type: text }
+          - { name: tagline, label: "Kratak slogan ispod loga", type: string }
+          - { name: kontaktHeading, label: "Naslov kolone: Kontakt", type: string }
+          - { name: hoursHeading, label: "Naslov kolone: Radno vreme", type: string }
+          - { name: socialHeading, label: "Naslov kolone: Društvene mreže", type: string }
+          - { name: pibLabel, label: "Labela: PIB", type: string }
+          - { name: rightsText, label: "Tekst prava (posle imena i vlasnika)", type: text }

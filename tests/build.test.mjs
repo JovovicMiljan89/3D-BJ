@@ -124,3 +124,120 @@ test("build fails (non-zero exit) when content/site.json has a missing image", (
     fs.writeFileSync(contentPath, backup);
   }
 });
+
+// ---------- Template engine: {{#if}} and {{{raw}}} ----------
+
+test("renderTemplate #if renders children only when the value is truthy", () => {
+  const template = "[{{#if show}}yes{{/if}}]";
+  assert.equal(renderTemplate(template, { show: true }), "[yes]");
+  assert.equal(renderTemplate(template, { show: "non-empty" }), "[yes]");
+  assert.equal(renderTemplate(template, { show: ["a"] }), "[yes]");
+  assert.equal(renderTemplate(template, { show: false }), "[]");
+  assert.equal(renderTemplate(template, { show: "" }), "[]");
+  assert.equal(renderTemplate(template, { show: [] }), "[]");
+  assert.equal(renderTemplate(template, { show: 0 }), "[]");
+  assert.equal(renderTemplate(template, {}), "[]");
+});
+
+test("renderTemplate #if works nested inside #each, against the item's own scope", () => {
+  const template = "{{#each items}}{{name}}{{#if featured}}*{{/if}} {{/each}}";
+  const html = renderTemplate(template, {
+    items: [
+      { name: "A", featured: true },
+      { name: "B", featured: false },
+    ],
+  });
+  assert.equal(html, "A* B ");
+});
+
+test("renderTemplate {{{raw}}} does not HTML-escape its value", () => {
+  const html = renderTemplate('<script type="application/ld+json">{{{json}}}</script>', {
+    json: '{"a":"<b>"}',
+  });
+  assert.equal(html, '<script type="application/ld+json">{"a":"<b>"}</script>');
+});
+
+// ---------- Hide-empty / zero-value build behavior ----------
+
+function buildDistWith(mutateFn) {
+  const contentPath = path.join(ROOT, "content", "site.json");
+  const backup = fs.readFileSync(contentPath, "utf-8");
+  try {
+    const mutated = deepClone(JSON.parse(backup));
+    mutateFn(mutated);
+    fs.writeFileSync(contentPath, JSON.stringify(mutated, null, 2));
+    execFileSync(process.execPath, [path.join(ROOT, "scripts", "build.mjs")], { cwd: ROOT, stdio: "pipe" });
+    return fs.readFileSync(path.join(ROOT, "dist", "index.html"), "utf-8");
+  } finally {
+    fs.writeFileSync(contentPath, backup);
+  }
+}
+
+test("prices section is hidden entirely when every card has from <= 0 (the shipped default)", () => {
+  const html = buildDistWith(() => {}); // real content.json ships all prices at 0
+  assert.ok(!html.includes('id="cene"'), "the #cene section should not be rendered");
+  assert.ok(!html.includes("#cene"), "nav should not link to #cene either");
+  assert.ok(!/\b0\s*din\b/i.test(html), 'rendered HTML must never show "0 din"');
+});
+
+test("prices section appears, but only shows cards with a real (>0) price", () => {
+  const pricedTitle = loadRealContent().prices.items[0].title;
+  const html = buildDistWith((content) => {
+    content.prices.items[0].from = 1500; // only this one gets a real price
+  });
+  assert.ok(html.includes('id="cene"'), "the #cene section should render once at least one card has a price");
+  assert.ok(html.includes(pricedTitle), "the priced card's title should appear");
+  // The other two cards (from: 0) must stay hidden.
+  const priceCount = (html.match(/<article class="price-card/g) || []).length;
+  assert.equal(priceCount, 1, "only the one priced card should render");
+});
+
+test("empty optional contact channels (viber, whatsapp, instagram, facebook, city, pib) are not rendered", () => {
+  const html = buildDistWith(() => {}); // real content.json ships these empty
+  assert.ok(!html.includes("viber://chat"), "no Viber link when contact.viber is empty");
+  assert.ok(!html.includes("wa.me/"), "no WhatsApp link when contact.whatsapp is empty");
+  assert.ok(!html.includes(">Instagram<"), "no Instagram link when contact.instagram is empty");
+  assert.ok(!html.includes(">Facebook<"), "no Facebook link when contact.facebook is empty");
+  assert.ok(!/PIB:/.test(html), "no PIB line when contact.pib is empty");
+});
+
+test("filling an optional contact channel makes it appear", () => {
+  const html = buildDistWith((content) => {
+    content.contact.viber = "381601234567";
+  });
+  assert.ok(html.includes("viber://chat?number=%2B381601234567"), "Viber link should render once contact.viber is set");
+});
+
+test("no placeholder/example text leaks into the rendered page", () => {
+  const html = buildDistWith(() => {});
+  assert.ok(!/\bexample\b/i.test(html), 'rendered HTML must not contain the word "example"');
+});
+
+// ---------- SEO: OG tags + JSON-LD ----------
+
+test("Open Graph / Twitter tags use absolute URLs built from seo.siteUrl", () => {
+  const html = buildDistWith(() => {});
+  const content = JSON.parse(fs.readFileSync(path.join(ROOT, "content", "site.json"), "utf-8"));
+  const expectedImage = content.seo.siteUrl.replace(/\/$/, "") + content.seo.ogImage;
+
+  assert.ok(html.includes(`property="og:url" content="${content.seo.siteUrl}"`));
+  assert.ok(html.includes(`property="og:image" content="${expectedImage}"`));
+  assert.ok(html.includes(`name="twitter:image" content="${expectedImage}"`));
+  assert.ok(expectedImage.startsWith("http"), "og:image must be an absolute URL");
+});
+
+test("the LocalBusiness JSON-LD block is present and is valid, parseable JSON", () => {
+  const html = buildDistWith(() => {});
+  const match = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(match, "expected a JSON-LD <script> tag in the rendered page");
+
+  let data;
+  assert.doesNotThrow(() => {
+    data = JSON.parse(match[1]);
+  }, "JSON-LD content must be valid JSON");
+
+  assert.equal(data["@type"], "LocalBusiness");
+  assert.equal(data["@context"], "https://schema.org");
+  assert.ok(typeof data.name === "string" && data.name.length > 0);
+  assert.ok(data.image.startsWith("http"), "JSON-LD image must be an absolute URL");
+});
