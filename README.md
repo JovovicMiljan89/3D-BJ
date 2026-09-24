@@ -10,7 +10,7 @@ now content-driven and free to host.
   equipment, gallery photos) through [Pages CMS](https://pagescms.org), a
   hosted admin UI that commits straight to this GitHub repo — no code, no
   GitHub account needed for him.
-- **Hosting**: [Cloudflare Pages](https://pages.cloudflare.com) free plan.
+- **Hosting**: Cloudflare (Compute / Workers static assets) free plan — `*.workers.dev` in practice; Cloudflare routes new Git-connected static-site projects there instead of classic Pages now, though both work the same way.
   Every commit (including Bojan's edits) triggers a rebuild; live in ~1–2 min.
 - **Contact form**: [Web3Forms](https://web3forms.com) free plan — submits
   go straight to email, no backend to run.
@@ -84,7 +84,8 @@ print3d-mockup/
 │   ├── build.test.mjs           # node:test — validation + template engine
 │   └── e2e/                       # optional Playwright smoke test (own package.json)
 ├── .pages.yml                   # Pages CMS admin UI config (Serbian labels)
-├── .node-version                 # pins Cloudflare Pages' Node version
+├── .node-version                 # pins the Cloudflare build image's Node version
+├── wrangler.jsonc                 # Cloudflare deploy config (Workers static assets)
 ├── dist/                          # build output — deploy this (gitignored)
 ├── DEPLOY.sr.md                  # (Serbian) deploy steps for Miljan
 ├── ADMIN-UPUTSTVO.sr.md           # (Serbian) how-to guide for Bojan
@@ -104,7 +105,7 @@ print3d-mockup/
 
 ## Deploying
 
-See **`DEPLOY.sr.md`** (Serbian, step by step): GitHub repo, Cloudflare Pages
+See **`DEPLOY.sr.md`** (Serbian, step by step): GitHub repo, Cloudflare
 build settings, connecting Pages CMS and inviting Bojan, creating the
 Web3Forms key, optional custom domain.
 

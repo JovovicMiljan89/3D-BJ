@@ -18,7 +18,7 @@ with real values in `content/site.json`.
 - **Admin editing**: [Pages CMS](https://pagescms.org) (`.pages.yml`), commits
   directly to the GitHub repo — no server, no database, no login on the
   public site.
-- **Hosting**: Cloudflare Pages free plan, `*.pages.dev` subdomain (custom
+- **Hosting**: Cloudflare (Compute / Workers static assets) free plan, `*.workers.dev` subdomain in practice (custom
   domain optional).
 - **Contact form**: [Web3Forms](https://web3forms.com) free plan — a client-side
   `fetch()` POST, no backend to run.

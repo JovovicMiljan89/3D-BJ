@@ -24,19 +24,28 @@ naloge (GitHub, Cloudflare, Pages CMS, Web3Forms).
    ```
    Ako želiš da ova grana bude glavna grana repozitorijuma, na GitHub-u u **Settings → Branches** promeni default granu na `static-cms` (ili je prvo spoji u `main` lokalno pa pošalji `main`).
 
-## 2. Poveži Cloudflare Pages
+## 2. Poveži Cloudflare (Compute / Workers static assets)
 
-1. Uloguj se na [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages** → **Create application** → tab **Pages** → **Connect to Git**.
-2. Izaberi GitHub repo koji si napravio.
-3. Podešavanja builda:
+> **Napomena o nazivu proizvoda:** originalni plan je predviđao klasičan
+> **Cloudflare Pages** (adresa oblika `*.pages.dev`). Cloudflare je u
+> međuvremenu preusmerio nove projekte na **Workers sa statičkim
+> fajlovima** — isti besplatni hosting, ista `_headers` podrška, isto
+> automatsko građenje na svaki push, samo je adresa oblika
+> `*.workers.dev` umesto `*.pages.dev`, i deploy ide preko `wrangler`
+> alata umesto klasičnog "Pages" builda. Testirano i potvrđeno da radi
+> identično (sigurnosni headeri, keširanje, sve sekcije sajta).
+
+1. Uloguj se na [dash.cloudflare.com](https://dash.cloudflare.com) → u levom meniju **Compute** → **Create** (ili **"Ship something new"** sa početne strane) → **Connect to Git**.
+2. Izaberi GitHub repo koji si napravio, granu **`static-cms`**.
+3. Podešavanja builda (Cloudflare ih obično sam prepozna, proveri da su ovakva):
    - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Root directory:** ostavi prazno (osim ako si repo stavio u podfolder).
-   - Node verzija se automatski čita iz `.node-version` fajla (već je u repou, podešen na `20`) — ne moraš ništa dodatno da podešavaš, ali ako Cloudflare pita, upiši `NODE_VERSION=20` kao env varijablu.
-4. Klikni **Save and Deploy**. Prvi build traje par minuta. Kad završi, dobijaš besplatnu adresu oblika `https://<ime-projekta>.pages.dev`.
+   - **Build output directory / Deploy command:** `dist` (Cloudflare sam doda `npx wrangler deploy` kao deploy komandu i generiše `wrangler.jsonc` — taj fajl je već u repou pa se ne generiše iznova svaki put).
+   - **Root directory:** ostavi prazno.
+   - Node verzija se automatski čita iz `.node-version` fajla (već je u repou, podešen na `20`).
+4. Klikni **Save and Deploy**. Prvi build traje par minuta. Kad završi, dobijaš besplatnu adresu oblika `https://<ime-projekta>.<tvoj-cloudflare-nalog>.workers.dev`.
 5. Svaki naredni `git push` (uključujući izmene koje Bojan sačuva kroz Pages CMS — vidi dole) automatski pokreće novi build i sajt se ažurira za otprilike 1–2 minuta.
 
-**Napomena:** ako `content/site.json` ima grešku (npr. nedostaje slika ili obavezno polje), `npm run build` će vratiti grešku i Cloudflare build će **pasti** — što znači da će **stara verzija sajta ostati uživo**, a nova (pokvarena) verzija se neće objaviti. Detalji greške se vide u Cloudflare Pages → tvoj projekat → **Deployments** → poslednji failed deploy → **View build log**.
+**Napomena:** ako `content/site.json` ima grešku (npr. nedostaje slika ili obavezno polje), `npm run build` će vratiti grešku i build će **pasti** — što znači da će **stara verzija sajta ostati uživo**, a nova (pokvarena) verzija se neće objaviti. Detalji greške se vide u Cloudflare dashboardu → tvoj projekat → **Deployments/Builds** → poslednji neuspeli deploy → build log.
 
 ## 3. Poveži Pages CMS i pozovi Bojana
 
@@ -57,7 +66,7 @@ Za detalje uputstva koje šalješ Bojanu, vidi `ADMIN-UPUTSTVO.sr.md`.
 
 ## 5. (Opciono) Sopstveni domen
 
-1. U Cloudflare Pages → tvoj projekat → **Custom domains** → **Set up a custom domain**.
+1. U Cloudflare dashboardu → tvoj projekat (Compute) → **Custom Domains** (ili **Triggers → Custom Domains**) → **Add**.
 2. Ukucaj domen (npr. `3d-bj.rs` ili `3dbj.com`) koji si prethodno kupio.
 3. Ako je domen već na Cloudflare-u (DNS), povezivanje je automatsko. Ako nije, Cloudflare će tražiti da dodaš CNAME/A zapis kod tvog registrara domena.
 4. HTTPS sertifikat se izdaje automatski, besplatno.
@@ -67,7 +76,7 @@ Za detalje uputstva koje šalješ Bojanu, vidi `ADMIN-UPUTSTVO.sr.md`.
 | Alat | Uloga | Nalog treba |
 |---|---|---|
 | GitHub | čuva kod i `content/site.json` | tebi |
-| Cloudflare Pages | hostuje sajt, gradi ga na svaki push (besplatno) | tebi |
+| Cloudflare (Compute / Workers static assets) | hostuje sajt, gradi ga na svaki push (besplatno); `*.workers.dev` adresa | tebi |
 | Pages CMS | admin panel za Bojana, piše direktno u GitHub | tebi (Bojan se loguje preko poziva, bez svog naloga) |
 | Web3Forms | prosleđuje poruke iz kontakt forme na email | nije obavezan (ključ se pravi samo sa email adresom) |
 

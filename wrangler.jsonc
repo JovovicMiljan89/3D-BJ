@@ -1,0 +1,15 @@
+{
+  // Cloudflare's dashboard auto-generated this on first deploy (Compute project,
+  // connected to Git, build output dir "dist") — committed here so every build
+  // is deterministic instead of re-running wrangler's interactive-fallback
+  // auto-init from scratch each time. Deploy command: `npx wrangler deploy`.
+  "name": "3d-bj",
+  "compatibility_date": "2026-09-24",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "dist"
+  },
+  "compatibility_flags": ["nodejs_compat"]
+}
