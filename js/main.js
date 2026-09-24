@@ -1,31 +1,27 @@
 // 3D-BJ — site interactions
-// 1) Contact modal (phone / email / inquiry form -> Web3Forms)
-// 2) Gallery image lightbox
-// 3) Footer year is baked in at build time (see scripts/build.mjs) — no JS needed for it.
+// 1) Mobile hamburger nav                      [#2]
+// 2) CTA -> scroll to #kontakt + focus name     [#3]
+// 3) Copy-email button                          [#3]
+// 4) Inquiry form -> Web3Forms                  [#4]
+// 5) Gallery lightbox (keyboard + focus-return) [#13]
 //
 // Everything the page needs (labels, options, messages, the Web3Forms access key)
 // is already rendered into the static HTML at build time — this file never fetches
 // content/site.json at runtime.
 
 (function () {
+  "use strict";
+
   const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
-  // ---------- Contact modal ----------
-  const modal = document.getElementById("contactModal");
-  const form = document.getElementById("inquiryForm");
-  const formError = document.getElementById("formError");
-  const formNetworkError = document.getElementById("formNetworkError");
-  const formSuccess = document.getElementById("formSuccess");
-  const submitBtn = document.getElementById("submitBtn");
-  const submitLabel = submitBtn.textContent;
-  const sendingLabel = form.dataset.sendingLabel || submitLabel;
+  function prefersReducedMotion() {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
 
   function openModal(el) {
     el.classList.add("is-open");
     el.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-    const firstInput = el.querySelector("input, button");
-    if (firstInput) firstInput.focus();
   }
 
   function closeModal(el) {
@@ -34,13 +30,63 @@
     document.body.style.overflow = "";
   }
 
-  document.querySelectorAll("[data-open-contact]").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      form.hidden = false;
-      formSuccess.hidden = true;
-      openModal(modal);
-    })
-  );
+  // ---------- Mobile hamburger nav [#2] ----------
+  const navToggle = document.getElementById("navToggle");
+  const siteNav = document.getElementById("siteNav");
+
+  function closeNav() {
+    siteNav.classList.remove("is-open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+  function openNav() {
+    siteNav.classList.add("is-open");
+    navToggle.setAttribute("aria-expanded", "true");
+  }
+
+  navToggle.addEventListener("click", () => {
+    if (siteNav.classList.contains("is-open")) closeNav();
+    else openNav();
+  });
+  siteNav.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeNav));
+
+  // ---------- CTA -> contact section [#3] ----------
+  const kontaktSection = document.getElementById("kontakt");
+  const nameField = document.getElementById("f-name");
+
+  function focusContactForm() {
+    if (!kontaktSection) return;
+    closeNav();
+    kontaktSection.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+    const delay = prefersReducedMotion() ? 0 : 450;
+    window.setTimeout(() => {
+      if (nameField) nameField.focus({ preventScroll: true });
+    }, delay);
+  }
+
+  document.querySelectorAll("[data-focus-form]").forEach((btn) => btn.addEventListener("click", focusContactForm));
+
+  // ---------- Copy-email button ----------
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    const label = btn.querySelector("span");
+    const originalLabel = label ? label.textContent : "";
+    const copiedLabel = btn.dataset.copiedLabel || originalLabel;
+    const text = btn.dataset.copyText || "";
+
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (err) {
+        console.warn("Clipboard copy failed:", err);
+        return;
+      }
+      btn.classList.add("is-copied");
+      if (label) label.textContent = copiedLabel;
+      window.setTimeout(() => {
+        btn.classList.remove("is-copied");
+        if (label) label.textContent = originalLabel;
+      }, 2000);
+    });
+  });
 
   document.addEventListener("click", (e) => {
     if (e.target.matches("[data-close-modal]")) {
@@ -48,13 +94,15 @@
     }
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      document.querySelectorAll(".modal.is-open").forEach(closeModal);
-    }
-  });
+  // ---------- Inquiry form -> Web3Forms [#4] ----------
+  const form = document.getElementById("inquiryForm");
+  const formError = document.getElementById("formError");
+  const formNetworkError = document.getElementById("formNetworkError");
+  const formSuccess = document.getElementById("formSuccess");
+  const submitBtn = document.getElementById("submitBtn");
+  const submitLabel = submitBtn.textContent;
+  const sendingLabel = form.dataset.sendingLabel || submitLabel;
 
-  // ---------- Inquiry form -> Web3Forms ----------
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
@@ -72,7 +120,6 @@
     // silently pretend to succeed instead of telling a bot what tripped it.
     if (data.botcheck) {
       form.reset();
-      form.hidden = true;
       formSuccess.hidden = false;
       return;
     }
@@ -91,6 +138,7 @@
           email: data.email,
           service: data.service,
           material: data.material,
+          file_link: data.file_link || "",
           message: data.message,
           botcheck: false,
         }),
@@ -101,7 +149,6 @@
       }
 
       form.reset();
-      form.hidden = true;
       formSuccess.hidden = false;
     } catch (err) {
       console.warn("Web3Forms submit failed:", err);
@@ -112,26 +159,56 @@
     }
   });
 
-  // ---------- Gallery lightbox ----------
+  // ---------- Gallery lightbox [#13] ----------
   const lightbox = document.createElement("div");
   lightbox.className = "modal modal--image";
   lightbox.setAttribute("aria-hidden", "true");
   lightbox.innerHTML = `
     <div class="modal__backdrop" data-close-modal></div>
-    <div class="modal__dialog" role="dialog" aria-modal="true">
-      <button class="modal__close" aria-label="Close" data-close-modal>&times;</button>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-label="Uvećana slika">
+      <button class="modal__close" aria-label="Zatvori" data-close-modal>&times;</button>
       <img alt="" />
       <p class="muted" style="margin-top:8px"></p>
     </div>`;
   document.body.appendChild(lightbox);
 
-  document.querySelectorAll(".gallery__item").forEach((item) =>
-    item.addEventListener("click", () => {
-      const img = item.querySelector("img");
-      lightbox.querySelector("img").src = img.src;
-      lightbox.querySelector("img").alt = img.alt;
-      lightbox.querySelector("p").textContent = item.querySelector("figcaption").textContent;
-      openModal(lightbox);
-    })
+  let lastGalleryTrigger = null;
+
+  function openLightbox(item) {
+    const img = item.querySelector("img");
+    lightbox.querySelector("img").src = img.src;
+    lightbox.querySelector("img").alt = img.alt;
+    lightbox.querySelector("p").textContent = item.querySelector("figcaption").textContent;
+    lastGalleryTrigger = item;
+    openModal(lightbox);
+    lightbox.querySelector(".modal__close").focus();
+  }
+
+  function closeLightbox() {
+    closeModal(lightbox);
+    if (lastGalleryTrigger) {
+      lastGalleryTrigger.focus();
+      lastGalleryTrigger = null;
+    }
+  }
+
+  lightbox.querySelectorAll("[data-close-modal]").forEach((el) =>
+    el.addEventListener("click", closeLightbox)
   );
+  // ---------- Escape: close the lightbox if open, otherwise close the mobile nav ----------
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (lightbox.classList.contains("is-open")) closeLightbox();
+    else closeNav();
+  });
+
+  document.querySelectorAll(".gallery__item").forEach((item) => {
+    item.addEventListener("click", () => openLightbox(item));
+    item.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        openLightbox(item);
+      }
+    });
+  });
 })();
