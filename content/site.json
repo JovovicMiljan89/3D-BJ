@@ -32,15 +32,39 @@
     "heading": "What we print"
   },
   "services": [
-    { "icon": "⚙️", "title": "Prototypes", "text": "Fast functional prototypes for product testing." },
-    { "icon": "🔧", "title": "Spare parts", "text": "Replacement clips, knobs, brackets and holders." },
-    { "icon": "🎁", "title": "Gifts & décor", "text": "Personalized figurines, vases and name plates." },
-    { "icon": "🎨", "title": "Multicolor prints", "text": "Up to 4 colors or materials in a single print — logos, signs, toys." },
-    { "icon": "🔥", "title": "Engineering materials", "text": "Enclosed printer for ABS, ASA and carbon-fiber blends — heat & UV resistant parts." },
-    { "icon": "📡", "title": "3D scanning", "text": "Scan an existing object, get a clean 3D model, then print a copy or improved version." }
+    {
+      "icon": "⚙️",
+      "title": "Prototypes",
+      "text": "Fast functional prototypes for product testing."
+    },
+    {
+      "icon": "🔧",
+      "title": "Spare parts",
+      "text": "Replacement clips, knobs, brackets and holders."
+    },
+    {
+      "icon": "🎁",
+      "title": "Gifts & décor",
+      "text": "Personalized figurines, vases and name plates."
+    },
+    {
+      "icon": "🎨",
+      "title": "Multicolor prints",
+      "text": "Up to 4 colors or materials in a single print — logos, signs, toys."
+    },
+    {
+      "icon": "🔥",
+      "title": "Engineering materials",
+      "text": "Enclosed printer for ABS, ASA and carbon-fiber blends — heat & UV resistant parts."
+    },
+    {
+      "icon": "📡",
+      "title": "3D scanning",
+      "text": "Scan an existing object, get a clean 3D model, then print a copy or improved version."
+    }
   ],
   "workshop": {
-    "heading": "Our workshop",
+    "heading": "Workshop",
     "subheading": "Real equipment, mock specs — values below are indicative only.",
     "photo": "/assets/images/workshop.jpg",
     "photoAlt": "Workshop with two open-frame 3D printers, multicolor filament units and an enclosed 3D printer",
@@ -52,10 +76,22 @@
         "tag": "FDM · Multicolor",
         "title": "2× Bambu Lab A1 + AMS lite",
         "specs": [
-          { "label": "Build volume", "value": "256 × 256 × 256 mm" },
-          { "label": "Colors per print", "value": "up to 4" },
-          { "label": "Materials", "value": "PLA, PETG, TPU" },
-          { "label": "Best for", "value": "Décor, gifts, signs, prototypes" }
+          {
+            "label": "Build volume",
+            "value": "256 × 256 × 256 mm"
+          },
+          {
+            "label": "Colors per print",
+            "value": "up to 4"
+          },
+          {
+            "label": "Materials",
+            "value": "PLA, PETG, TPU"
+          },
+          {
+            "label": "Best for",
+            "value": "Décor, gifts, signs, prototypes"
+          }
         ]
       },
       {
@@ -64,10 +100,22 @@
         "tag": "FDM · Enclosed CoreXY",
         "title": "High-speed enclosed printer",
         "specs": [
-          { "label": "Build volume", "value": "~256 × 256 × 256 mm" },
-          { "label": "Speed", "value": "up to 500 mm/s" },
-          { "label": "Materials", "value": "ABS, ASA, PETG-CF, PLA" },
-          { "label": "Best for", "value": "Functional & outdoor parts" }
+          {
+            "label": "Build volume",
+            "value": "~256 × 256 × 256 mm"
+          },
+          {
+            "label": "Speed",
+            "value": "up to 500 mm/s"
+          },
+          {
+            "label": "Materials",
+            "value": "ABS, ASA, PETG-CF, PLA"
+          },
+          {
+            "label": "Best for",
+            "value": "Functional & outdoor parts"
+          }
         ]
       },
       {
@@ -76,18 +124,42 @@
         "tag": "3D scanning",
         "title": "3D scanner + turntable",
         "specs": [
-          { "label": "Object size", "value": "~2 cm – 1 m" },
-          { "label": "Accuracy", "value": "~0.05 mm" },
-          { "label": "Output", "value": "STL / OBJ / PLY" },
-          { "label": "Best for", "value": "Spare parts, replicas, reverse engineering" }
+          {
+            "label": "Object size",
+            "value": "~2 cm – 1 m"
+          },
+          {
+            "label": "Accuracy",
+            "value": "~0.05 mm"
+          },
+          {
+            "label": "Output",
+            "value": "STL / OBJ / PLY"
+          },
+          {
+            "label": "Best for",
+            "value": "Spare parts, replicas, reverse engineering"
+          }
         ]
       }
     ],
     "stats": [
-      { "value": "3", "label": "printers" },
-      { "value": "4", "label": "colors per print" },
-      { "value": "1", "label": "3D scanner" },
-      { "value": "24h", "label": "typical turnaround*" }
+      {
+        "value": "3",
+        "label": "printers"
+      },
+      {
+        "value": "4",
+        "label": "colors per print"
+      },
+      {
+        "value": "1",
+        "label": "3D scanner"
+      },
+      {
+        "value": "24h",
+        "label": "typical turnaround*"
+      }
     ],
     "footnote": "*Mock value."
   },
@@ -103,20 +175,48 @@
     "subheading": "Click an image to enlarge."
   },
   "gallery": [
-    { "image": "/assets/images/vase.svg", "alt": "Spiral vase", "caption": "Spiral vase · PLA" },
-    { "image": "/assets/images/gear.svg", "alt": "Mechanical gear", "caption": "Gear set · PETG" },
-    { "image": "/assets/images/figurine.svg", "alt": "Robot figurine", "caption": "Robot figurine · PLA multicolor" },
-    { "image": "/assets/images/phone-stand.svg", "alt": "Phone stand", "caption": "Phone stand · PLA" }
+    {
+      "image": "/assets/images/vase.svg",
+      "alt": "Spiral vase",
+      "caption": "Spiral vase · PLA"
+    },
+    {
+      "image": "/assets/images/gear.svg",
+      "alt": "Mechanical gear",
+      "caption": "Gear set · PETG"
+    },
+    {
+      "image": "/assets/images/figurine.svg",
+      "alt": "Robot figurine",
+      "caption": "Robot figurine · PLA multicolor"
+    },
+    {
+      "image": "/assets/images/phone-stand.svg",
+      "alt": "Phone stand",
+      "caption": "Phone stand · PLA"
+    }
   ],
   "howSection": {
     "heading": "How it works",
     "buttonLabel": "Start an inquiry"
   },
   "steps": [
-    { "title": "Send a file, idea or object", "text": "STL/OBJ/3MF, a sketch, or the part itself." },
-    { "title": "Scan & model", "text": "We 3D-scan or model it if needed." },
-    { "title": "Get a quote", "text": "Price, material and delivery time." },
-    { "title": "Print & deliver", "text": "Shipping or local pickup." }
+    {
+      "title": "Send a file, idea or object",
+      "text": "STL/OBJ/3MF, a sketch, or the part itself."
+    },
+    {
+      "title": "Scan & model",
+      "text": "We 3D-scan or model it if needed."
+    },
+    {
+      "title": "Get a quote",
+      "text": "Price, material and delivery time."
+    },
+    {
+      "title": "Print & deliver",
+      "text": "Shipping or local pickup."
+    }
   ],
   "contact": {
     "phoneDisplay": "+1 (555) 010-0199",
@@ -137,8 +237,19 @@
     "namePlaceholder": "John Doe",
     "emailPlaceholder": "john@example.com",
     "messagePlaceholder": "Describe what you want to print...",
-    "materialOptions": ["PLA", "PLA multicolor", "PETG", "ABS / ASA", "TPU (flexible)", "Not sure"],
-    "serviceOptions": ["3D printing", "3D scanning", "Scan + print"],
+    "materialOptions": [
+      "PLA",
+      "PLA multicolor",
+      "PETG",
+      "ABS / ASA",
+      "TPU (flexible)",
+      "Not sure"
+    ],
+    "serviceOptions": [
+      "3D printing",
+      "3D scanning",
+      "Scan + print"
+    ],
     "submitLabel": "Send inquiry",
     "sendingLabel": "Sending…",
     "errorMessage": "Please fill in all fields with a valid email.",
