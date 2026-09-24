@@ -1,0 +1,193 @@
+# Pages CMS config — https://pagescms.org/docs/
+# Bojan edits everything here through the Pages CMS admin UI; it commits
+# straight to this GitHub repo, which triggers a Cloudflare Pages build.
+
+media:
+  input: assets/uploads
+  output: /assets/uploads
+  categories: [image]
+
+content:
+  - name: site
+    label: "Sadržaj sajta"
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: meta
+        label: "Meta podaci (SEO)"
+        type: object
+        fields:
+          - { name: title, label: "Naslov stranice (tab u browseru)", type: string }
+          - { name: description, label: "Opis za pretragu (SEO)", type: text }
+          - { name: lang, label: "Jezik stranice (npr. en, sr)", type: string }
+
+      - name: brand
+        label: "Brend"
+        type: object
+        fields:
+          - { name: name, label: "Naziv brenda", type: string }
+          - { name: logo, label: "Logo (slika u zaglavlju)", type: image }
+          - { name: favicon, label: "Favikona (ikonica u tabu)", type: image }
+          - { name: touchIcon, label: "Ikonica za mobilne uređaje", type: image }
+          - { name: ownerName, label: "Ime vlasnika", type: string }
+          - { name: ownerRole, label: "Uloga vlasnika", type: string }
+
+      - name: nav
+        label: "Meni (navigacija)"
+        type: object
+        fields:
+          - { name: servicesLabel, label: "Labela: Usluge", type: string }
+          - { name: workshopLabel, label: "Labela: Radionica", type: string }
+          - { name: galleryLabel, label: "Labela: Galerija", type: string }
+          - { name: howLabel, label: "Labela: Kako radi", type: string }
+          - { name: contactLabel, label: "Labela: Kontakt (dugme)", type: string }
+
+      - name: hero
+        label: "Naslovna sekcija (hero)"
+        type: object
+        fields:
+          - { name: eyebrow, label: "Mali tekst iznad naslova", type: string }
+          - { name: headline, label: "Glavni naslov", type: string }
+          - { name: lead, label: "Tekst ispod naslova", type: text }
+          - { name: primaryButton, label: "Tekst prvog dugmeta", type: string }
+          - { name: secondaryButton, label: "Tekst drugog dugmeta", type: string }
+          - { name: image, label: "Slika", type: image }
+          - { name: imageAlt, label: "Opis slike (alt tekst)", type: string }
+
+      - name: servicesSection
+        label: "Sekcija: Usluge (naslov)"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+
+      - name: services
+        label: "Usluge (kartice)"
+        type: object
+        list: true
+        fields:
+          - { name: icon, label: "Ikonica (emoji)", type: string }
+          - { name: title, label: "Naslov", type: string }
+          - { name: text, label: "Opis", type: text }
+
+      - name: workshop
+        label: "Radionica"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: subheading, label: "Podnaslov", type: string }
+          - { name: photo, label: "Velika fotografija radionice", type: image }
+          - { name: photoAlt, label: "Opis fotografije (alt tekst)", type: string }
+          - { name: photoCaption, label: "Natpis ispod fotografije", type: string }
+          - name: equipment
+            label: "Oprema (kartice)"
+            type: object
+            list: true
+            fields:
+              - { name: image, label: "Slika opreme", type: image }
+              - { name: imageAlt, label: "Opis slike (alt tekst)", type: string }
+              - { name: tag, label: "Oznaka (npr. FDM · Multicolor)", type: string }
+              - { name: title, label: "Naziv opreme", type: string }
+              - name: specs
+                label: "Specifikacije"
+                type: object
+                list: true
+                fields:
+                  - { name: label, label: "Naziv karakteristike", type: string }
+                  - { name: value, label: "Vrednost", type: string }
+          - name: stats
+            label: "Brojke (statistika)"
+            type: object
+            list: true
+            fields:
+              - { name: value, label: "Broj", type: string }
+              - { name: label, label: "Opis broja", type: string }
+          - { name: footnote, label: "Napomena ispod brojki", type: string }
+
+      - name: maker
+        label: "O vlasniku"
+        type: object
+        fields:
+          - { name: name, label: "Ime", type: string }
+          - { name: roleTag, label: "Uloga (oznaka)", type: string }
+          - { name: bio, label: "Kratka biografija", type: text }
+          - { name: avatar, label: "Slika / avatar", type: image }
+          - { name: buttonLabel, label: "Tekst dugmeta", type: string }
+
+      - name: gallerySection
+        label: "Sekcija: Galerija (naslov)"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: subheading, label: "Podnaslov", type: string }
+
+      - name: gallery
+        label: "Galerija (radovi)"
+        type: object
+        list: true
+        fields:
+          - { name: image, label: "Slika", type: image }
+          - { name: alt, label: "Opis slike (alt tekst)", type: string }
+          - { name: caption, label: "Natpis ispod slike", type: string }
+
+      - name: howSection
+        label: "Sekcija: Kako radi (naslov)"
+        type: object
+        fields:
+          - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: buttonLabel, label: "Tekst dugmeta na dnu", type: string }
+
+      - name: steps
+        label: "Koraci (Kako radi)"
+        type: object
+        list: true
+        fields:
+          - { name: title, label: "Naslov koraka", type: string }
+          - { name: text, label: "Opis koraka", type: text }
+
+      - name: contact
+        label: "Kontakt i forma za upit"
+        type: object
+        fields:
+          - { name: phoneDisplay, label: "Telefon (prikazan tekst)", type: string }
+          - { name: phoneTel, label: "Telefon (za pozivanje, npr. +381601234567)", type: string }
+          - { name: email, label: "Email adresa", type: string }
+          - name: web3formsKey
+            label: "Web3Forms pristupni ključ (access key)"
+            type: string
+            description: "Dobija se besplatno na web3forms.com. Ovaj ključ je javan po dizajnu."
+          - { name: modalTitle, label: "Naslov prozora za kontakt", type: string }
+          - { name: modalSubtitle, label: "Podnaslov prozora za kontakt", type: string }
+          - { name: phoneTileLabel, label: "Labela: Telefon (u prozoru)", type: string }
+          - { name: emailTileLabel, label: "Labela: Email (u prozoru)", type: string }
+          - name: fieldLabels
+            label: "Labele polja u formi"
+            type: object
+            fields:
+              - { name: name, label: "Labela: Ime", type: string }
+              - { name: email, label: "Labela: Email", type: string }
+              - { name: material, label: "Labela: Materijal", type: string }
+              - { name: service, label: "Labela: Usluga", type: string }
+              - { name: message, label: "Labela: Poruka", type: string }
+          - { name: namePlaceholder, label: "Primer teksta: Ime", type: string }
+          - { name: emailPlaceholder, label: "Primer teksta: Email", type: string }
+          - { name: messagePlaceholder, label: "Primer teksta: Poruka", type: string }
+          - name: materialOptions
+            label: "Opcije: Materijal"
+            type: string
+            list: true
+          - name: serviceOptions
+            label: "Opcije: Usluga"
+            type: string
+            list: true
+          - { name: submitLabel, label: "Tekst dugmeta: Pošalji", type: string }
+          - { name: sendingLabel, label: "Tekst dugmeta dok se šalje", type: string }
+          - { name: errorMessage, label: "Poruka greške (nepopunjena forma)", type: string }
+          - { name: networkErrorMessage, label: "Poruka greške (slanje nije uspelo)", type: string }
+          - { name: successMessage, label: "Poruka uspeha (poslato)", type: string }
+
+      - name: footer
+        label: "Podnožje (footer)"
+        type: object
+        fields:
+          - { name: text, label: "Tekst u podnožju (posle imena i vlasnika)", type: text }
