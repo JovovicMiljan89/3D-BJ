@@ -1,16 +1,24 @@
-// 3D-BJ — mockup interactions
-// 1) Contact modal (phone / email / inquiry form)
+// 3D-BJ — site interactions
+// 1) Contact modal (phone / email / inquiry form -> Web3Forms)
 // 2) Gallery image lightbox
-// 3) Footer year
+// 3) Footer year is baked in at build time (see scripts/build.mjs) — no JS needed for it.
+//
+// Everything the page needs (labels, options, messages, the Web3Forms access key)
+// is already rendered into the static HTML at build time — this file never fetches
+// content/site.json at runtime.
 
 (function () {
-  const CONTACT_EMAIL = "hello@3d-bj.example"; // mock data
+  const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
   // ---------- Contact modal ----------
   const modal = document.getElementById("contactModal");
   const form = document.getElementById("inquiryForm");
   const formError = document.getElementById("formError");
+  const formNetworkError = document.getElementById("formNetworkError");
   const formSuccess = document.getElementById("formSuccess");
+  const submitBtn = document.getElementById("submitBtn");
+  const submitLabel = submitBtn.textContent;
+  const sendingLabel = form.dataset.sendingLabel || submitLabel;
 
   function openModal(el) {
     el.classList.add("is-open");
@@ -46,29 +54,62 @@
     }
   });
 
-  // ---------- Inquiry form -> mailto ----------
-  form.addEventListener("submit", (e) => {
+  // ---------- Inquiry form -> Web3Forms ----------
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || "");
+
+    formError.hidden = true;
+    formNetworkError.hidden = true;
 
     if (!data.name.trim() || !data.message.trim() || !emailOk) {
       formError.hidden = false;
       return;
     }
-    formError.hidden = true;
 
-    const subject = encodeURIComponent(`3D print inquiry from ${data.name}`);
-    const body = encodeURIComponent(
-      `Name: ${data.name}\nEmail: ${data.email}\nService: ${data.service}\nMaterial: ${data.material}\n\n${data.message}`
-    );
+    // Honeypot: real visitors never fill this hidden field. If it's filled,
+    // silently pretend to succeed instead of telling a bot what tripped it.
+    if (data.botcheck) {
+      form.reset();
+      form.hidden = true;
+      formSuccess.hidden = false;
+      return;
+    }
 
-    // Mockup: no backend — open the user's mail client with a prefilled message.
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    submitBtn.disabled = true;
+    submitBtn.textContent = sendingLabel;
 
-    form.reset();
-    form.hidden = true;
-    formSuccess.hidden = false;
+    try {
+      const res = await fetch(WEB3FORMS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: data.access_key,
+          subject: `3D-BJ upit: ${data.name}`,
+          name: data.name,
+          email: data.email,
+          service: data.service,
+          material: data.material,
+          message: data.message,
+          botcheck: false,
+        }),
+      });
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || `Request failed (${res.status})`);
+      }
+
+      form.reset();
+      form.hidden = true;
+      formSuccess.hidden = false;
+    } catch (err) {
+      console.warn("Web3Forms submit failed:", err);
+      formNetworkError.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitLabel;
+    }
   });
 
   // ---------- Gallery lightbox ----------
@@ -93,7 +134,4 @@
       openModal(lightbox);
     })
   );
-
-  // ---------- Footer year ----------
-  document.getElementById("year").textContent = new Date().getFullYear();
 })();
