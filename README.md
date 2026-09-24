@@ -1,75 +1,111 @@
-# 3D-BJ — 3D Printing Mockup (Single Page)
+# 3D-BJ — Static Site with Pages CMS Admin
 
-A simple, dependency-free single-page mockup for **3D-BJ**, a 3D print / scan / model service run by **Bojan Jovović** (owner & print operator).
-Phone number and email are fake placeholders.
+A single-page marketing site for **3D-BJ**, a 3D print / scan / model service run
+by **Bojan Jovović**. Same dark navy/black/red design as the original mockup —
+now content-driven and free to host.
 
-## Quick start (VS Code)
+- **Public site**: fully static HTML, generated at build time. No server, no
+  database, no login on the public site.
+- **Admin editing**: Bojan edits everything (texts, prices/specs, services,
+  equipment, gallery photos) through [Pages CMS](https://pagescms.org), a
+  hosted admin UI that commits straight to this GitHub repo — no code, no
+  GitHub account needed for him.
+- **Hosting**: [Cloudflare Pages](https://pages.cloudflare.com) free plan.
+  Every commit (including Bojan's edits) triggers a rebuild; live in ~1–2 min.
+- **Contact form**: [Web3Forms](https://web3forms.com) free plan — submits
+  go straight to email, no backend to run.
 
-1. Open this folder in VS Code (`File → Open Folder…`).
-2. Install the recommended extensions when prompted (Live Server, Prettier).
-3. Right-click `index.html` → **Open with Live Server**
-   — or run in terminal: `npm start` (requires Node.js, no install step needed).
-4. Or simply double-click `index.html` to open it in a browser.
+> Looking for the previous approach (Node/Express server with a session-login
+> admin panel and a JSON-file database)? That's the `master` branch — kept
+> intentionally separate so both approaches exist side by side.
+
+## How content becomes a page
+
+```
+content/site.json  +  src/index.template.html
+        │                      │
+        └────────► scripts/build.mjs ────────► dist/  (deploy this)
+                    (validates, then
+                     renders + copies
+                     css/ js/ assets/)
+```
+
+`content/site.json` is the **single source of truth** for every piece of
+user-facing text and every image path — edited either by hand or through
+Pages CMS (`.pages.yml` defines that admin UI). `src/index.template.html` is
+the page with `{{placeholders}}` and `{{#each}}` blocks. The build script
+HTML-escapes everything, checks that every referenced image actually exists,
+and writes a fully rendered `dist/index.html` — no client-side fetch of JSON,
+so the page is immediately indexable, has no layout flash, and works without
+JavaScript except for the contact modal, the contact form, and the gallery
+lightbox.
+
+## Run it locally
+
+No install needed for the site itself (zero npm dependencies):
+
+```bash
+npm run build   # content/site.json -> dist/
+npm run dev     # build, then serve dist/ at http://localhost:8080
+npm test        # node:test — content validation + template engine
+```
+
+Optional end-to-end smoke test (kept in its own `tests/e2e/` so the root
+project stays dependency-free):
+
+```bash
+cd tests/e2e
+npm install
+npx playwright install chromium   # first time only
+npm test
+```
 
 ## Project structure
 
 ```
 print3d-mockup/
-├── index.html              # The whole page (header, hero, services, workshop, gallery, steps, footer, modal)
-├── css/styles.css          # All styles + responsive rules
-├── js/main.js              # Contact modal, inquiry form → mailto, gallery lightbox
-├── assets/logo/            # 3D-BJ logo set (see Logo section below)
-├── assets/images/          # Mock SVG illustrations (replace with real photos later)
-│   ├── favicon.svg
-│   ├── hero-printer.svg
-│   ├── vase.svg
-│   ├── gear.svg
-│   ├── figurine.svg
-│   ├── phone-stand.svg
-│   ├── workshop.jpg        # Stills from the workshop video (low-res, replace later)
-│   ├── printers-multicolor.jpg
-│   ├── printer-enclosed.jpg
-│   └── scanner.jpg
-├── SPEC.md                 # Functional spec & acceptance criteria
-├── package.json             # Optional npm scripts (start / format)
-├── .vscode/                # Recommended extensions + editor settings
-├── .prettierrc
-└── .gitignore
+├── content/
+│   └── site.json              # ALL editable content — edit this or use Pages CMS
+├── src/
+│   └── index.template.html    # page template ({{placeholders}}, {{#each}})
+├── scripts/
+│   ├── build.mjs               # validate -> render -> dist/ (+ dist/_headers)
+│   ├── serve.mjs                # zero-dependency static server for `npm run dev`
+│   └── lib/
+│       ├── validate.mjs         # required fields, types, image files exist
+│       ├── render.mjs            # tiny {{ }} / {{#each}} template engine
+│       └── escape.mjs             # HTML-escaping
+├── css/styles.css              # unchanged from the original mockup
+├── js/main.js                  # contact modal, Web3Forms submit, gallery lightbox
+├── assets/
+│   ├── logo/, images/           # original logo + seed illustrations
+│   └── uploads/                  # photos Bojan uploads via Pages CMS land here
+├── tests/
+│   ├── build.test.mjs           # node:test — validation + template engine
+│   └── e2e/                       # optional Playwright smoke test (own package.json)
+├── .pages.yml                   # Pages CMS admin UI config (Serbian labels)
+├── .node-version                 # pins Cloudflare Pages' Node version
+├── dist/                          # build output — deploy this (gitignored)
+├── DEPLOY.sr.md                  # (Serbian) deploy steps for Miljan
+├── ADMIN-UPUTSTVO.sr.md           # (Serbian) how-to guide for Bojan
+└── SPEC.md                        # functional spec & acceptance criteria
 ```
 
-## Where to change mock data
+## Where to change things
 
-| What            | Where                                                        |
-|-----------------|--------------------------------------------------------------|
-| Business name   | `index.html` (logo, title, footer)                            |
-| Phone           | `index.html` → search `tel:+15550100199`                      |
-| Email           | `index.html` → search `3d-bj.example` + `CONTACT_EMAIL` in `js/main.js` |
-| Images          | Replace files in `assets/images/` (keep names or update `src`) |
-| Equipment specs | `index.html` → section `#workshop` (all values are indicative/mock) |
-| Colors          | `css/styles.css` → `:root` variables (dark-only: black / navy / red) |
+| What | Where |
+|---|---|
+| Any text on the site | `content/site.json` (or Pages CMS — same file, friendlier UI) |
+| Product/gallery photos, equipment photos, logos | `content/site.json` image fields → files in `assets/` or `assets/uploads/` |
+| Page structure / HTML | `src/index.template.html` |
+| Colors / layout | `css/styles.css` — unchanged from the original mockup |
+| Contact form behavior | `js/main.js` |
+| What fields Bojan sees in the admin UI | `.pages.yml` |
 
-## Notes
+## Deploying
 
-- No backend: the inquiry form opens the visitor's email client with a pre-filled message (`mailto:`).
-  To use a real backend later, replace the `submit` handler in `js/main.js` with a `fetch()` call
-  (e.g. Formspree, Netlify Forms, or your own API).
-- `tel:` links dial on mobile; on desktop they open the default calling app (if any).
+See **`DEPLOY.sr.md`** (Serbian, step by step): GitHub repo, Cloudflare Pages
+build settings, connecting Pages CMS and inviting Bojan, creating the
+Web3Forms key, optional custom domain.
 
-## Logo (assets/logo/)
-
-| File | Use |
-|------|-----|
-| `3d-bj-horizontal.svg` / `.png` | Main logo: cube + wordmark + tagline "PRINT · SCAN · MODEL" |
-| `3d-bj-wordmark.svg` | Compact version for the site header |
-| `3d-bj-stacked.svg` / `.png` | Stacked version with the name "Bojan Jovović" (business card, social cover) |
-| `3d-bj-mark.svg` | Cube symbol only (avatar, stickers, watermark) |
-| `3d-bj-icon.svg` / `3d-bj-icon-512.png` | App icon / favicon (dark rounded square); copied to `assets/images/favicon.svg` |
-| `3d-bj-logo-sheet.png` | Overview of all variants + color palette |
-| `3d-bj-horizontal-mono.svg` | Single-color white version (engraving, printing on colored backgrounds) |
-
-**Concept:** an isometric cube built from visible print layers (navy sides) with a red top layer and a
-white dot for the nozzle, which is a part being printed seen from above. The wordmark uses custom geometric lettering
-with chamfered corners, drawn as paths so it needs no font. "3D" is light, "-BJ" is red.
-
-**Colors:** red `#e11d2e` / `#b3121f`, navy `#2f4f9a` / `#1b2d55`, text `#e7ecf6`, background `#070b14`.
-Tagline and name use the system UI font.
+See **`ADMIN-UPUTSTVO.sr.md`** (Serbian) for the short guide handed to Bojan.
