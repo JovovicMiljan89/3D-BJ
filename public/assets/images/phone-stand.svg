@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#131226"/>
+  <path d="M60 240h180l-10 16H70z" fill="#24365c"/>
+  <path d="M90 240l70-150 22 10-60 140z" fill="#b3121f"/>
+  <rect x="150" y="70" width="70" height="140" rx="12" transform="rotate(24 185 140)" fill="#24365c"/>
+  <rect x="158" y="82" width="54" height="112" rx="6" transform="rotate(24 185 140)" fill="#2f4f9a"/>
+  <path d="M150 240l30-22 10 12-20 10z" fill="#b3121f"/>
+</svg>

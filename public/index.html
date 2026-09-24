@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D-BJ — 3D Print · Scan · Model | Bojan Jovović</title>
+  <meta name="theme-color" content="#070b14" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="3D printing, scanning and modeling service — prototypes, spare parts, gifts and décor." />
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/logo/3d-bj-icon-512.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#top" class="logo">
+        <img src="assets/logo/3d-bj-wordmark.svg" alt="3D-BJ" height="40" />
+      </a>
+      <nav class="nav">
+        <a href="#services">Services</a>
+        <a href="#workshop">Workshop</a>
+        <a href="#products">Products</a>
+        <a href="#how">How it works</a>
+        <button class="btn btn--small" data-open-contact>Contact</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== Hero ===== -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="eyebrow" id="heroEyebrow">3D-BJ · Print · Scan · Model</p>
+          <h1 id="heroHeadline">Your ideas, printed layer by layer.</h1>
+          <p class="lead" id="heroLead">Prototypes, spare parts, gifts and décor. Send us a file or an idea — we'll scan, model and print it — in up to 4 colors, or in tough engineering materials.</p>
+          <div class="hero__actions">
+            <button class="btn" data-open-contact>Request a quote</button>
+            <a href="#workshop" class="btn btn--ghost">See our workshop</a>
+          </div>
+        </div>
+        <img class="hero__img" src="assets/images/hero-printer.svg" alt="Illustration of a 3D printer printing an object" />
+      </div>
+    </section>
+
+    <!-- ===== Services ===== -->
+    <section id="services" class="section">
+      <div class="container">
+        <h2>What we print</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="card__icon">⚙️</div>
+            <h3>Prototypes</h3>
+            <p>Fast functional prototypes for product testing.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon">🔧</div>
+            <h3>Spare parts</h3>
+            <p>Replacement clips, knobs, brackets and holders.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon">🎁</div>
+            <h3>Gifts &amp; décor</h3>
+            <p>Personalized figurines, vases and name plates.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon">🎨</div>
+            <h3>Multicolor prints</h3>
+            <p>Up to 4 colors or materials in a single print — logos, signs, toys.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon">🔥</div>
+            <h3>Engineering materials</h3>
+            <p>Enclosed printer for ABS, ASA and carbon-fiber blends — heat &amp; UV resistant parts.</p>
+          </article>
+          <article class="card">
+            <div class="card__icon">📡</div>
+            <h3>3D scanning</h3>
+            <p>Scan an existing object, get a clean 3D model, then print a copy or improved version.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===== Workshop / Equipment ===== -->
+    <section id="workshop" class="section section--alt">
+      <div class="container">
+        <h2>Our workshop</h2>
+        <p class="muted">Real equipment, mock specs — values below are indicative only.</p>
+
+        <figure class="workshop-hero">
+          <img src="assets/images/workshop.jpg" alt="Workshop with two open-frame 3D printers, multicolor filament units and an enclosed 3D printer" />
+          <figcaption>Print corner — 3 printers running side by side.</figcaption>
+        </figure>
+
+        <div class="equipment">
+          <article class="equip">
+            <img src="assets/images/printers-multicolor.jpg" alt="Two open-frame 3D printers with 4-spool multicolor units" />
+            <div class="equip__body">
+              <span class="tag">FDM · Multicolor</span>
+              <h3>2× Bambu Lab A1 + AMS lite</h3>
+              <ul class="specs">
+                <li><span>Build volume</span><strong>256 × 256 × 256 mm</strong></li>
+                <li><span>Colors per print</span><strong>up to 4</strong></li>
+                <li><span>Materials</span><strong>PLA, PETG, TPU</strong></li>
+                <li><span>Best for</span><strong>Décor, gifts, signs, prototypes</strong></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="equip">
+            <img src="assets/images/printer-enclosed.jpg" alt="Enclosed CoreXY 3D printer with glass door" />
+            <div class="equip__body">
+              <span class="tag">FDM · Enclosed CoreXY</span>
+              <h3>High-speed enclosed printer</h3>
+              <ul class="specs">
+                <li><span>Build volume</span><strong>~256 × 256 × 256 mm</strong></li>
+                <li><span>Speed</span><strong>up to 500 mm/s</strong></li>
+                <li><span>Materials</span><strong>ABS, ASA, PETG-CF, PLA</strong></li>
+                <li><span>Best for</span><strong>Functional &amp; outdoor parts</strong></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="equip">
+            <img src="assets/images/scanner.jpg" alt="3D scanner on tripod with turntable" />
+            <div class="equip__body">
+              <span class="tag">3D scanning</span>
+              <h3>3D scanner + turntable</h3>
+              <ul class="specs">
+                <li><span>Object size</span><strong>~2 cm – 1 m</strong></li>
+                <li><span>Accuracy</span><strong>~0.05 mm</strong></li>
+                <li><span>Output</span><strong>STL / OBJ / PLY</strong></li>
+                <li><span>Best for</span><strong>Spare parts, replicas, reverse engineering</strong></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+
+        <div class="stats">
+          <div><strong>3</strong><span>printers</span></div>
+          <div><strong>4</strong><span>colors per print</span></div>
+          <div><strong>1</strong><span>3D scanner</span></div>
+          <div><strong>24h</strong><span>typical turnaround*</span></div>
+        </div>
+        <p class="muted small">*Mock value.</p>
+
+        <!-- Meet the maker -->
+        <div class="maker">
+          <img class="maker__avatar" src="assets/logo/3d-bj-mark.svg" alt="" width="72" height="72" />
+          <div>
+            <span class="tag" id="aboutTag">Owner · Print operator</span>
+            <h3 id="aboutName">Bojan Jovović</h3>
+            <p class="muted" id="aboutText">Every job goes through my hands — from scanning and modeling to slicing, printing and final quality check. One person responsible, from your first message to delivery.</p>
+          </div>
+          <button class="btn" data-open-contact>Contact</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== Products ===== -->
+    <section id="products" class="section">
+      <div class="container">
+        <h2>Products</h2>
+        <p class="muted">Click a product to view details.</p>
+        <div class="gallery" id="productGrid">
+          <p class="muted">Loading products…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section id="how" class="section section--alt">
+      <div class="container">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li><span>1</span><strong>Send a file, idea or object</strong> STL/OBJ/3MF, a sketch, or the part itself.</li>
+          <li><span>2</span><strong>Scan &amp; model</strong> We 3D-scan or model it if needed.</li>
+          <li><span>3</span><strong>Get a quote</strong> Price, material and delivery time.</li>
+          <li><span>4</span><strong>Print &amp; deliver</strong> Shipping or local pickup.</li>
+        </ol>
+        <div class="center">
+          <button class="btn" data-open-contact>Start an inquiry</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© <span id="year"></span> <span id="footerBusinessName">3D-BJ</span> — <span id="footerNote">mockup, contact data is fictional.</span></p>
+      <p>
+        <a href="tel:+15550100199" id="footerPhone">+1 (555) 010-0199</a> ·
+        <a href="mailto:hello@3d-bj.example" id="footerEmail">hello@3d-bj.example</a>
+      </p>
+      <p><a href="admin/" class="muted small">Admin</a></p>
+    </div>
+  </footer>
+
+  <!-- ===== Contact modal ===== -->
+  <div class="modal" id="contactModal" aria-hidden="true">
+    <div class="modal__backdrop" data-close-modal></div>
+    <div class="modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+      <button class="modal__close" aria-label="Close" data-close-modal>&times;</button>
+      <h2 id="contactTitle">Contact inquiry</h2>
+      <p class="muted">Call, email, or send a quick message.</p>
+
+      <div class="contact-options">
+        <a class="contact-option" href="tel:+15550100199" id="contactPhoneLink">
+          <span class="contact-option__icon">📞</span>
+          <span><small>Phone</small><br /><span id="contactPhoneText">+1 (555) 010-0199</span></span>
+        </a>
+        <a class="contact-option" href="mailto:hello@3d-bj.example?subject=3D%20print%20inquiry" id="contactEmailLink">
+          <span class="contact-option__icon">✉️</span>
+          <span><small>Email</small><br /><span id="contactEmailText">hello@3d-bj.example</span></span>
+        </a>
+      </div>
+
+      <form id="inquiryForm" class="form" novalidate>
+        <label>Name
+          <input type="text" name="name" placeholder="John Doe" required />
+        </label>
+        <label>Email
+          <input type="email" name="email" placeholder="john@example.com" required />
+        </label>
+        <label>Material
+          <select name="material">
+            <option>PLA</option>
+            <option>PLA multicolor</option>
+            <option>PETG</option>
+            <option>ABS / ASA</option>
+            <option>TPU (flexible)</option>
+            <option>Not sure</option>
+          </select>
+        </label>
+        <label>Service
+          <select name="service">
+            <option>3D printing</option>
+            <option>3D scanning</option>
+            <option>Scan + print</option>
+          </select>
+        </label>
+        <label>Message
+          <textarea name="message" rows="3" placeholder="Describe what you want to print..." required></textarea>
+        </label>
+        <p class="form__error" id="formError" hidden>Please fill in all fields with a valid email.</p>
+        <button type="submit" class="btn btn--full">Send inquiry</button>
+      </form>
+      <p class="form__success" id="formSuccess" hidden>✅ Thanks! We received your inquiry and will get back to you soon.</p>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
