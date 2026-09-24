@@ -1,8 +1,8 @@
 {
   "meta": {
-    "title": "3D-BJ — 3D Print · Scan · Model | Bojan Jovović",
-    "description": "3D printing, scanning and modeling service — prototypes, spare parts, gifts and décor.",
-    "lang": "en"
+    "title": "3D-BJ — 3D štampa · skeniranje · modelovanje | Bojan Jovović",
+    "description": "Usluga 3D štampe, skeniranja i modelovanja — prototipovi, rezervni delovi, pokloni i dekoracija.",
+    "lang": "sr"
   },
   "brand": {
     "name": "3D-BJ",
@@ -10,142 +10,142 @@
     "favicon": "/assets/images/favicon.svg",
     "touchIcon": "/assets/logo/3d-bj-icon-512.png",
     "ownerName": "Bojan Jovović",
-    "ownerRole": "Owner & print operator"
+    "ownerRole": "Vlasnik i operater štampe"
   },
   "nav": {
-    "servicesLabel": "Services",
-    "workshopLabel": "Workshop",
-    "galleryLabel": "Gallery",
-    "howLabel": "How it works",
-    "contactLabel": "Contact"
+    "servicesLabel": "Usluge",
+    "workshopLabel": "Radionica",
+    "galleryLabel": "Galerija",
+    "howLabel": "Kako radi",
+    "contactLabel": "Kontakt"
   },
   "hero": {
-    "eyebrow": "3D-BJ · Print · Scan · Model",
-    "headline": "Your ideas, printed layer by layer.",
-    "lead": "Prototypes, spare parts, gifts and décor. Send us a file or an idea — we'll scan, model and print it — in up to 4 colors, or in tough engineering materials.",
-    "primaryButton": "Request a quote",
-    "secondaryButton": "See our workshop",
+    "eyebrow": "3D-BJ · Štampa · Skeniranje · Modelovanje",
+    "headline": "Vaše ideje, odštampane sloj po sloj.",
+    "lead": "Prototipovi, rezervni delovi, pokloni i dekoracija. Pošaljite nam fajl ili ideju — mi ćemo skenirati, modelovati i odštampati — u do 4 boje, ili u izdržljivim inženjerskim materijalima.",
+    "primaryButton": "Zatražite ponudu",
+    "secondaryButton": "Pogledajte radionicu",
     "image": "/assets/images/hero-printer.svg",
-    "imageAlt": "Illustration of a 3D printer printing an object"
+    "imageAlt": "Ilustracija 3D štampača koji štampa predmet"
   },
   "servicesSection": {
-    "heading": "What we print"
+    "heading": "Šta štampamo"
   },
   "services": [
-    { "icon": "⚙️", "title": "Prototypes", "text": "Fast functional prototypes for product testing." },
-    { "icon": "🔧", "title": "Spare parts", "text": "Replacement clips, knobs, brackets and holders." },
-    { "icon": "🎁", "title": "Gifts & décor", "text": "Personalized figurines, vases and name plates." },
-    { "icon": "🎨", "title": "Multicolor prints", "text": "Up to 4 colors or materials in a single print — logos, signs, toys." },
-    { "icon": "🔥", "title": "Engineering materials", "text": "Enclosed printer for ABS, ASA and carbon-fiber blends — heat & UV resistant parts." },
-    { "icon": "📡", "title": "3D scanning", "text": "Scan an existing object, get a clean 3D model, then print a copy or improved version." }
+    { "icon": "⚙️", "title": "Prototipovi", "text": "Brzi funkcionalni prototipovi za testiranje proizvoda." },
+    { "icon": "🔧", "title": "Rezervni delovi", "text": "Zamenski klipsevi, dugmad, nosači i držači." },
+    { "icon": "🎁", "title": "Pokloni i dekoracija", "text": "Personalizovane figurice, vaze i pločice sa imenom." },
+    { "icon": "🎨", "title": "Višebojna štampa", "text": "Do 4 boje ili materijala u jednoj štampi — logotipi, natpisi, igračke." },
+    { "icon": "🔥", "title": "Inženjerski materijali", "text": "Zatvoreni štampač za ABS, ASA i karbonske mešavine — delovi otporni na toplotu i UV zračenje." },
+    { "icon": "📡", "title": "3D skeniranje", "text": "Skenirajte postojeći predmet, dobijte čist 3D model, zatim odštampajte kopiju ili poboljšanu verziju." }
   ],
   "workshop": {
-    "heading": "Our workshop",
-    "subheading": "Real equipment, mock specs — values below are indicative only.",
+    "heading": "Naša radionica",
+    "subheading": "Prava oprema, okvirne specifikacije — vrednosti ispod su samo informativne.",
     "photo": "/assets/images/workshop.jpg",
-    "photoAlt": "Workshop with two open-frame 3D printers, multicolor filament units and an enclosed 3D printer",
-    "photoCaption": "Print corner — 3 printers running side by side.",
+    "photoAlt": "Radionica sa dva otvorena 3D štampača, jedinicama za višebojni filament i zatvorenim 3D štampačem",
+    "photoCaption": "Štamparski kutak — 3 štampača rade jedan pored drugog.",
     "equipment": [
       {
         "image": "/assets/images/printers-multicolor.jpg",
-        "imageAlt": "Two open-frame 3D printers with 4-spool multicolor units",
-        "tag": "FDM · Multicolor",
+        "imageAlt": "Dva otvorena 3D štampača sa jedinicama za 4-bojni filament",
+        "tag": "FDM · Višebojno",
         "title": "2× Bambu Lab A1 + AMS lite",
         "specs": [
-          { "label": "Build volume", "value": "256 × 256 × 256 mm" },
-          { "label": "Colors per print", "value": "up to 4" },
-          { "label": "Materials", "value": "PLA, PETG, TPU" },
-          { "label": "Best for", "value": "Décor, gifts, signs, prototypes" }
+          { "label": "Zapremina štampe", "value": "256 × 256 × 256 mm" },
+          { "label": "Boja po štampi", "value": "do 4" },
+          { "label": "Materijali", "value": "PLA, PETG, TPU" },
+          { "label": "Najbolje za", "value": "Dekoracija, pokloni, natpisi, prototipovi" }
         ]
       },
       {
         "image": "/assets/images/printer-enclosed.jpg",
-        "imageAlt": "Enclosed CoreXY 3D printer with glass door",
-        "tag": "FDM · Enclosed CoreXY",
-        "title": "High-speed enclosed printer",
+        "imageAlt": "Zatvoreni CoreXY 3D štampač sa staklenim vratima",
+        "tag": "FDM · Zatvoreni CoreXY",
+        "title": "Brzi zatvoreni štampač",
         "specs": [
-          { "label": "Build volume", "value": "~256 × 256 × 256 mm" },
-          { "label": "Speed", "value": "up to 500 mm/s" },
-          { "label": "Materials", "value": "ABS, ASA, PETG-CF, PLA" },
-          { "label": "Best for", "value": "Functional & outdoor parts" }
+          { "label": "Zapremina štampe", "value": "~256 × 256 × 256 mm" },
+          { "label": "Brzina", "value": "do 500 mm/s" },
+          { "label": "Materijali", "value": "ABS, ASA, PETG-CF, PLA" },
+          { "label": "Najbolje za", "value": "Funkcionalni i spoljni delovi" }
         ]
       },
       {
         "image": "/assets/images/scanner.jpg",
-        "imageAlt": "3D scanner on tripod with turntable",
-        "tag": "3D scanning",
-        "title": "3D scanner + turntable",
+        "imageAlt": "3D skener na tronošcu sa rotacionom platformom",
+        "tag": "3D skeniranje",
+        "title": "3D skener + rotaciona platforma",
         "specs": [
-          { "label": "Object size", "value": "~2 cm – 1 m" },
-          { "label": "Accuracy", "value": "~0.05 mm" },
-          { "label": "Output", "value": "STL / OBJ / PLY" },
-          { "label": "Best for", "value": "Spare parts, replicas, reverse engineering" }
+          { "label": "Veličina predmeta", "value": "~2 cm – 1 m" },
+          { "label": "Preciznost", "value": "~0.05 mm" },
+          { "label": "Izlaz", "value": "STL / OBJ / PLY" },
+          { "label": "Najbolje za", "value": "Rezervni delovi, replike, reverzni inženjering" }
         ]
       }
     ],
     "stats": [
-      { "value": "3", "label": "printers" },
-      { "value": "4", "label": "colors per print" },
-      { "value": "1", "label": "3D scanner" },
-      { "value": "24h", "label": "typical turnaround*" }
+      { "value": "3", "label": "štampača" },
+      { "value": "4", "label": "boje po štampi" },
+      { "value": "1", "label": "3D skener" },
+      { "value": "24h", "label": "tipično vreme izrade*" }
     ],
-    "footnote": "*Mock value."
+    "footnote": "*Okvirna vrednost."
   },
   "maker": {
     "name": "Bojan Jovović",
-    "roleTag": "Owner · Print operator",
-    "bio": "Every job goes through my hands — from scanning and modeling to slicing, printing and final quality check. One person responsible, from your first message to delivery.",
+    "roleTag": "Vlasnik · Operater štampe",
+    "bio": "Svaki posao prolazi kroz moje ruke — od skeniranja i modelovanja do sečenja, štampe i finalne kontrole kvaliteta. Jedna osoba odgovorna, od vaše prve poruke do isporuke.",
     "avatar": "/assets/logo/3d-bj-mark.svg",
-    "buttonLabel": "Contact Bojan"
+    "buttonLabel": "Kontaktirajte Bojana"
   },
   "gallerySection": {
-    "heading": "Gallery",
-    "subheading": "Click an image to enlarge."
+    "heading": "Galerija",
+    "subheading": "Kliknite na sliku za uvećanje."
   },
   "gallery": [
-    { "image": "/assets/images/vase.svg", "alt": "Spiral vase", "caption": "Spiral vase · PLA" },
-    { "image": "/assets/images/gear.svg", "alt": "Mechanical gear", "caption": "Gear set · PETG" },
-    { "image": "/assets/images/figurine.svg", "alt": "Robot figurine", "caption": "Robot figurine · PLA multicolor" },
-    { "image": "/assets/images/phone-stand.svg", "alt": "Phone stand", "caption": "Phone stand · PLA" }
+    { "image": "/assets/images/vase.svg", "alt": "Spiralna vaza", "caption": "Spiralna vaza · PLA" },
+    { "image": "/assets/images/gear.svg", "alt": "Mehanički zupčanik", "caption": "Set zupčanika · PETG" },
+    { "image": "/assets/images/figurine.svg", "alt": "Figurica robota", "caption": "Figurica robota · Višebojni PLA" },
+    { "image": "/assets/images/phone-stand.svg", "alt": "Stalak za telefon", "caption": "Stalak za telefon · PLA" }
   ],
   "howSection": {
-    "heading": "How it works",
-    "buttonLabel": "Start an inquiry"
+    "heading": "Kako radi",
+    "buttonLabel": "Pokrenite upit"
   },
   "steps": [
-    { "title": "Send a file, idea or object", "text": "STL/OBJ/3MF, a sketch, or the part itself." },
-    { "title": "Scan & model", "text": "We 3D-scan or model it if needed." },
-    { "title": "Get a quote", "text": "Price, material and delivery time." },
-    { "title": "Print & deliver", "text": "Shipping or local pickup." }
+    { "title": "Pošaljite fajl, ideju ili predmet", "text": "STL/OBJ/3MF, skica, ili sam predmet." },
+    { "title": "Skeniranje i modelovanje", "text": "Po potrebi 3D skeniramo ili modelujemo." },
+    { "title": "Dobijte ponudu", "text": "Cena, materijal i vreme isporuke." },
+    { "title": "Štampa i isporuka", "text": "Dostava ili lično preuzimanje." }
   ],
   "contact": {
     "phoneDisplay": "+1 (555) 010-0199",
     "phoneTel": "+15550100199",
     "email": "hello@3d-bj.example",
     "web3formsKey": "YOUR_WEB3FORMS_ACCESS_KEY",
-    "modalTitle": "Contact inquiry",
-    "modalSubtitle": "Call, email, or send a quick message.",
-    "phoneTileLabel": "Phone",
+    "modalTitle": "Kontakt upit",
+    "modalSubtitle": "Pozovite, pošaljite email, ili kratku poruku.",
+    "phoneTileLabel": "Telefon",
     "emailTileLabel": "Email",
     "fieldLabels": {
-      "name": "Name",
+      "name": "Ime",
       "email": "Email",
-      "material": "Material",
-      "service": "Service",
-      "message": "Message"
+      "material": "Materijal",
+      "service": "Usluga",
+      "message": "Poruka"
     },
-    "namePlaceholder": "John Doe",
-    "emailPlaceholder": "john@example.com",
-    "messagePlaceholder": "Describe what you want to print...",
-    "materialOptions": ["PLA", "PLA multicolor", "PETG", "ABS / ASA", "TPU (flexible)", "Not sure"],
-    "serviceOptions": ["3D printing", "3D scanning", "Scan + print"],
-    "submitLabel": "Send inquiry",
-    "sendingLabel": "Sending…",
-    "errorMessage": "Please fill in all fields with a valid email.",
-    "networkErrorMessage": "Something went wrong sending your message. Please try phone or email instead.",
-    "successMessage": "✅ Thanks! We received your inquiry and will get back to you soon."
+    "namePlaceholder": "Petar Petrović",
+    "emailPlaceholder": "petar@example.com",
+    "messagePlaceholder": "Opišite šta želite da odštampate...",
+    "materialOptions": ["PLA", "PLA višebojni", "PETG", "ABS / ASA", "TPU (fleksibilni)", "Nisam siguran/na"],
+    "serviceOptions": ["3D štampa", "3D skeniranje", "Skeniranje + štampa"],
+    "submitLabel": "Pošalji upit",
+    "sendingLabel": "Šalje se…",
+    "errorMessage": "Molimo popunite sva polja ispravnim email-om.",
+    "networkErrorMessage": "Nešto je pošlo po zlu prilikom slanja poruke. Molimo pokušajte preko telefona ili email-a.",
+    "successMessage": "✅ Hvala! Primili smo vaš upit i javićemo vam se uskoro."
   },
   "footer": {
-    "text": "mockup, contact data is fictional."
+    "text": "sva prava zadržana."
   }
 }
