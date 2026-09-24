@@ -29,6 +29,14 @@ test("hamburger menu opens and closes the mobile nav", async ({ page }) => {
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
   await expect(nav).toHaveClass(/is-open/);
 
+  // Regression check: the open nav must actually be laid out across the
+  // viewport (not squished into a sliver by a stray containing-block from
+  // an ancestor's backdrop-filter/filter) and its links must be visible.
+  const box = await nav.boundingBox();
+  expect(box.width).toBeGreaterThan(300);
+  expect(box.height).toBeGreaterThan(200);
+  await expect(nav.locator("a", { hasText: "Kontakt" })).toBeVisible();
+
   // Closes on Escape.
   await page.keyboard.press("Escape");
   await expect(toggle).toHaveAttribute("aria-expanded", "false");

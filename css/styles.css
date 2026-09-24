@@ -80,8 +80,10 @@ a:hover { text-decoration: underline; }
 /* ========== Header & nav [#1 #2] ========== */
 .header {
   position: sticky; top: 0; z-index: 10;
-  background: rgba(7, 11, 20, .85);
-  backdrop-filter: blur(8px);
+  /* Deliberately no backdrop-filter here: it creates a new containing block
+     for position:fixed descendants, which would break the off-canvas mobile
+     nav (it'd anchor to this 64px-tall header instead of the viewport). */
+  background: rgba(7, 11, 20, .92);
   border-bottom: 1px solid var(--border);
 }
 .header__inner { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); gap: 12px; }

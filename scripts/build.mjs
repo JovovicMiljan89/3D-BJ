@@ -146,6 +146,9 @@ function computeViewModel(content) {
   const visibleItems = (data.prices?.items || []).filter((item) => typeof item.from === "number" && item.from > 0);
   data.prices = { ...data.prices, visibleItems, visible: visibleItems.length > 0 };
 
+  // --- Footer/social: hide the whole "Društvene mreže" column when both links are empty.
+  data.contact.hasSocial = Boolean(data.contact.instagram || data.contact.facebook);
+
   // --- Maker photo falls back to the logo mark if the admin hasn't uploaded one yet.
   data.maker = { ...data.maker, avatarResolved: data.maker.photo || data.maker.avatar };
 

@@ -382,11 +382,13 @@
           {{/each}}
         </ul>
       </div>
+      {{#if contact.hasSocial}}
       <div class="footer__col">
         <h3>{{footer.socialHeading}}</h3>
         {{#if contact.instagram}}<a href="{{contact.instagram}}" target="_blank" rel="noopener">Instagram</a>{{/if}}
         {{#if contact.facebook}}<a href="{{contact.facebook}}" target="_blank" rel="noopener">Facebook</a>{{/if}}
       </div>
+      {{/if}}
     </div>
     <div class="container footer__bottom">
       <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}} — {{footer.rightsText}}{{#if contact.pib}} · {{footer.pibLabel}}: {{contact.pib}}{{/if}}</p>
