@@ -150,3 +150,80 @@ test("no leftover placeholder text (\"0 din\" or \"example\") anywhere on the pa
   expect(bodyText).not.toMatch(/0\s*din/i);
   expect(bodyText.toLowerCase()).not.toContain("example");
 });
+
+test("hero headline and both new sections render", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveTitle("3D-BJ | 3D štampa, skeniranje i modelovanje po meri");
+  await expect(page.locator("h1")).toHaveText("Od ideje do gotovog predmeta.");
+  await expect(page.locator("h1 .accent")).toHaveText("gotovog predmeta.");
+
+  const business = page.locator("#za-firme");
+  await expect(business.locator(".tag")).toHaveText("Za firme");
+  await expect(business.locator("h2")).toHaveText("Vaš logo, u bojama Vašeg brenda.");
+  await expect(business.locator(".checklist li")).toHaveCount(3);
+
+  const spare = page.locator("#rezervni-delovi");
+  await expect(spare.locator("h2")).toHaveText("Skeniramo. Ispravljamo. Izrađujemo.");
+  await expect(spare.locator(".steps li")).toHaveCount(3);
+});
+
+test("the 'Za firme' CTA scrolls to the form without pre-selecting anything", async ({ page }) => {
+  await page.goto("/");
+  const serviceBefore = await page.locator("#f-service").inputValue();
+  await page.locator("#za-firme [data-focus-form]").click();
+
+  await expect(page.locator("#f-name")).toBeFocused({ timeout: 2000 });
+  await expect(page.locator("#f-service")).toHaveValue(serviceBefore);
+  await expect(page.locator("#f-message")).toHaveValue("");
+});
+
+test("'Pošaljite fotografiju dela' prefills service + message and puts the cursor at the end", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Pošaljite fotografiju dela" }).click();
+
+  const message = page.locator("#f-message");
+  await expect(message).toBeFocused({ timeout: 2000 });
+  await expect(message).toHaveValue("Rezervni deo: ");
+  await expect(page.locator("#f-service")).toHaveValue("3D skeniranje");
+  await expect(page.locator("#kontakt")).toBeInViewport();
+
+  const caret = await message.evaluate((el) => [el.selectionStart, el.selectionEnd, el.value.length]);
+  expect(caret).toEqual([14, 14, 14]);
+
+  // Typing continues right after the prefix; clicking again doesn't duplicate it.
+  await page.keyboard.type("dugme za veš mašinu");
+  await page.getByRole("button", { name: "Pošaljite fotografiju dela" }).click();
+  await expect(message).toHaveValue("Rezervni deo: dugme za veš mašinu");
+});
+
+for (const width of [375, 1280]) {
+  test(`every class used in the page exists in the loaded CSS (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+
+    const missing = await page.evaluate(() => {
+      const selectorText = [];
+      const collect = (rules) => {
+        for (const rule of rules) {
+          if (rule.selectorText) selectorText.push(rule.selectorText);
+          if (rule.cssRules) collect(rule.cssRules);
+        }
+      };
+      for (const sheet of document.styleSheets) collect(sheet.cssRules);
+      const defined = new Set(selectorText.join(" ").match(/\.[a-zA-Z_][\w-]*/g).map((c) => c.slice(1)));
+
+      const used = new Set();
+      document.querySelectorAll("[class]").forEach((el) => el.classList.forEach((c) => used.add(c)));
+      return [...used].filter((c) => !defined.has(c));
+    });
+    expect(missing).toEqual([]);
+  });
+}
+
+test("the stylesheet is loaded from a content-hashed file name", async ({ page }) => {
+  await page.goto("/");
+  const href = await page.locator('link[rel="stylesheet"]').getAttribute("href");
+  expect(href).toMatch(/^\/css\/styles\.[0-9a-f]{10}\.css$/);
+  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(bg).toBe("rgb(7, 11, 20)");
+});

@@ -241,3 +241,80 @@ test("the LocalBusiness JSON-LD block is present and is valid, parseable JSON", 
   assert.ok(typeof data.name === "string" && data.name.length > 0);
   assert.ok(data.image.startsWith("http"), "JSON-LD image must be an absolute URL");
 });
+
+// ---------- Toggleable sections: "Za firme" and "Rezervni delovi" ----------
+
+test("both new sections render by default, with their content from site.json", () => {
+  const content = loadRealContent();
+  const html = buildDistWith(() => {});
+  assert.ok(html.includes('id="za-firme"'), "the #za-firme section should render");
+  assert.ok(html.includes('id="rezervni-delovi"'), "the #rezervni-delovi section should render");
+  assert.ok(html.includes(escapeHtml(content.business.heading)));
+  assert.ok(html.includes(escapeHtml(content.spareParts.heading)));
+  for (const point of content.business.points) assert.ok(html.includes(escapeHtml(point)));
+  const spareSteps = html.split('id="rezervni-delovi"')[1].split("</section>")[0];
+  assert.equal((spareSteps.match(/<li>/g) || []).length, content.spareParts.items.length);
+  assert.ok(html.includes(`data-prefill-service="${escapeHtml(content.spareParts.formService)}"`));
+  assert.ok(html.includes(`data-prefill-message="${escapeHtml(content.spareParts.formMessage)}"`));
+});
+
+test("a missing enabled flag defaults to showing the section", () => {
+  const html = buildDistWith((content) => {
+    delete content.business.enabled;
+    delete content.spareParts.enabled;
+  });
+  assert.ok(html.includes('id="za-firme"'));
+  assert.ok(html.includes('id="rezervni-delovi"'));
+});
+
+test("enabled: false hides a section entirely, even with its other fields left empty", () => {
+  const html = buildDistWith((content) => {
+    content.business = { enabled: false, tag: "", heading: "", text: "", points: [], buttonLabel: "" };
+    content.spareParts.enabled = false;
+  });
+  assert.ok(!html.includes('id="za-firme"'), "#za-firme must not render when disabled");
+  assert.ok(!html.includes('id="rezervni-delovi"'), "#rezervni-delovi must not render when disabled");
+  assert.ok(!html.includes("data-prefill-message"));
+});
+
+test("an enabled new section with a missing required field fails validation", () => {
+  const content = deepClone(loadRealContent());
+  content.business.heading = "";
+  content.spareParts.items[1].title = "";
+  content.business.points = [];
+
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  assert.ok(errors.some((e) => e.includes("business.heading")), errors.join("; "));
+  assert.ok(errors.some((e) => e.includes("business.points")), errors.join("; "));
+  assert.ok(errors.some((e) => e.includes("spareParts.items[1]")), errors.join("; "));
+});
+
+test("a non-boolean enabled flag fails validation", () => {
+  const content = deepClone(loadRealContent());
+  content.spareParts.enabled = "da";
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  assert.ok(errors.some((e) => e.includes("spareParts.enabled")));
+});
+
+test("hero headline renders its accent part in a span, and omits the span when empty", () => {
+  const content = loadRealContent();
+  const html = buildDistWith(() => {});
+  assert.ok(html.includes(`<h1>${escapeHtml(content.hero.headline)} <span class="accent">${escapeHtml(content.hero.headlineAccent)}</span></h1>`));
+  const plain = buildDistWith((c) => {
+    c.hero.headlineAccent = "";
+  });
+  assert.ok(plain.includes(`<h1>${escapeHtml(content.hero.headline)}</h1>`));
+});
+
+test("CSS and JS are emitted with content-hashed file names and referenced from index.html", () => {
+  const html = buildDistWith(() => {});
+  const css = html.match(/href="\/css\/(styles\.[0-9a-f]{10}\.css)"/);
+  const js = html.match(/src="\/js\/(main\.[0-9a-f]{10}\.js)"/);
+  assert.ok(css, "stylesheet link should use a hashed file name");
+  assert.ok(js, "script tag should use a hashed file name");
+  assert.ok(fs.existsSync(path.join(ROOT, "dist", "css", css[1])));
+  assert.ok(fs.existsSync(path.join(ROOT, "dist", "js", js[1])));
+  assert.ok(!fs.existsSync(path.join(ROOT, "dist", "css", "styles.css")), "unhashed copy must not be shipped");
+});
