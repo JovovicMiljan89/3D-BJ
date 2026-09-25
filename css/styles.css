@@ -143,7 +143,7 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow); cursor: zoom-in; transition: transform .2s;
 }
 .gallery__item:hover { transform: translateY(-4px); border-color: var(--primary); }
-.gallery__item img { aspect-ratio: 1 / 1; object-fit: cover; width: 100%; }
+.gallery__item img { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
 .gallery__item figcaption { padding: 10px 14px; font-size: .9rem; color: var(--muted); }
 
 /* Steps */

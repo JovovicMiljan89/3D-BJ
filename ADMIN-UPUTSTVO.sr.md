@@ -40,7 +40,48 @@ da se sekcija vrati.
 3. Sačuvaj.
 
 **Savet:** koristi slike razumne veličine (do par MB, JPG ili PNG) — sajt će biti
-brži za posetioce.
+brži za posetioce. Najbolje izgledaju slike u formatu: oprema položeno 4:3,
+galerija uspravno 4:5.
+
+## Privremene (stock) fotografije — zameni ih svojim
+
+Dok ne otpremiš svoje fotografije, na karticama opreme i u galeriji stoje
+privremene fotografije sa Pexels-a. Takve stavke imaju uključeno polje
+**„Privremena (stock) slika: zameniti pravom fotografijom“**. Na sajtu se to
+nigde ne vidi, to je samo podsetnik za tebe i Miljana.
+
+Kad otpremiš svoju fotografiju za neku stavku:
+
+1. Zameni sliku (Upload) i po potrebi ispravi **Opis slike (alt tekst)** da
+   opisuje tvoju fotografiju.
+2. **Isključi** polje „Privremena (stock) slika…“.
+3. Sačuvaj.
+
+## Logo i naziv brenda (3D-MDL)
+
+Sve u vezi sa brendom je u sekciji **Brend**:
+
+| Polje | Gde se vidi |
+|---|---|
+| **Naziv brenda** (sada „3D-MDL“) | naslov u tabu browsera, pregled linka na Viberu/Facebooku, podnožje, naslov emaila sa upitom („3D-MDL upit: …“) |
+| **Logo (zaglavlje i podnožje)** | logo gore levo i u podnožju |
+| **Pun logo (sa sloganom)** | koristi ga Google u rezultatima pretrage |
+| **Znak (samo kocka)** | u kartici „O vlasniku“, dok nema tvoje fotografije |
+| **Favikona** | mala ikonica u tabu browsera |
+| **Ikonica za mobilne uređaje** | ikonica kad se sajt doda na početni ekran telefona |
+
+Slika koja se vidi kad se link ka sajtu podeli (Viber, Facebook…) je u sekciji
+**SEO / deljenje na društvenim mrežama → Slika za deljenje**.
+
+- **Promena naziva:** menjaš samo polje **Naziv brenda** — sajt ga sam ubacuje
+  svuda. U polju **Meta podaci → Naslov stranice** naziv ne pišeš, on se dodaje
+  automatski ispred.
+- **Povratak na stari 3D-BJ logo:** stari fajlovi su i dalje na sajtu. U poljima
+  slika izaberi fajlove čije ime počinje sa `3d-bj-` (npr. `3d-bj-wordmark.svg`
+  za logo, `3d-bj-mark.svg` za znak), a naziv brenda vrati na „3D-BJ“.
+- **Pregled linka na društvenim mrežama** se ne menja odmah jer Facebook i Viber
+  pamte staru sliku. Posle promene logoa ili slike za deljenje javi Miljanu da
+  osveži pregled.
 
 ## Kako dodajem novi rad u Galeriju?
 
@@ -75,5 +116,7 @@ može brzo da je ispravi ili ti kaže šta da promeniš.
 - Loguješ se preko email linka — bez lozinke.
 - Menjaš tekst → kucaš → Save.
 - Menjaš/dodaješ sliku → Upload → Save.
+- Otpremio si svoju fotografiju umesto stock slike → isključi „Privremena (stock) slika“.
+- Logo i naziv brenda → sekcija **Brend**.
 - Izmena je uživo za 1–2 minuta.
 - Ako nešto ne štima — stara verzija ostaje, javi se Miljanu.

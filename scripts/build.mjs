@@ -211,6 +211,19 @@ function copyHashed(relPath) {
   return "/" + hashedRel.split(path.sep).join("/");
 }
 
+// Stock photos are marked `placeholder: true` in site.json until Bojan
+// uploads his own; list them after every build so they don't get forgotten.
+function listPlaceholders(content) {
+  const found = [];
+  (content.workshop?.equipment || []).forEach((item, i) => {
+    if (item.placeholder === true) found.push(`workshop.equipment[${i}] "${item.title}" — ${item.image}`);
+  });
+  (content.gallery || []).forEach((item, i) => {
+    if (item.placeholder === true) found.push(`gallery[${i}] "${item.caption}" — ${item.image}`);
+  });
+  return found;
+}
+
 function main() {
   const content = loadContent();
 
@@ -239,6 +252,13 @@ function main() {
   // reference/ (local-only UI/UX reference material) is never copied — dist/
   // only ever gets css/, js/, assets/ and the rendered index.html, above.
   fs.writeFileSync(path.join(DIST_DIR, "_headers"), buildHeaders());
+
+  const placeholders = listPlaceholders(content);
+  if (placeholders.length) {
+    console.warn(`\n[build] WARNING: ${placeholders.length} image(s) are still temporary stock photos (placeholder: true) — replace with real photos:`);
+    for (const line of placeholders) console.warn(`  - ${line}`);
+    console.warn("");
+  }
 
   console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, _headers)`);
 }

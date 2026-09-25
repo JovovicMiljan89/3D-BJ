@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import { validateContent } from "../scripts/lib/validate.mjs";
@@ -388,4 +388,75 @@ test("_headers: css/js stay immutable (hashed names), /assets/* is not immutable
   assert.match(block("/css/*"), /immutable/);
   assert.match(block("/js/*"), /immutable/);
   assert.doesNotMatch(block("/assets/*"), /immutable/);
+});
+
+// ---------- Images / stock placeholders ----------
+
+// Every "/assets/..." string anywhere in site.json.
+function collectAssetPaths(value, out = []) {
+  if (typeof value === "string" && value.startsWith("/assets/")) out.push(value);
+  else if (Array.isArray(value)) value.forEach((v) => collectAssetPaths(v, out));
+  else if (value && typeof value === "object") Object.values(value).forEach((v) => collectAssetPaths(v, out));
+  return out;
+}
+
+test("every image referenced in site.json exists in dist/", () => {
+  buildDistWith(() => {});
+  const paths = collectAssetPaths(loadRealContent());
+  assert.ok(paths.length > 10, "expected to find the site's image references");
+  for (const p of paths) {
+    assert.ok(fs.existsSync(path.join(ROOT, "dist", p.replace(/^\//, ""))), `dist${p} is missing`);
+  }
+});
+
+test("no gallery or equipment image is larger than 300 KB", () => {
+  const content = loadRealContent();
+  const images = [...content.gallery.map((g) => g.image), ...content.workshop.equipment.map((e) => e.image)];
+  for (const img of images) {
+    const size = fs.statSync(path.join(ROOT, img.replace(/^\//, ""))).size;
+    assert.ok(size <= 300 * 1024, `${img} is ${Math.round(size / 1024)} KB (max 300 KB)`);
+  }
+});
+
+test("WebP images get their real width/height on <img>", () => {
+  const html = buildDistWith((c) => {
+    c.gallery[0].image = "/assets/uploads/stock/galerija-zupcanik.webp";
+  });
+  assert.ok(/src="\/assets\/uploads\/stock\/galerija-zupcanik\.webp" alt="[^"]*" width="1200" height="1500"/.test(html));
+});
+
+test("placeholder: true is never shown on the page, and the build warns about each such item", () => {
+  const contentPath = path.join(ROOT, "content", "site.json");
+  const backup = fs.readFileSync(contentPath, "utf-8");
+  try {
+    const c = JSON.parse(backup);
+    c.gallery.forEach((g, i) => (g.placeholder = i === 0));
+    c.workshop.equipment.forEach((e, i) => (e.placeholder = i === 1));
+    fs.writeFileSync(contentPath, JSON.stringify(c, null, 2));
+    const out = spawnSync(process.execPath, [path.join(ROOT, "scripts", "build.mjs")], { cwd: ROOT, encoding: "utf-8" });
+    assert.equal(out.status, 0, out.stderr);
+    assert.match(out.stderr, /2 image\(s\) are still temporary stock photos/);
+    assert.ok(out.stderr.includes(`gallery[0] "${c.gallery[0].caption}"`));
+    assert.ok(out.stderr.includes(`workshop.equipment[1] "${c.workshop.equipment[1].title}"`));
+    assert.ok(!out.stderr.includes("gallery[1]"));
+
+    const html = fs.readFileSync(path.join(ROOT, "dist", "index.html"), "utf-8");
+    assert.ok(!/placeholder(?!=)/i.test(html.replace(/placeholder="[^"]*"/g, "")), "no placeholder badge/flag in the HTML");
+
+    c.gallery.forEach((g) => (g.placeholder = false));
+    c.workshop.equipment.forEach((e) => (e.placeholder = false));
+    fs.writeFileSync(contentPath, JSON.stringify(c, null, 2));
+    const clean = spawnSync(process.execPath, [path.join(ROOT, "scripts", "build.mjs")], { cwd: ROOT, encoding: "utf-8" });
+    assert.ok(!clean.stderr.includes("stock photos"), "no warning once every placeholder is cleared");
+  } finally {
+    fs.writeFileSync(contentPath, backup);
+  }
+});
+
+test("a non-boolean placeholder flag fails validation", () => {
+  const content = deepClone(loadRealContent());
+  content.gallery[0].placeholder = "da";
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  assert.ok(errors.some((e) => e.includes("gallery[0].placeholder")));
 });
