@@ -9,8 +9,10 @@ Miljan će ti poslati **email pozivnicu**. Klikneš na link u tom emailu i ulogu
 se — ne treba ti nikakav poseban nalog niti lozinka koju pamtiš, samo pristup
 tom emailu.
 
-Kasnije, za sledeća logovanja, idi na **pagescms.org** i uloguj se istim putem
-(preko emaila).
+Kasnije, za sledeća logovanja, najlakše je da otvoriš
+**https://3d-bj.printmodel.workers.dev/admin** — ta adresa te vodi pravo na
+uređivanje sajta u Pages CMS-u. Ako nisi ulogovan, prijaviš se istim putem
+(preko emaila). Sačuvaj je u omiljene (bookmark).
 
 ## Šta vidim kad se ulogujem?
 
@@ -113,7 +115,7 @@ može brzo da je ispravi ili ti kaže šta da promeniš.
 
 ## Kratak podsetnik
 
-- Loguješ se preko email linka — bez lozinke.
+- Admin: **3d-bj.printmodel.workers.dev/admin** → prijava preko email linka, bez lozinke.
 - Menjaš tekst → kucaš → Save.
 - Menjaš/dodaješ sliku → Upload → Save.
 - Otpremio si svoju fotografiju umesto stock slike → isključi „Privremena (stock) slika“.
