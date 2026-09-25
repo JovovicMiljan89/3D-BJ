@@ -1,0 +1,49 @@
+{
+ "osnova": {
+  "bg": "#0a0a0a",
+  "bgalt": "#101010",
+  "surface": "#161616",
+  "surface2": "#1f1f1f",
+  "text": "#f2f2f2",
+  "muted": "#9a9a9a",
+  "navy": "#262626",
+  "light": "#5c5c5c",
+  "mid": "#3a3a3a",
+  "border": "#2a2a2a",
+  "header": "rgba(10,10,10,.9)",
+  "footer": "#050505",
+  "hero2": "#1b1b1b"
+ },
+ "akcenti": {
+  "crvena": {
+   "naziv": "Crvena",
+   "akcenat": "#ef2b3b",
+   "tamniji": "#b3121f",
+   "tekst_na_akcentu": "#ffffff"
+  },
+  "narandzasta": {
+   "naziv": "Narandžasta",
+   "akcenat": "#ff7a1a",
+   "tamniji": "#c95a0c",
+   "tekst_na_akcentu": "#0a0a0a"
+  },
+  "zuta": {
+   "naziv": "Žuta",
+   "akcenat": "#ffc93c",
+   "tamniji": "#c99a1a",
+   "tekst_na_akcentu": "#0a0a0a"
+  },
+  "limeta": {
+   "naziv": "Limeta",
+   "akcenat": "#b5f23d",
+   "tamniji": "#84b81f",
+   "tekst_na_akcentu": "#0a0a0a"
+  },
+  "plava": {
+   "naziv": "Plava",
+   "akcenat": "#3cbcfa",
+   "tamniji": "#1a8ac2",
+   "tekst_na_akcentu": "#0a0a0a"
+  }
+ }
+}

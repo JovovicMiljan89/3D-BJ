@@ -309,7 +309,7 @@ test("the stylesheet is loaded from a content-hashed file name", async ({ page }
 test("header logo is the configured wordmark and renders at 40px height", async ({ page }) => {
   await page.goto("/");
   const logo = page.locator(".header .logo img");
-  await expect(logo).toHaveAttribute("src", "/assets/logo/3d-mdl-wordmark-bw.svg");
+  await expect(logo).toHaveAttribute("src", "/assets/theme/3d-mdl-wordmark-ff7a1a.svg");
   const box = await logo.boundingBox();
   expect(Math.round(box.height)).toBe(40);
   expect(await logo.evaluate((img) => img.naturalWidth > 0)).toBe(true);
@@ -325,7 +325,7 @@ test("gallery and equipment photos all load (no broken images)", async ({ page }
   }
 });
 
-test("crnobela: buttons are dark text on white, photos grayscale, gallery in color", async ({ page }) => {
+test("crnobela: buttons are dark text on white, accent step numbers, photos grayscale, gallery in color", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "crnobela");
   const btn = await page.locator(".hero .btn").first().evaluate((el) => {
@@ -333,10 +333,10 @@ test("crnobela: buttons are dark text on white, photos grayscale, gallery in col
     return [cs.color, cs.backgroundColor];
   });
   expect(btn).toEqual(["rgb(10, 10, 10)", "rgb(255, 255, 255)"]);
-  const stepNumber = await page.locator("#kako-radi .steps span").first().evaluate((el) => getComputedStyle(el).color);
-  expect(stepNumber).toBe("rgb(10, 10, 10)");
+  const stepNumber = await page.locator("#kako-radi .steps span").first().evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
+  expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(255, 122, 26)"]);
   expect(await page.locator(".equip img").first().evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".workshop-hero img").evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".gallery__item img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
-  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", /-bw\.svg$/);
+  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/assets/theme/3d-mdl-icon-ff7a1a.svg");
 });
