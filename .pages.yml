@@ -157,6 +157,10 @@ content:
           - { name: image, label: "Slika", type: image }
           - { name: alt, label: "Opis slike (alt tekst)", type: string }
           - { name: caption, label: "Natpis ispod slike", type: string }
+          - name: placeholder
+            label: "Privremena (stock) slika: zameniti pravom fotografijom"
+            type: boolean
+            description: "Uključeno dok je ovde stock fotografija. Kad otpremiš pravu fotografiju, isključi ovo polje."
 
       - name: howSection
         label: "Sekcija: Kako radi (naslov)"
@@ -241,6 +245,10 @@ content:
             fields:
               - { name: image, label: "Slika opreme", type: image }
               - { name: imageAlt, label: "Opis slike (alt tekst)", type: string }
+              - name: placeholder
+                label: "Privremena (stock) slika: zameniti pravom fotografijom"
+                type: boolean
+                description: "Uključeno dok je ovde stock fotografija. Kad otpremiš pravu fotografiju, isključi ovo polje."
               - { name: tag, label: "Oznaka (npr. FDM · Multicolor)", type: string }
               - { name: title, label: "Naziv opreme", type: string }
               - name: specs

@@ -251,3 +251,13 @@ test("header logo is the configured wordmark and renders at 40px height", async 
   expect(Math.round(box.height)).toBe(40);
   expect(await logo.evaluate((img) => img.naturalWidth > 0)).toBe(true);
 });
+
+test("gallery and equipment photos all load (no broken images)", async ({ page }) => {
+  await page.goto("/");
+  const imgs = page.locator(".gallery__item img, .equip img");
+  await expect(imgs).toHaveCount(7);
+  for (const img of await imgs.all()) {
+    await img.scrollIntoViewIfNeeded();
+    await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBe(true);
+  }
+});

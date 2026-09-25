@@ -226,6 +226,17 @@ export function validateContent(content, projectRoot) {
     errors.push('Missing or empty required list: "prices.items"');
   }
 
+  // Optional "placeholder" flag (stock photo still in use) must be a boolean when present.
+  for (const arrayPath of ["gallery", "workshop.equipment"]) {
+    const arr = get(content, arrayPath);
+    if (!isArray(arr)) continue;
+    arr.forEach((item, i) => {
+      if (item?.placeholder !== undefined && typeof item.placeholder !== "boolean") {
+        errors.push(`"${arrayPath}[${i}].placeholder" must be true or false.`);
+      }
+    });
+  }
+
   // Nested specs[] inside each workshop.equipment item.
   const equipment = get(content, "workshop.equipment");
   if (isArray(equipment)) {

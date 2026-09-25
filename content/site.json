@@ -95,24 +95,28 @@
   },
   "gallery": [
     {
-      "image": "/assets/images/vase.svg",
-      "alt": "Spiralna vaza",
-      "caption": "Spiralna vaza · PLA"
+      "image": "/assets/uploads/stock/galerija-zupcanik.webp",
+      "alt": "Odštampani mehanizam sa zupčanicima u beloj, plavoj i narandžastoj boji",
+      "caption": "Set zupčanika · PETG",
+      "placeholder": true
     },
     {
-      "image": "/assets/images/gear.svg",
-      "alt": "Mehanički zupčanik",
-      "caption": "Set zupčanika · PETG"
+      "image": "/assets/uploads/stock/galerija-vaza.webp",
+      "alt": "3D štampač tokom izrade spiralne vaze",
+      "caption": "Spiralna vaza · PLA",
+      "placeholder": true
     },
     {
-      "image": "/assets/images/figurine.svg",
-      "alt": "Figurica robota",
-      "caption": "Figurica robota · Višebojni PLA"
+      "image": "/assets/uploads/stock/galerija-sitni-delovi.webp",
+      "alt": "Ploča štampača sa serijom sitnih odštampanih delova",
+      "caption": "Serija sitnih delova · PLA",
+      "placeholder": true
     },
     {
-      "image": "/assets/images/phone-stand.svg",
-      "alt": "Stalak za telefon",
-      "caption": "Stalak za telefon · PLA"
+      "image": "/assets/uploads/stock/galerija-spiralni-element.webp",
+      "alt": "Beli dekorativni spiralni element u rukama",
+      "caption": "Dekorativni spiralni element · PLA",
+      "placeholder": true
     }
   ],
   "howSection": {
@@ -194,8 +198,9 @@
     "photoCaption": "Štamparski kutak — 3 štampača rade jedan pored drugog.",
     "equipment": [
       {
-        "image": "/assets/images/printers-multicolor.jpg",
-        "imageAlt": "Dva otvorena 3D štampača sa jedinicama za 4-bojni filament",
+        "image": "/assets/uploads/stock/oprema-a2l.webp",
+        "imageAlt": "3D štampač tokom izrade predmeta",
+        "placeholder": true,
         "tag": "FDM · Višebojno",
         "title": "2× Bambu Lab A1 + AMS lite",
         "specs": [
@@ -218,8 +223,9 @@
         ]
       },
       {
-        "image": "/assets/images/printer-enclosed.jpg",
-        "imageAlt": "Zatvoreni CoreXY 3D štampač sa staklenim vratima",
+        "image": "/assets/uploads/stock/oprema-corexy.webp",
+        "imageAlt": "Mehanizam 3D štampača izbliza",
+        "placeholder": true,
         "tag": "FDM · Zatvoreni CoreXY",
         "title": "Brzi zatvoreni štampač",
         "specs": [
@@ -242,8 +248,9 @@
         ]
       },
       {
-        "image": "/assets/images/scanner.jpg",
-        "imageAlt": "3D skener na tronošcu sa rotacionom platformom",
+        "image": "/assets/uploads/stock/oprema-skener.webp",
+        "imageAlt": "3D skener na stativu",
+        "placeholder": true,
         "tag": "3D skeniranje",
         "title": "3D skener + rotaciona platforma",
         "specs": [
