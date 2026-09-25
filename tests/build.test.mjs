@@ -318,3 +318,74 @@ test("CSS and JS are emitted with content-hashed file names and referenced from 
   assert.ok(fs.existsSync(path.join(ROOT, "dist", "js", js[1])));
   assert.ok(!fs.existsSync(path.join(ROOT, "dist", "css", "styles.css")), "unhashed copy must not be shipped");
 });
+
+// ---------- Brand / logo ----------
+
+test("header and footer logo src equal brand.logo, with width matching the SVG's aspect ratio", () => {
+  const { brand } = loadRealContent();
+  const html = buildDistWith(() => {});
+  const vb = fs
+    .readFileSync(path.join(ROOT, brand.logo.replace(/^\//, "")), "utf-8")
+    .match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/);
+  const ratio = parseFloat(vb[1]) / parseFloat(vb[2]);
+
+  const header = html.match(/<a href="#top" class="logo">\s*<img src="([^"]+)" alt="([^"]+)" height="40" width="(\d+)"/);
+  assert.ok(header, "header logo <img> not found");
+  assert.equal(header[1], brand.logo);
+  assert.equal(header[2], brand.name);
+  assert.equal(Number(header[3]), Math.round(40 * ratio));
+
+  const footer = html.match(/<img src="([^"]+)" alt="[^"]+" height="32" width="(\d+)" loading="lazy" \/>/);
+  assert.equal(footer[1], brand.logo);
+  assert.equal(Number(footer[2]), Math.round(32 * ratio));
+});
+
+test("og:image is an absolute URL whose file exists in dist/", () => {
+  const { seo } = loadRealContent();
+  const html = buildDistWith(() => {});
+  const og = html.match(/property="og:image" content="([^"]+)"/)[1];
+  assert.ok(og.startsWith(seo.siteUrl), `og:image must be absolute under ${seo.siteUrl}, got ${og}`);
+  const rel = new URL(og).pathname.replace(/^\//, "");
+  assert.ok(fs.existsSync(path.join(ROOT, "dist", rel)), `dist/${rel} should exist`);
+});
+
+test('no rendered HTML contains the old brand name "3D-BJ"', () => {
+  const html = buildDistWith(() => {});
+  assert.ok(!html.includes("3D-BJ"), "found 3D-BJ in dist/index.html");
+  assert.ok(!fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf-8").includes("3D-BJ"), "found 3D-BJ in js/main.js");
+});
+
+test("favicon and apple-touch-icon links point to files that exist in dist/", () => {
+  const html = buildDistWith(() => {});
+  for (const rel of ["icon", "apple-touch-icon"]) {
+    const href = html.match(new RegExp(`<link rel="${rel}" href="([^"]+)"`))[1];
+    assert.ok(fs.existsSync(path.join(ROOT, "dist", href.replace(/^\//, ""))), `${rel} ${href} should exist in dist/`);
+  }
+});
+
+test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subject", () => {
+  const html = buildDistWith((c) => {
+    c.brand.name = "Test Brand";
+  });
+  assert.ok(html.includes("<title>Test Brand | "));
+  assert.ok(html.includes('property="og:site_name" content="Test Brand"'));
+  assert.ok(html.includes('data-brand-name="Test Brand"'));
+  const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(jsonLd.name, "Test Brand");
+  assert.ok(jsonLd.logo.startsWith("http"), "JSON-LD logo must be an absolute URL");
+});
+
+test("maker avatar falls back to brand.mark while no photo is set", () => {
+  const { brand } = loadRealContent();
+  const html = buildDistWith(() => {});
+  assert.ok(html.includes(`<img class="maker__avatar" src="${brand.mark}"`));
+});
+
+test("_headers: css/js stay immutable (hashed names), /assets/* is not immutable", () => {
+  buildDistWith(() => {});
+  const headers = fs.readFileSync(path.join(ROOT, "dist", "_headers"), "utf-8");
+  const block = (p) => headers.split(`\n${p}\n`)[1].split("\n\n")[0];
+  assert.match(block("/css/*"), /immutable/);
+  assert.match(block("/js/*"), /immutable/);
+  assert.doesNotMatch(block("/assets/*"), /immutable/);
+});

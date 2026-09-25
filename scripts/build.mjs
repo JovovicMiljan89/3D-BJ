@@ -54,7 +54,7 @@ function buildHeaders() {
   Cache-Control: public, max-age=31536000, immutable
 
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
@@ -83,6 +83,7 @@ function buildLocalBusinessJsonLd(content) {
     name: brand.name,
     description: content.meta.description,
     url: seo.siteUrl,
+    logo: absoluteUrl(seo.siteUrl, brand.logoFull),
     image: absoluteUrl(seo.siteUrl, seo.ogImage),
   };
 
@@ -111,6 +112,8 @@ function buildLocalBusinessJsonLd(content) {
 // <img width/height> always matches whatever photo is currently in place —
 // including one an admin swapped in through the CMS — instead of numbers
 // someone hand-typed into site.json that can silently go stale.
+const FAVICON_TYPES = { ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon" };
+
 function resolveDims(root, absPath) {
   const fsPath = path.join(root, absPath.replace(/^\//, ""));
   const size = getImageSize(fsPath);
@@ -134,6 +137,17 @@ function computeViewModel(content, assets) {
   data.spareParts = { ...data.spareParts, enabled: isSectionEnabled(data.spareParts) };
 
   // --- Image dimensions, read from the actual files (see resolveDims above).
+  // --- Brand: the name is edited once (brand.name) and composed into the
+  // <title>/og:title here; logo widths follow the logo's real aspect ratio.
+  data.meta = { ...data.meta, fullTitle: `${data.brand.name} | ${data.meta.title}` };
+  const logoDims = resolveDims(ROOT, data.brand.logo);
+  data.brand = {
+    ...data.brand,
+    logoHeaderWidth: Math.round((40 * logoDims.width) / logoDims.height),
+    logoFooterWidth: Math.round((32 * logoDims.width) / logoDims.height),
+    faviconType: FAVICON_TYPES[path.extname(data.brand.favicon).toLowerCase()] || "image/png",
+  };
+
   const heroDims = resolveDims(ROOT, data.hero.image);
   data.hero.imageWidth = heroDims.width;
   data.hero.imageHeight = heroDims.height;
@@ -160,7 +174,7 @@ function computeViewModel(content, assets) {
   data.contact.hasSocial = Boolean(data.contact.instagram || data.contact.facebook);
 
   // --- Maker photo falls back to the logo mark if the admin hasn't uploaded one yet.
-  data.maker = { ...data.maker, avatarResolved: data.maker.photo || data.maker.avatar };
+  data.maker = { ...data.maker, avatarResolved: data.maker.photo || data.brand.mark };
 
   // --- FAQ: first item open by default. The template engine can't compare
   // @index to a literal, so we precompute the flag here instead.
@@ -168,9 +182,12 @@ function computeViewModel(content, assets) {
 
   // --- SEO: absolute URLs + JSON-LD (computed, not admin-editable — safe to render raw).
   const ogImageAbsolute = absoluteUrl(data.seo.siteUrl, data.seo.ogImage);
+  const ogDims = resolveDims(ROOT, data.seo.ogImage);
   data.seo = {
     ...data.seo,
     ogImageAbsolute,
+    ogImageWidth: ogDims.width,
+    ogImageHeight: ogDims.height,
     canonicalUrl: data.seo.siteUrl,
     jsonLd: scriptSafeJson(buildLocalBusinessJsonLd(data)),
   };

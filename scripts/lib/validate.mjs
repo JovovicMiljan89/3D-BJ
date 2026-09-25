@@ -32,8 +32,10 @@ const REQUIRED_STRINGS = [
   "seo.ogImage",
   "brand.name",
   "brand.logo",
+  "brand.logoFull",
+  "brand.mark",
   "brand.favicon",
-  "brand.touchIcon",
+  "brand.appleIcon",
   "brand.ownerName",
   "brand.ownerRole",
   "nav.servicesLabel",
@@ -64,7 +66,6 @@ const REQUIRED_STRINGS = [
   "maker.name",
   "maker.roleTag",
   "maker.bio",
-  "maker.avatar",
   "maker.buttonLabel",
   "faqSection.heading",
   "contact.sectionHeading",
@@ -124,7 +125,16 @@ const REQUIRED_ARRAY_ITEM_FIELDS = {
 const REQUIRED_STRING_ARRAYS = ["trust", "contact.materialOptions", "contact.serviceOptions"];
 
 // image fields to check for existence on disk (single value)
-const IMAGE_FIELDS = ["brand.logo", "brand.favicon", "brand.touchIcon", "hero.image", "workshop.photo", "maker.avatar", "seo.ogImage"];
+const IMAGE_FIELDS = [
+  "brand.logo",
+  "brand.logoFull",
+  "brand.mark",
+  "brand.favicon",
+  "brand.appleIcon",
+  "hero.image",
+  "workshop.photo",
+  "seo.ogImage",
+];
 
 // [arrayPath, fieldNameInEachItem] to check for existence on disk
 const IMAGE_ARRAY_FIELDS = [

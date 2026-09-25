@@ -1,4 +1,4 @@
-// 3D-BJ — site interactions
+// Site interactions
 // 1) Mobile hamburger nav                      [#2]
 // 2) CTA -> scroll to #kontakt + focus name     [#3]
 //    (+ prefill service/message for the spare-parts CTA)
@@ -126,6 +126,7 @@
   const submitBtn = document.getElementById("submitBtn");
   const submitLabel = submitBtn.textContent;
   const sendingLabel = form.dataset.sendingLabel || submitLabel;
+  const brandName = form.dataset.brandName || "";
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -157,7 +158,7 @@
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: data.access_key,
-          subject: `3D-BJ upit: ${data.name}`,
+          subject: `${brandName} upit: ${data.name}`,
           name: data.name,
           email: data.email,
           service: data.service,
