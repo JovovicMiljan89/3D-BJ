@@ -15,8 +15,14 @@ Kasnije, za sledeća logovanja, idi na **pagescms.org** i uloguj se istim putem
 ## Šta vidim kad se ulogujem?
 
 Vidiš listu sekcija sajta — sve na srpskom: Brend, Meni, Naslovna sekcija, Usluge,
-Radionica, O vlasniku, Galerija, Kako radi, Kontakt i forma za upit, Podnožje.
-Klikneš na sekciju, menjaš tekst u poljima, i sačuvaš.
+Za firme, Galerija, Kako radi, Rezervni delovi, Radionica, O vlasniku, Kontakt i
+forma za upit, Podnožje. Klikneš na sekciju, menjaš tekst u poljima, i sačuvaš.
+
+## Kako sakrijem sekciju „Za firme“ ili „Rezervni delovi“?
+
+Obe sekcije imaju polje **„Prikaži sekciju na sajtu“**. Isključi ga i sačuvaj —
+sekcija nestaje sa sajta, a tekst ostaje sačuvan za kasnije. Uključi ga ponovo
+da se sekcija vrati.
 
 ## Kako menjam tekst?
 
