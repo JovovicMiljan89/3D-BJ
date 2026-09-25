@@ -321,13 +321,13 @@
             {{#if contact.viber}}
             <a class="channel" href="viber://chat?number=%2B{{contact.viber}}">
               <svg class="channel__icon" aria-hidden="true"><use href="#icon-viber"></use></svg>
-              <span><small>{{contact.channelLabels.viber}}</small><br />{{contact.viber}}</span>
+              <span><small>{{contact.channelLabels.viber}}</small><br />{{contact.viberDisplay}}</span>
             </a>
             {{/if}}
             {{#if contact.whatsapp}}
             <a class="channel" href="https://wa.me/{{contact.whatsapp}}">
               <svg class="channel__icon" aria-hidden="true"><use href="#icon-message"></use></svg>
-              <span><small>{{contact.channelLabels.whatsapp}}</small><br />{{contact.whatsapp}}</span>
+              <span><small>{{contact.channelLabels.whatsapp}}</small><br />{{contact.whatsappDisplay}}</span>
             </a>
             {{/if}}
             {{#if contact.email}}
