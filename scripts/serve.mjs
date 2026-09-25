@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
-const DIST_DIR = path.join(ROOT, "dist");
+const DIST_DIR = process.env.BUILD_DIST_DIR ? path.resolve(process.env.BUILD_DIST_DIR) : path.join(ROOT, "dist");
 const PORT = Number(process.env.PORT) || 8080;
 
 const MIME_TYPES = {

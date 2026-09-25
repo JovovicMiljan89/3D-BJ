@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { validateContent } from "../scripts/lib/validate.mjs";
 import { renderTemplate } from "../scripts/lib/render.mjs";
 import { escapeHtml } from "../scripts/lib/escape.mjs";
+import { bwPath, toBwSvg, BW_COLOR_MAP } from "../scripts/lib/bw.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -218,7 +219,7 @@ test("no placeholder/example text leaks into the rendered page", () => {
 // ---------- SEO: OG tags + JSON-LD ----------
 
 test("Open Graph / Twitter tags use absolute URLs built from seo.siteUrl", () => {
-  const html = buildDistWith(() => {});
+  const html = buildDistWith((c) => (c.theme = "teget"));
   const content = JSON.parse(fs.readFileSync(path.join(ROOT, "content", "site.json"), "utf-8"));
   const expectedImage = content.seo.siteUrl.replace(/\/$/, "") + content.seo.ogImage;
 
@@ -325,7 +326,7 @@ test("CSS and JS are emitted with content-hashed file names and referenced from 
 
 test("header and footer logo src equal brand.logo, with width matching the SVG's aspect ratio", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith(() => {});
+  const html = buildDistWith((c) => (c.theme = "teget"));
   const vb = fs
     .readFileSync(path.join(ROOT, brand.logo.replace(/^\//, "")), "utf-8")
     .match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/);
@@ -379,7 +380,7 @@ test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subje
 
 test("maker avatar falls back to brand.mark while no photo is set", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith(() => {});
+  const html = buildDistWith((c) => (c.theme = "teget"));
   assert.ok(html.includes(`<img class="maker__avatar" src="${brand.mark}"`));
 });
 
@@ -519,5 +520,94 @@ test("/admin redirects to this repo's Pages CMS editor", () => {
       redirects.includes(`${from} https://app.pagescms.org/JovovicMiljan89/3D-BJ/static-cms 302\n`),
       `missing redirect for ${from}`
     );
+  }
+});
+
+// ---------- Color themes ----------
+
+test("data-theme on <html> matches site.json, and theme-color follows the theme's --bg", () => {
+  const bw = buildDistWith((c) => (c.theme = "crnobela"));
+  assert.match(bw, /<html lang="sr" data-theme="crnobela" data-photos="grayscale">/);
+  assert.ok(bw.includes('<meta name="theme-color" content="#0a0a0a" />'));
+
+  const teget = buildDistWith((c) => (c.theme = "teget"));
+  assert.match(teget, /<html lang="sr" data-theme="teget">/, "teget never gets grayscale photos");
+  assert.ok(teget.includes('<meta name="theme-color" content="#070b14" />'));
+
+  const missing = buildDistWith((c) => delete c.theme);
+  assert.match(missing, /data-theme="crnobela"/, "crnobela is the default");
+});
+
+test("crnobela uses the -bw logo, mark, favicon, apple icon, hero and OG image; teget the originals", () => {
+  const content = loadRealContent();
+  const bw = buildDistWith((c) => (c.theme = "crnobela"));
+  const teget = buildDistWith((c) => (c.theme = "teget"));
+  const og = (p) => content.seo.siteUrl.replace(/\/$/, "") + p;
+  const checks = [
+    (p) => `<img src="${p}" alt="${content.brand.name}" height="40"`,
+    (p) => `<link rel="icon" href="${p}"`,
+    (p) => `<link rel="apple-touch-icon" href="${p}"`,
+    (p) => `<img class="maker__avatar" src="${p}"`,
+    (p) => `<img class="hero__img" src="${p}"`,
+    (p) => `property="og:image" content="${og(p)}"`,
+    (p) => `"logo":"${og(p)}"`,
+  ];
+  const fields = [content.brand.logo, content.brand.favicon, content.brand.appleIcon, content.brand.mark, content.hero.image, content.seo.ogImage, content.brand.logoFull];
+  fields.forEach((field, i) => {
+    assert.ok(bw.includes(checks[i](bwPath(field))), `crnobela should use ${bwPath(field)}`);
+    assert.ok(teget.includes(checks[i](field)), `teget should use ${field}`);
+    assert.ok(fs.existsSync(path.join(ROOT, bwPath(field).replace(/^\//, ""))), `${bwPath(field)} must be committed`);
+  });
+});
+
+test("grayscalePhotos: false keeps workshop/equipment photos in color", () => {
+  const html = buildDistWith((c) => {
+    c.theme = "crnobela";
+    c.grayscalePhotos = false;
+  });
+  assert.match(html, /<html lang="sr" data-theme="crnobela">/);
+});
+
+test("an unknown theme or a non-boolean grayscalePhotos fails validation", () => {
+  const content = deepClone(loadRealContent());
+  content.theme = "zelena";
+  content.grayscalePhotos = "da";
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  assert.ok(errors.some((e) => e.includes('"theme"')));
+  assert.ok(errors.some((e) => e.includes('"grayscalePhotos"')));
+});
+
+test("built CSS: navy/red literals appear only inside the teget token block", () => {
+  buildDistWith(() => {});
+  const cssFile = fs.readdirSync(path.join(ROOT, "dist", "css")).find((f) => f.endsWith(".css"));
+  const css = fs.readFileSync(path.join(ROOT, "dist", "css", cssFile), "utf-8");
+  const tegetBlock = css.match(/:root\[data-theme="teget"\]\s*\{[^}]*\}/)[0];
+  const outside = css.replace(tegetBlock, "");
+  for (const lit of ["#e11d2e", "#b3121f", "#1b2d55", "#2f4f9a", "#070b14", "rgba(225, 29, 46", "rgba(225,29,46"]) {
+    assert.ok(!outside.toLowerCase().includes(lit), `${lit} found outside the teget block`);
+  }
+  assert.ok(tegetBlock.includes("#e11d2e"), "teget keeps its red");
+});
+
+test("text on primary-colored elements uses --on-primary, never a literal white", () => {
+  const css = fs.readFileSync(path.join(ROOT, "css", "styles.css"), "utf-8");
+  // Decorative, text-less boxes (content: "") don't need a text color.
+  const rules = (css.match(/[^{}]+\{[^}]*background:\s*var\(--primary\)[^}]*\}/g) || []).filter((r) => !/content:\s*""/.test(r));
+  assert.ok(rules.length >= 4, "expected .btn, skip-link, step numbers, featured badge");
+  for (const rule of rules) {
+    assert.match(rule, /(^|[^-])color:\s*var\(--on-primary\)/, `missing color: var(--on-primary) in: ${rule.trim().slice(0, 80)}`);
+  }
+  assert.ok(!/color:\s*#fff(fff)?\b/i.test(css), "no literal white text color left");
+});
+
+test("B&W SVG recoloring: exact mapping, dark nozzle dot, unmapped colors rejected", () => {
+  assert.equal(BW_COLOR_MAP["#e11d2e"], "#ffffff");
+  const out = toBwSvg('<svg><rect fill="#E11D2E"/><polygon fill="#1b2d55"/><circle cx="60" cy="34" r="5" fill="#e7ecf6"/></svg>');
+  assert.equal(out, '<svg><rect fill="#ffffff"/><polygon fill="#262626"/><circle cx="60" cy="34" r="5" fill="#0a0a0a"/></svg>');
+  assert.throws(() => toBwSvg('<svg><rect fill="#00ff00"/></svg>'), /Unmapped colors/);
+  for (const f of ["assets/logo/3d-mdl-wordmark-bw.svg", "assets/logo/3d-mdl-mark-bw.svg", "assets/logo/3d-mdl-icon-bw.svg", "assets/images/hero-printer-bw.svg"]) {
+    const svg = fs.readFileSync(path.join(ROOT, f), "utf-8");
+    assert.equal(svg, toBwSvg(fs.readFileSync(path.join(ROOT, f.replace("-bw", "")), "utf-8")), `${f} is stale — rerun make-bw-assets`);
   }
 });

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{meta.lang}}">
+<html lang="{{meta.lang}}" data-theme="{{theme.name}}"{{#if theme.grayscalePhotos}} data-photos="grayscale"{{/if}}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{meta.fullTitle}}</title>
-  <meta name="theme-color" content="#070b14" />
+  <meta name="theme-color" content="{{theme.color}}" />
   <meta name="color-scheme" content="dark" />
   <meta name="description" content="{{meta.description}}" />
   <link rel="canonical" href="{{seo.canonicalUrl}}" />
