@@ -170,6 +170,13 @@ function computeViewModel(content, assets) {
   const visibleItems = (data.prices?.items || []).filter((item) => typeof item.from === "number" && item.from > 0);
   data.prices = { ...data.prices, visibleItems, visible: visibleItems.length > 0 };
 
+  // --- Viber/WhatsApp are stored as bare digits (for the links); show them
+  // like the phone number when it's the same number, otherwise as +digits.
+  const phoneDigits = (data.contact.phoneTel || "").replace(/\D/g, "");
+  const displayNumber = (digits) => (digits && digits === phoneDigits ? data.contact.phoneDisplay : `+${digits}`);
+  data.contact.viberDisplay = displayNumber(data.contact.viber);
+  data.contact.whatsappDisplay = displayNumber(data.contact.whatsapp);
+
   // --- Footer/social: hide the whole "Društvene mreže" column when both links are empty.
   data.contact.hasSocial = Boolean(data.contact.instagram || data.contact.facebook);
 
