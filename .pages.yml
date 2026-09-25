@@ -67,6 +67,10 @@ content:
         fields:
           - { name: eyebrow, label: "Mali tekst iznad naslova", type: string }
           - { name: headline, label: "Glavni naslov", type: string }
+          - name: headlineAccent
+            label: "Istaknuti kraj naslova (crvenom bojom)"
+            type: string
+            description: "Nastavak glavnog naslova koji se prikazuje u crvenoj boji, npr. 'gotovog predmeta.'. Može ostati prazno."
           - { name: lead, label: "Tekst ispod naslova", type: text }
           - { name: primaryButton, label: "Tekst prvog dugmeta", type: string }
           - { name: secondaryButton, label: "Tekst drugog dugmeta", type: string }
@@ -84,6 +88,7 @@ content:
         type: object
         fields:
           - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: subheading, label: "Podnaslov", type: text }
 
       - name: services
         label: "Usluge (kartice)"
@@ -103,6 +108,23 @@ content:
                 - { name: scan, label: "Skener" }
           - { name: title, label: "Naslov", type: string }
           - { name: text, label: "Opis", type: text }
+
+      - name: business
+        label: "Sekcija: Za firme"
+        type: object
+        fields:
+          - name: enabled
+            label: "Prikaži sekciju na sajtu"
+            type: boolean
+            default: true
+          - { name: tag, label: "Oznaka iznad naslova", type: string }
+          - { name: heading, label: "Naslov", type: string }
+          - { name: text, label: "Tekst", type: text }
+          - name: points
+            label: "Stavke sa kvačicom"
+            type: string
+            list: true
+          - { name: buttonLabel, label: "Tekst dugmeta", type: string }
 
       - name: gallerySection
         label: "Sekcija: Galerija (naslov)"
@@ -125,6 +147,7 @@ content:
         type: object
         fields:
           - { name: heading, label: "Naslov sekcije", type: string }
+          - { name: note, label: "Napomena ispod koraka", type: string }
           - { name: buttonLabel, label: "Tekst dugmeta na dnu", type: string }
 
       - name: steps
@@ -134,6 +157,35 @@ content:
         fields:
           - { name: title, label: "Naslov koraka", type: string }
           - { name: text, label: "Opis koraka", type: text }
+
+      - name: spareParts
+        label: "Sekcija: Rezervni delovi (3D skeniranje)"
+        type: object
+        fields:
+          - name: enabled
+            label: "Prikaži sekciju na sajtu"
+            type: boolean
+            default: true
+          - { name: tag, label: "Oznaka iznad naslova", type: string }
+          - { name: heading, label: "Naslov", type: string }
+          - { name: text, label: "Tekst", type: text }
+          - name: items
+            label: "Koraci (numerisane stavke)"
+            type: object
+            list: true
+            fields:
+              - { name: title, label: "Naslov stavke", type: string }
+              - { name: text, label: "Opis stavke", type: text }
+          - { name: examples, label: "Primeri (sitan tekst ispod stavki)", type: text }
+          - { name: buttonLabel, label: "Tekst dugmeta", type: string }
+          - name: formService
+            label: "Usluga koja se bira u formi"
+            type: string
+            description: "Mora da se poklapa sa jednom od opcija u 'Opcije: Usluga' (Kontakt), inače se usluga ne menja."
+          - name: formMessage
+            label: "Početak poruke u formi"
+            type: string
+            description: "Tekst koji se upiše u polje Poruka kad se klikne dugme, npr. 'Rezervni deo: '."
 
       - name: prices
         label: "Cene"
@@ -224,6 +276,7 @@ content:
         fields:
           - { name: sectionHeading, label: "Naslov sekcije", type: string }
           - { name: sectionSubheading, label: "Podnaslov sekcije", type: string }
+          - { name: formTitle, label: "Naslov forme", type: string }
           - { name: phoneDisplay, label: "Telefon (prikazan tekst)", type: string }
           - { name: phoneTel, label: "Telefon (za pozivanje, npr. +381601234567)", type: string }
           - name: viber

@@ -50,9 +50,11 @@ const REQUIRED_STRINGS = [
   "hero.image",
   "hero.imageAlt",
   "servicesSection.heading",
+  "servicesSection.subheading",
   "gallerySection.heading",
   "gallerySection.subheading",
   "howSection.heading",
+  "howSection.note",
   "howSection.buttonLabel",
   "workshop.heading",
   "workshop.subheading",
@@ -67,6 +69,7 @@ const REQUIRED_STRINGS = [
   "faqSection.heading",
   "contact.sectionHeading",
   "contact.sectionSubheading",
+  "contact.formTitle",
   "contact.web3formsKey",
   "contact.channelLabels.phone",
   "contact.channelLabels.viber",
@@ -128,6 +131,18 @@ const IMAGE_ARRAY_FIELDS = [
   ["gallery", "image"],
   ["workshop.equipment", "image"],
 ];
+
+// Sections the admin can switch off with an `enabled` checkbox. `enabled`
+// defaults to true when missing; the section's own fields are only required
+// while it is shown, so a hidden section can be left half-filled.
+const TOGGLEABLE_SECTIONS = {
+  business: { strings: ["tag", "heading", "text", "buttonLabel"], stringLists: ["points"], itemLists: {} },
+  spareParts: {
+    strings: ["tag", "heading", "text", "examples", "buttonLabel", "formService", "formMessage"],
+    stringLists: [],
+    itemLists: { items: ["title", "text"] },
+  },
+};
 
 // Optional image fields: only checked for existence IF non-empty (not required to be set at all).
 const OPTIONAL_IMAGE_FIELDS = ["maker.photo"];
@@ -252,6 +267,45 @@ export function validateContent(content, projectRoot) {
         const value = item?.[field];
         if (isNonEmptyString(value) && !imageExists(projectRoot, value)) {
           errors.push(`Image not found on disk for "${arrayPath}[${index}].${field}": ${value}`);
+        }
+      });
+    }
+  }
+
+  for (const [sectionPath, spec] of Object.entries(TOGGLEABLE_SECTIONS)) {
+    const section = get(content, sectionPath);
+    if (!isObject(section)) {
+      errors.push(`Missing required section: "${sectionPath}"`);
+      continue;
+    }
+    if (section.enabled !== undefined && typeof section.enabled !== "boolean") {
+      errors.push(`"${sectionPath}.enabled" must be true or false.`);
+      continue;
+    }
+    if (section.enabled === false) continue;
+
+    for (const field of spec.strings) {
+      if (!isNonEmptyString(section[field])) {
+        errors.push(`Missing or empty required text field: "${sectionPath}.${field}"`);
+      }
+    }
+    for (const field of spec.stringLists) {
+      const arr = section[field];
+      if (!isArray(arr) || arr.length === 0 || !arr.every(isNonEmptyString)) {
+        errors.push(`"${sectionPath}.${field}" must be a non-empty list of non-empty texts.`);
+      }
+    }
+    for (const [field, itemFields] of Object.entries(spec.itemLists)) {
+      const arr = section[field];
+      if (!isArray(arr) || arr.length === 0) {
+        errors.push(`Missing or empty required list: "${sectionPath}.${field}"`);
+        continue;
+      }
+      arr.forEach((item, index) => {
+        for (const itemField of itemFields) {
+          if (!isNonEmptyString(item?.[itemField])) {
+            errors.push(`Missing or empty required field "${itemField}" in "${sectionPath}.${field}[${index}]"`);
+          }
         }
       });
     }

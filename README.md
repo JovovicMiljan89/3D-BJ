@@ -75,8 +75,8 @@ print3d-mockup/
 │       ├── validate.mjs         # required fields, types, image files exist
 │       ├── render.mjs            # tiny {{ }} / {{#each}} template engine
 │       └── escape.mjs             # HTML-escaping
-├── css/styles.css              # unchanged from the original mockup
-├── js/main.js                  # contact modal, Web3Forms submit, gallery lightbox
+├── css/styles.css              # built as dist/css/styles.<hash>.css
+├── js/main.js                  # nav, CTAs/prefill, Web3Forms submit, lightbox (built as main.<hash>.js)
 ├── assets/
 │   ├── logo/, images/           # original logo + seed illustrations
 │   └── uploads/                  # photos Bojan uploads via Pages CMS land here
@@ -99,7 +99,7 @@ print3d-mockup/
 | Any text on the site | `content/site.json` (or Pages CMS — same file, friendlier UI) |
 | Product/gallery photos, equipment photos, logos | `content/site.json` image fields → files in `assets/` or `assets/uploads/` |
 | Page structure / HTML | `src/index.template.html` |
-| Colors / layout | `css/styles.css` — unchanged from the original mockup |
+| Colors / layout | `css/styles.css` (the build emits it under a content-hashed name, so the 1-year immutable cache never serves a stale copy) |
 | Contact form behavior | `js/main.js` |
 | What fields Bojan sees in the admin UI | `.pages.yml` |
 

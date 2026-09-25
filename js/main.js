@@ -1,6 +1,7 @@
 // 3D-BJ — site interactions
 // 1) Mobile hamburger nav                      [#2]
 // 2) CTA -> scroll to #kontakt + focus name     [#3]
+//    (+ prefill service/message for the spare-parts CTA)
 // 3) Copy-email button                          [#3]
 // 4) Inquiry form -> Web3Forms                  [#4]
 // 5) Gallery lightbox (keyboard + focus-return) [#13]
@@ -53,17 +54,40 @@
   const kontaktSection = document.getElementById("kontakt");
   const nameField = document.getElementById("f-name");
 
-  function focusContactForm() {
+  function focusContactForm(field = nameField) {
     if (!kontaktSection) return;
     closeNav();
     kontaktSection.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
     const delay = prefersReducedMotion() ? 0 : 450;
     window.setTimeout(() => {
-      if (nameField) nameField.focus({ preventScroll: true });
+      if (!field) return;
+      field.focus({ preventScroll: true });
+      if (field.setSelectionRange) field.setSelectionRange(field.value.length, field.value.length);
     }, delay);
   }
 
-  document.querySelectorAll("[data-focus-form]").forEach((btn) => btn.addEventListener("click", focusContactForm));
+  document.querySelectorAll("[data-focus-form]").forEach((btn) => btn.addEventListener("click", () => focusContactForm()));
+
+  // Spare-parts CTA: pre-selects a service (only if that option exists) and
+  // starts the message with a prefix, then focuses the message at its end.
+  const serviceField = document.getElementById("f-service");
+  const messageField = document.getElementById("f-message");
+
+  document.querySelectorAll("[data-prefill-message]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const service = btn.dataset.prefillService || "";
+      if (serviceField && service && Array.from(serviceField.options).some((o) => o.value === service)) {
+        serviceField.value = service;
+      }
+      // The CMS may trim the trailing space, so always end the prefix with exactly one.
+      const raw = (btn.dataset.prefillMessage || "").trimEnd();
+      const prefix = raw ? raw + " " : "";
+      if (messageField && prefix && !messageField.value.startsWith(prefix)) {
+        messageField.value = prefix + messageField.value;
+      }
+      focusContactForm(messageField || nameField);
+    })
+  );
 
   // ---------- Copy-email button ----------
   document.querySelectorAll(".copy-btn").forEach((btn) => {
