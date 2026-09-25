@@ -3,6 +3,7 @@
 // content/site.json + src/index.template.html  -->  dist/
 "use strict";
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -120,8 +121,17 @@ function resolveDims(root, absPath) {
   return size;
 }
 
-function computeViewModel(content) {
+// Optional sections are shown unless the admin explicitly switched them off.
+function isSectionEnabled(section) {
+  return section?.enabled !== false;
+}
+
+function computeViewModel(content, assets) {
   const data = structuredClone(content);
+  data.assets = assets;
+
+  data.business = { ...data.business, enabled: isSectionEnabled(data.business) };
+  data.spareParts = { ...data.spareParts, enabled: isSectionEnabled(data.spareParts) };
 
   // --- Image dimensions, read from the actual files (see resolveDims above).
   const heroDims = resolveDims(ROOT, data.hero.image);
@@ -170,6 +180,20 @@ function computeViewModel(content) {
   return data;
 }
 
+// css/ and js/ are served with a one-year immutable cache (see _headers), so
+// their file names must change whenever their content does. Copies
+// <dir>/<name>.<ext> to dist/<dir>/<name>.<hash>.<ext> and returns the URL.
+function copyHashed(relPath) {
+  const src = path.join(ROOT, relPath);
+  const buf = fs.readFileSync(src);
+  const hash = crypto.createHash("sha256").update(buf).digest("hex").slice(0, 10);
+  const { dir, name, ext } = path.parse(relPath);
+  const hashedRel = path.join(dir, `${name}.${hash}${ext}`);
+  fs.mkdirSync(path.join(DIST_DIR, dir), { recursive: true });
+  fs.writeFileSync(path.join(DIST_DIR, hashedRel), buf);
+  return "/" + hashedRel.split(path.sep).join("/");
+}
+
 function main() {
   const content = loadContent();
 
@@ -186,21 +210,20 @@ function main() {
   }
   const template = fs.readFileSync(TEMPLATE_PATH, "utf-8");
 
-  const data = computeViewModel(content);
-  const html = renderTemplate(template, data);
-
   fs.rmSync(DIST_DIR, { recursive: true, force: true });
   fs.mkdirSync(DIST_DIR, { recursive: true });
 
+  const assets = { css: copyHashed("css/styles.css"), js: copyHashed("js/main.js") };
+  const data = computeViewModel(content, assets);
+  const html = renderTemplate(template, data);
+
   fs.writeFileSync(path.join(DIST_DIR, "index.html"), html);
-  copyDir(path.join(ROOT, "css"), path.join(DIST_DIR, "css"));
-  copyDir(path.join(ROOT, "js"), path.join(DIST_DIR, "js"));
   copyDir(path.join(ROOT, "assets"), path.join(DIST_DIR, "assets"));
   // reference/ (local-only UI/UX reference material) is never copied — dist/
   // only ever gets css/, js/, assets/ and the rendered index.html, above.
   fs.writeFileSync(path.join(DIST_DIR, "_headers"), buildHeaders());
 
-  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, css/, js/, assets/, _headers)`);
+  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, _headers)`);
 }
 
 main();

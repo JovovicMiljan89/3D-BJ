@@ -26,7 +26,7 @@
 
   <link rel="icon" href="{{brand.favicon}}" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="{{brand.touchIcon}}" />
-  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="{{assets.css}}" />
 
   <!-- LocalBusiness structured data [#11] — computed by scripts/build.mjs, not admin-editable, safe to render raw -->
   <script type="application/ld+json">{{{seo.jsonLd}}}</script>
@@ -109,13 +109,13 @@
     <!-- ===== Hero ===== -->
     <section class="hero">
       <div class="container hero__inner">
-        <div class="hero__text">
+        <div>
           <p class="eyebrow">{{hero.eyebrow}}</p>
-          <h1>{{hero.headline}}</h1>
+          <h1>{{hero.headline}}{{#if hero.headlineAccent}} <span class="accent">{{hero.headlineAccent}}</span>{{/if}}</h1>
           <p class="lead">{{hero.lead}}</p>
           <div class="hero__actions">
             <button class="btn" data-focus-form>{{hero.primaryButton}}</button>
-            <a href="#radionica" class="btn btn--ghost">{{hero.secondaryButton}}</a>
+            <a href="#galerija" class="btn btn--ghost">{{hero.secondaryButton}}</a>
           </div>
           <!-- Trust row [#5] -->
           <ul class="trust">
@@ -132,6 +132,7 @@
     <section id="usluge" class="section">
       <div class="container">
         <h2>{{servicesSection.heading}}</h2>
+        <p class="muted">{{servicesSection.subheading}}</p>
         <div class="cards">
           {{#each services}}
           <article class="card">
@@ -143,6 +144,29 @@
         </div>
       </div>
     </section>
+
+    <!-- ===== For businesses (hideable via business.enabled) ===== -->
+    {{#if business.enabled}}
+    <section id="za-firme" class="section section--band">
+      <div class="container">
+        <div class="card band">
+          <div>
+            <span class="tag">{{business.tag}}</span>
+            <h2>{{business.heading}}</h2>
+            <p class="muted">{{business.text}}</p>
+          </div>
+          <div class="band__aside">
+            <ul class="checklist">
+              {{#each business.points}}
+              <li><svg class="trust__icon" aria-hidden="true"><use href="#icon-check"></use></svg><span>{{this}}</span></li>
+              {{/each}}
+            </ul>
+            <button class="btn" data-focus-form>{{business.buttonLabel}}</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    {{/if}}
 
     <!-- ===== Gallery ===== -->
     <section id="galerija" class="section section--alt">
@@ -169,11 +193,32 @@
           <li><span>{{@index1}}</span><strong>{{title}}</strong> {{text}}</li>
           {{/each}}
         </ol>
+        <p class="muted small">{{howSection.note}}</p>
         <div class="center">
           <button class="btn" data-focus-form>{{howSection.buttonLabel}}</button>
         </div>
       </div>
     </section>
+
+    <!-- ===== Spare parts via 3D scanning (hideable via spareParts.enabled) ===== -->
+    {{#if spareParts.enabled}}
+    <section id="rezervni-delovi" class="section section--alt">
+      <div class="container">
+        <span class="tag">{{spareParts.tag}}</span>
+        <h2>{{spareParts.heading}}</h2>
+        <p class="muted">{{spareParts.text}}</p>
+        <ol class="steps steps--3">
+          {{#each spareParts.items}}
+          <li><span>{{@index1}}</span><strong>{{title}}</strong> {{text}}</li>
+          {{/each}}
+        </ol>
+        <p class="muted small">{{spareParts.examples}}</p>
+        <div class="center">
+          <button class="btn" data-prefill-service="{{spareParts.formService}}" data-prefill-message="{{spareParts.formMessage}}">{{spareParts.buttonLabel}}</button>
+        </div>
+      </div>
+    </section>
+    {{/if}}
 
     <!-- ===== Prices [#7] — build.mjs hides this whole section unless at least one card has a real price ===== -->
     {{#if prices.visible}}
@@ -317,7 +362,8 @@
             {{/if}}
           </div>
 
-          <form id="inquiryForm" class="form" data-sending-label="{{contact.sendingLabel}}" novalidate>
+          <form id="inquiryForm" class="form" data-sending-label="{{contact.sendingLabel}}" aria-labelledby="formTitle" novalidate>
+            <h3 class="form__title" id="formTitle">{{contact.formTitle}}</h3>
             <input type="hidden" name="access_key" value="{{contact.web3formsKey}}" />
             <input type="checkbox" name="botcheck" class="botcheck-field" style="display:none" tabindex="-1" autocomplete="off" />
 
@@ -391,7 +437,7 @@
       {{/if}}
     </div>
     <div class="container footer__bottom">
-      <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}} — {{footer.rightsText}}{{#if contact.pib}} · {{footer.pibLabel}}: {{contact.pib}}{{/if}}</p>
+      <p>© {{build.year}} {{brand.name}} · {{brand.ownerName}}. {{footer.rightsText}}{{#if contact.pib}} · {{footer.pibLabel}}: {{contact.pib}}{{/if}}</p>
     </div>
   </footer>
 
@@ -417,6 +463,6 @@
     </button>
   </nav>
 
-  <script src="/js/main.js"></script>
+  <script src="{{assets.js}}"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "3D-BJ — 3D štampa · skeniranje · modelovanje | Bojan Jovović",
-    "description": "Usluga 3D štampe, skeniranja i modelovanja — prototipovi, rezervni delovi, pokloni i dekoracija.",
+    "title": "3D-BJ | 3D štampa, skeniranje i modelovanje po meri",
+    "description": "Radionica za 3D štampu, 3D skeniranje i modelovanje po meri. Prototipovi, rezervni delovi i personalizovani pokloni. Izrada od jednog komada, besplatna ponuda u roku od 24 časa.",
     "lang": "sr"
   },
   "seo": {
@@ -25,57 +25,71 @@
     "contactLabel": "Kontakt"
   },
   "hero": {
-    "eyebrow": "3D-BJ · Štampa · Skeniranje · Modelovanje",
-    "headline": "Vaše ideje, odštampane sloj po sloj.",
-    "lead": "Prototipovi, rezervni delovi, pokloni i dekoracija. Pošaljite nam fajl ili ideju — mi ćemo skenirati, modelovati i odštampati — u do 4 boje, ili u izdržljivim inženjerskim materijalima.",
+    "eyebrow": "3D štampa · skeniranje · modelovanje",
+    "headline": "Od ideje do",
+    "headlineAccent": "gotovog predmeta.",
+    "lead": "Izrađujemo prototipove, rezervne delove, personalizovane poklone i dekorativne predmete, u jednoj ili više boja i u materijalima prilagođenim nameni.",
     "primaryButton": "Zatražite ponudu",
-    "secondaryButton": "Pogledajte radionicu",
+    "secondaryButton": "Pogledajte radove",
     "image": "/assets/images/hero-printer.svg",
     "imageAlt": "Ilustracija 3D štampača koji štampa predmet"
   },
   "trust": [
-    "Direktna komunikacija sa Bojanom, bez posrednika",
-    "Besplatna konsultacija pre izrade — bez obaveze",
-    "Odgovor na upit u kratkom roku"
+    "Izrada već od jednog komada",
+    "Besplatna procena i ponuda",
+    "Odgovor u roku od 24 časa"
   ],
   "servicesSection": {
-    "heading": "Šta štampamo"
+    "heading": "Naše usluge",
+    "subheading": "Rešenja za pojedince i firme. Za svaki upit predlažemo optimalan materijal i način izrade."
   },
   "services": [
     {
       "icon": "gear",
       "title": "Prototipovi",
-      "text": "Brzi funkcionalni prototipovi za testiranje proizvoda."
+      "text": "Funkcionalni modeli za proveru dizajna pre serijske proizvodnje."
     },
     {
       "icon": "wrench",
       "title": "Rezervni delovi",
-      "text": "Zamenski klipsevi, dugmad, nosači i držači."
+      "text": "Izrada delova kojih više nema u prodaji, prema uzorku ili merama."
     },
     {
       "icon": "gift",
       "title": "Pokloni i dekoracija",
-      "text": "Personalizovane figurice, vaze i pločice sa imenom."
+      "text": "Personalizovani predmeti sa imenom, logom ili posvetom."
     },
     {
       "icon": "layers",
       "title": "Višebojna štampa",
-      "text": "Do 4 boje ili materijala u jednoj štampi — logotipi, natpisi, igračke."
+      "text": "Do četiri boje u jednom predmetu, bez naknadnog farbanja."
     },
     {
       "icon": "shield",
-      "title": "Inženjerski materijali",
-      "text": "Zatvoreni štampač za ABS, ASA i karbonske mešavine — delovi otporni na toplotu i UV zračenje."
+      "title": "Tehnički materijali",
+      "text": "ABS, ASA i kompoziti ojačani karbonskim vlaknima za zahtevne primene."
     },
     {
       "icon": "scan",
       "title": "3D skeniranje",
-      "text": "Skenirajte postojeći predmet, dobijte čist 3D model, zatim odštampajte kopiju ili poboljšanu verziju."
+      "text": "Digitalizacija postojećih predmeta i izrada preciznih kopija."
     }
   ],
+  "business": {
+    "enabled": true,
+    "tag": "Za firme",
+    "heading": "Vaš logo, u bojama Vašeg brenda.",
+    "text": "Izrađujemo promotivne predmete, natpise i logotipe u do četiri boje, kao i prototipove i manje serije delova za razvoj proizvoda.",
+    "points": [
+      "Manje serije po povoljnijoj ceni",
+      "Izrada prema Vašem fajlu ili skici",
+      "Poštovanje dogovorenih rokova"
+    ],
+    "buttonLabel": "Zatražite ponudu za firmu"
+  },
   "gallerySection": {
-    "heading": "Galerija",
-    "subheading": "Kliknite na sliku za uvećanje."
+    "heading": "Izbor iz naših radova",
+    "subheading": "Kliknite na rad za uvećan prikaz."
   },
   "gallery": [
     {
@@ -100,30 +114,55 @@
     }
   ],
   "howSection": {
-    "heading": "Kako radi",
+    "heading": "Četiri koraka do gotovog predmeta",
+    "note": "Cenu i rok znate pre početka rada, bez skrivenih troškova.",
     "buttonLabel": "Pokrenite upit"
   },
   "steps": [
     {
-      "title": "Pošaljite fajl, ideju ili predmet",
-      "text": "STL/OBJ/3MF, skica, ili sam predmet."
+      "title": "Upit",
+      "text": "Pošaljete 3D fajl (STL, 3MF, OBJ), skicu sa merama, fotografiju ili sam predmet."
     },
     {
-      "title": "Skeniranje i modelovanje",
-      "text": "Po potrebi 3D skeniramo ili modelujemo."
+      "title": "Priprema",
+      "text": "Po potrebi skeniramo predmet ili izradimo 3D model."
     },
     {
-      "title": "Dobijte ponudu",
-      "text": "Cena, materijal i vreme isporuke."
+      "title": "Ponuda",
+      "text": "Dobijate cenu, predlog materijala i rok izrade, bez obaveze."
     },
     {
-      "title": "Štampa i isporuka",
-      "text": "Dostava ili lično preuzimanje."
+      "title": "Izrada i isporuka",
+      "text": "Nakon potvrde štampamo, proveravamo kvalitet i isporučujemo."
     }
   ],
+  "spareParts": {
+    "enabled": true,
+    "tag": "3D skeniranje",
+    "heading": "Skeniramo. Ispravljamo. Izrađujemo.",
+    "text": "Kada se deo pokvari, a zamena više ne postoji na tržištu, rešenje je izrada novog.",
+    "items": [
+      {
+        "title": "Skeniranje",
+        "text": "Skeniramo deo ili ga modelujemo prema merama."
+      },
+      {
+        "title": "Ispravka modela",
+        "text": "Uklanjamo oštećenja i po potrebi ojačavamo kritična mesta."
+      },
+      {
+        "title": "Izrada",
+        "text": "Štampamo novi deo u materijalu prilagođenom opterećenju i temperaturi."
+      }
+    ],
+    "examples": "Primeri: dugmad za kućne aparate, klipsevi, nosači, zupčanici, poklopci i kućišta.",
+    "buttonLabel": "Pošaljite fotografiju dela",
+    "formService": "3D skeniranje",
+    "formMessage": "Rezervni deo: "
+  },
   "prices": {
     "heading": "Cene",
-    "note": "Konačna cena zavisi od veličine, materijala i količine — pošaljite upit za tačnu ponudu.",
+    "note": "Tačna cena zavisi od veličine, materijala i vremena izrade. Ponuda je besplatna i bez obaveze.",
     "items": [
       {
         "title": "Mali radovi",
@@ -246,8 +285,8 @@
   },
   "maker": {
     "name": "Bojan Jovović",
-    "roleTag": "Vlasnik · Operater štampe",
-    "bio": "Svaki posao prolazi kroz moje ruke — od skeniranja i modelovanja do sečenja, štampe i finalne kontrole kvaliteta. Jedna osoba odgovorna, od vaše prve poruke do isporuke.",
+    "roleTag": "Vlasnik i operater štampe",
+    "bio": "Lično vodim svaki projekat, od prvog razgovora, preko skeniranja i modelovanja, do završne kontrole kvaliteta. Rad sa jednom odgovornom osobom znači direktnu komunikaciju, jasne dogovore i poštovanje rokova.",
     "avatar": "/assets/logo/3d-bj-mark.svg",
     "photo": "",
     "buttonLabel": "Kontaktirajte Bojana"
@@ -257,29 +296,34 @@
   },
   "faq": [
     {
-      "q": "Koje materijale koristite?",
-      "a": "Radimo sa PLA, PETG, ABS, ASA i TPU (fleksibilnim) materijalima, u zavisnosti od namene dela."
+      "q": "Koji format fajla je potreban?",
+      "a": "Najbolje STL, 3MF ili OBJ. Ukoliko nemate 3D model, dovoljna je skica sa merama ili fotografija predmeta, a model izrađujemo mi."
     },
     {
-      "q": "Kako se formira cena?",
-      "a": "Cena zavisi od veličine, materijala, boje i složenosti izrade. Pošaljite upit sa detaljima i dobijate ponudu bez obaveze."
-    },
-    {
-      "q": "Mogu li da pošaljem gotov 3D fajl?",
-      "a": "Naravno — prihvatamo STL, OBJ i 3MF fajlove. Ako nemate fajl, možemo da skeniramo postojeći predmet ili modelujemo po vašem opisu."
+      "q": "Da li je moguće naručiti samo jedan komad?",
+      "a": "Da. Izrada je moguća već od jednog komada, bez minimalne količine. Za veće serije pripremamo posebnu ponudu."
     },
     {
       "q": "Koliko traje izrada?",
-      "a": "Zavisi od veličine i složenosti dela. Tačan rok dobijate uz ponudu, nakon što pošaljete upit."
+      "a": "Na upit odgovaramo u roku od 24 časa. Manji predmeti su najčešće gotovi za jedan do tri radna dana, a tačan rok navodimo u ponudi."
     },
     {
-      "q": "Da li radite višebojnu štampu?",
-      "a": "Da, do 4 boje u jednom štampanju — idealno za logotipe, figure i personalizovane poklone."
+      "q": "Koji materijal da izaberem?",
+      "a": "PLA za dekorativne predmete i poklone, PETG za delove izložene opterećenju, ABS i ASA za toplotu i spoljnu upotrebu, TPU za elastične delove. Ukoliko niste sigurni, preporučićemo optimalno rešenje."
+    },
+    {
+      "q": "Kako se vrši isporuka i plaćanje?",
+      "a": "Predmet možete preuzeti lično ili ga šaljemo kurirskom službom. Način plaćanja dogovaramo prilikom potvrde porudžbine."
+    },
+    {
+      "q": "Da li možete da izradite deo prema pokvarenom originalu?",
+      "a": "U većini slučajeva da. Deo skeniramo ili izmerimo, ispravimo oštećenja u modelu i izradimo novi."
     }
   ],
   "contact": {
     "sectionHeading": "Kontakt",
-    "sectionSubheading": "Pozovite, pošaljite poruku, ili popunite formu — javljamo se u kratkom roku.",
+    "sectionSubheading": "Pošaljite upit putem forme, telefona ili poruke. Odgovor šaljemo u roku od 24 časa.",
+    "formTitle": "Zatražite ponudu",
     "phoneDisplay": "+1 (555) 010-0199",
     "phoneTel": "+15550100199",
     "viber": "",
@@ -320,8 +364,8 @@
     },
     "namePlaceholder": "Petar Petrović",
     "emailPlaceholder": "petar@gmail.com",
-    "messagePlaceholder": "Opišite šta želite da odštampate...",
-    "fileLinkPlaceholder": "Link ka STL/OBJ fajlu, Google Drive, itd. (opciono)",
+    "messagePlaceholder": "Opišite predmet: namenu, približne dimenzije, količinu i željeni rok.",
+    "fileLinkPlaceholder": "Link ka fajlu (Google Drive, WeTransfer, Dropbox)",
     "materialOptions": [
       "Nisam siguran",
       "PLA",
@@ -337,11 +381,11 @@
       "Modelovanje"
     ],
     "web3formsKey": "YOUR_WEB3FORMS_ACCESS_KEY",
-    "submitLabel": "Pošalji upit",
+    "submitLabel": "Pošaljite upit",
     "sendingLabel": "Šalje se…",
-    "errorMessage": "Molimo popunite sva polja ispravnim email-om.",
-    "networkErrorMessage": "Nešto je pošlo po zlu prilikom slanja poruke. Molimo pokušajte preko telefona ili email-a.",
-    "successMessage": "✅ Hvala! Primili smo vaš upit i javićemo vam se uskoro."
+    "errorMessage": "Molimo unesite ime, ispravnu email adresu i poruku.",
+    "networkErrorMessage": "Slanje trenutno nije uspelo. Pokušajte ponovo ili nas kontaktirajte telefonom.",
+    "successMessage": "Hvala Vam. Upit je primljen, a odgovor šaljemo u roku od 24 časa."
   },
   "bottomBar": {
     "callLabel": "Pozovi",
@@ -349,7 +393,7 @@
     "inquiryLabel": "Upit"
   },
   "footer": {
-    "tagline": "Print · Scan · Model",
+    "tagline": "3D štampa, skeniranje i modelovanje po meri.",
     "kontaktHeading": "Kontakt",
     "hoursHeading": "Radno vreme",
     "socialHeading": "Društvene mreže",
