@@ -159,17 +159,19 @@
         body: JSON.stringify({
           access_key: data.access_key,
           subject: `${brandName} upit: ${data.name}`,
+          from_name: `${brandName} sajt`,
           name: data.name,
+          // Must stay "email": Web3Forms uses this field as the Reply-To.
           email: data.email,
           service: data.service,
           material: data.material,
-          file_link: data.file_link || "",
+          file_link: data.file_link.trim() || "—",
           message: data.message,
           botcheck: false,
         }),
       });
-      const result = await res.json();
-      if (!res.ok || !result.success) {
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || result.success !== true) {
         throw new Error(result.message || `Request failed (${res.status})`);
       }
 

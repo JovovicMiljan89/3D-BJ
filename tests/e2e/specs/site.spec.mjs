@@ -77,29 +77,107 @@ test("submitting the empty inquiry form shows a validation error", async ({ page
   await expect(formError).toBeVisible();
 });
 
-test("a valid submission posts to Web3Forms (including file_link) and shows the success message", async ({ page }) => {
-  let requestBody = null;
+// Web3Forms is always mocked here — tests never send a real submission.
+async function fillValidForm(page, { fileLink = "" } = {}) {
+  await page.locator("#f-name").fill("Petar Test");
+  await page.locator("#f-email").fill("petar@test.rs");
+  await page.locator("#f-material").selectOption("PETG");
+  await page.locator("#f-service").selectOption("3D skeniranje");
+  if (fileLink) await page.locator("#f-file-link").fill(fileLink);
+  await page.locator("#f-message").fill("Treba mi nosač, 10 × 4 cm.");
+}
+
+test("a valid submission sends the expected JSON to Web3Forms and shows the success message", async ({ page }) => {
+  let request = null;
   await page.route("https://api.web3forms.com/submit", async (route) => {
-    requestBody = route.request().postDataJSON();
-    await route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ success: true, message: "ok" }),
-    });
+    request = route.request();
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ success: true, message: "ok" }) });
   });
 
   await page.goto("/");
-  await page.locator('#inquiryForm input[name="name"]').fill("Test Person");
-  await page.locator('#inquiryForm input[name="email"]').fill("test@example.com");
-  await page.locator('#inquiryForm input[name="file_link"]').fill("https://drive.example/my-model.stl");
-  await page.locator('#inquiryForm textarea[name="message"]').fill("Playwright smoke test message.");
+  const key = await page.locator('#inquiryForm input[name="access_key"]').inputValue();
+  expect(key).toMatch(/^[0-9a-f-]{36}$/);
+
+  await fillValidForm(page, { fileLink: "https://drive.example/model.stl" });
   await page.locator("#inquiryForm button[type=submit]").click();
 
   await expect(page.locator("#formSuccess")).toBeVisible();
-  expect(requestBody).not.toBeNull();
-  expect(requestBody.name).toBe("Test Person");
-  expect(requestBody.email).toBe("test@example.com");
-  expect(requestBody.file_link).toBe("https://drive.example/my-model.stl");
+  await expect(page.locator("#formNetworkError")).toBeHidden();
+  expect(request.method()).toBe("POST");
+  expect(request.headers()["content-type"]).toBe("application/json");
+  expect(request.postDataJSON()).toEqual({
+    access_key: key,
+    subject: "3D-MDL upit: Petar Test",
+    from_name: "3D-MDL sajt",
+    name: "Petar Test",
+    email: "petar@test.rs",
+    service: "3D skeniranje",
+    material: "PETG",
+    file_link: "https://drive.example/model.stl",
+    message: "Treba mi nosač, 10 × 4 cm.",
+    botcheck: false,
+  });
+  // Form is cleared after a successful send.
+  await expect(page.locator("#f-name")).toHaveValue("");
+});
+
+test('an empty file link is sent as "—"', async ({ page }) => {
+  let body = null;
+  await page.route("https://api.web3forms.com/submit", async (route) => {
+    body = route.request().postDataJSON();
+    await route.fulfill({ status: 200, contentType: "application/json", body: '{"success":true}' });
+  });
+  await page.goto("/");
+  await fillValidForm(page);
+  await page.locator("#inquiryForm button[type=submit]").click();
+  await expect(page.locator("#formSuccess")).toBeVisible();
+  expect(body.file_link).toBe("—");
+});
+
+test("a 500 from Web3Forms shows the network error, keeps the input and re-enables the button", async ({ page }) => {
+  await page.route("https://api.web3forms.com/submit", (route) =>
+    route.fulfill({ status: 500, contentType: "text/plain", body: "Internal Server Error" })
+  );
+  await page.goto("/");
+  await fillValidForm(page);
+  const submit = page.locator("#inquiryForm button[type=submit]");
+  const label = await submit.textContent();
+  await submit.click();
+
+  await expect(page.locator("#formNetworkError")).toBeVisible();
+  await expect(page.locator("#formSuccess")).toBeHidden();
+  await expect(page.locator("#f-message")).toHaveValue("Treba mi nosač, 10 × 4 cm.");
+  await expect(submit).toBeEnabled();
+  await expect(submit).toHaveText(label);
+});
+
+test("success: false in a 200 response is treated as an error", async ({ page }) => {
+  await page.route("https://api.web3forms.com/submit", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: '{"success":false,"message":"Invalid key"}' })
+  );
+  await page.goto("/");
+  await fillValidForm(page);
+  await page.locator("#inquiryForm button[type=submit]").click();
+  await expect(page.locator("#formNetworkError")).toBeVisible();
+  await expect(page.locator("#formSuccess")).toBeHidden();
+});
+
+test("the submit button shows the sending state while the request is in flight", async ({ page }) => {
+  let release;
+  const gate = new Promise((r) => (release = r));
+  await page.route("https://api.web3forms.com/submit", async (route) => {
+    await gate;
+    await route.fulfill({ status: 200, contentType: "application/json", body: '{"success":true}' });
+  });
+  await page.goto("/");
+  await fillValidForm(page);
+  const submit = page.locator("#inquiryForm button[type=submit]");
+  await submit.click();
+  await expect(submit).toBeDisabled();
+  await expect(submit).toHaveText(await page.locator("#inquiryForm").getAttribute("data-sending-label"));
+  release();
+  await expect(page.locator("#formSuccess")).toBeVisible();
+  await expect(submit).toBeEnabled();
 });
 
 test("FAQ items toggle open/closed, first one open by default", async ({ page }) => {
@@ -226,21 +304,6 @@ test("the stylesheet is loaded from a content-hashed file name", async ({ page }
   expect(href).toMatch(/^\/css\/styles\.[0-9a-f]{10}\.css$/);
   const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
   expect(bg).toBe("rgb(7, 11, 20)");
-});
-
-test("the Web3Forms subject uses the brand name", async ({ page }) => {
-  let body = null;
-  await page.route("https://api.web3forms.com/submit", async (route) => {
-    body = route.request().postDataJSON();
-    await route.fulfill({ status: 200, contentType: "application/json", body: '{"success":true}' });
-  });
-  await page.goto("/");
-  await page.locator("#f-name").fill("Petar");
-  await page.locator("#f-email").fill("petar@test.rs");
-  await page.locator("#f-message").fill("Poruka");
-  await page.locator("#inquiryForm button[type=submit]").click();
-  await expect(page.locator("#formSuccess")).toBeVisible();
-  expect(body.subject).toBe("3D-MDL upit: Petar");
 });
 
 test("header logo is the configured wordmark and renders at 40px height", async ({ page }) => {
