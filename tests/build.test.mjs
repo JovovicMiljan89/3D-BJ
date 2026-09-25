@@ -193,7 +193,9 @@ test("prices section appears, but only shows cards with a real (>0) price", () =
 });
 
 test("empty optional contact channels (viber, whatsapp, instagram, facebook, city, pib) are not rendered", () => {
-  const html = buildDistWith(() => {}); // real content.json ships these empty
+  const html = buildDistWith((content) => {
+    for (const key of ["viber", "whatsapp", "instagram", "facebook", "city", "pib"]) content.contact[key] = "";
+  });
   assert.ok(!html.includes("viber://chat"), "no Viber link when contact.viber is empty");
   assert.ok(!html.includes("wa.me/"), "no WhatsApp link when contact.whatsapp is empty");
   assert.ok(!html.includes(">Instagram<"), "no Instagram link when contact.instagram is empty");
