@@ -22,6 +22,8 @@ function get(obj, dottedPath) {
   return dottedPath.split(".").reduce((acc, key) => (acc == null ? undefined : acc[key]), obj);
 }
 
+export const WEB3FORMS_PLACEHOLDER_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+
 export const SERVICE_ICONS = ["gear", "wrench", "gift", "layers", "shield", "scan"];
 
 const REQUIRED_STRINGS = [
@@ -330,6 +332,13 @@ export function validateContent(content, projectRoot) {
         }
       });
     }
+  }
+
+  const web3formsKey = get(content, "contact.web3formsKey");
+  if (isNonEmptyString(web3formsKey) && web3formsKey.trim() === WEB3FORMS_PLACEHOLDER_KEY) {
+    errors.push(
+      `"contact.web3formsKey" is still the placeholder "${WEB3FORMS_PLACEHOLDER_KEY}" — set the real Web3Forms access key, or the contact form can't send.`
+    );
   }
 
   const hasContactMethod = AT_LEAST_ONE_CONTACT_METHOD.some((fieldPath) => isNonEmptyString(get(content, fieldPath)));

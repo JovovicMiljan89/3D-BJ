@@ -59,7 +59,7 @@ Za detalje uputstva koje šalješ Bojanu, vidi `ADMIN-UPUTSTVO.sr.md`.
 ## 4. Napravi Web3Forms ključ za kontakt formu
 
 1. Idi na [web3forms.com](https://web3forms.com), unesi email na koji žele da stižu upiti sa sajta (npr. Bojanov email) i klikni **Create Access Key**. Nije potreban nalog — ključ stiže na email.
-2. Otvori `content/site.json` (lokalno ili kroz Pages CMS, polje **"Web3Forms pristupni ključ (access key)"** unutar sekcije **"Kontakt i forma za upit"**) i zameni `YOUR_WEB3FORMS_ACCESS_KEY` stvarnim ključem.
+2. Ključ je u `content/site.json`, polje `contact.web3formsKey` (u Pages CMS-u: **"Web3Forms pristupni ključ (access key)"** u sekciji **"Kontakt i forma za upit"**). Build namerno pada ako je polje prazno ili je vraćeno na probnu vrednost `YOUR_WEB3FORMS_ACCESS_KEY`.
 3. Sačuvaj (commit i push, ili Save u Pages CMS-u) — sledeći build će ugraditi ključ u formu.
 4. Ovaj ključ je **namerno javan** (vidi se u izvornom kodu stranice) — tako Web3Forms radi, ključ samo određuje na koji email stižu poruke, ne daje pristup ničemu drugom. Preporuka: u Web3Forms podešavanjima ograniči ključ na tvoj domen (**Restrict to domain**) kad sajt bude uživo, da spreči zloupotrebu sa drugih sajtova.
 5. Testiraj: pošalji upit kroz formu na sajtu i proveri da li stiže email.
@@ -84,4 +84,4 @@ Za detalje uputstva koje šalješ Bojanu, vidi `ADMIN-UPUTSTVO.sr.md`.
 
 - **Build pada na Cloudflare-u:** pogledaj build log (korak 2, poslednja napomena) — poruka greške iz `scripts/build.mjs` će tačno reći koje polje ili slika nedostaje.
 - **Bojan ne može da se uloguje:** proveri da li je pozivnica poslata na tačnu email adresu u Pages CMS → Collaborators, i da nije završila u spam folderu.
-- **Kontakt forma ne šalje:** proveri da li je `contact.web3formsKey` u `content/site.json` stvarna vrednost (ne `YOUR_WEB3FORMS_ACCESS_KEY`), i da li je Web3Forms ključ ograničen na pogrešan domen.
+- **Kontakt forma ne šalje:** proveri u Web3Forms dashboardu da li je ključ iz `contact.web3formsKey` aktivan, u konzoli browsera (F12) pogledaj odgovor sa `api.web3forms.com`, i proveri da li je Web3Forms ključ ograničen na pogrešan domen.

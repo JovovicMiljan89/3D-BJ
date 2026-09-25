@@ -474,3 +474,39 @@ test("Viber/WhatsApp show the formatted phone number when it's the same number, 
   assert.ok(html.includes("<small>WhatsApp</small><br />+381601234567</span>"));
   assert.ok(html.includes('href="viber://chat?number=%2B381659738702"'), "link still uses the bare digits");
 });
+
+// ---------- Web3Forms ----------
+
+test("the rendered form carries the real Web3Forms key from site.json", () => {
+  const { contact } = loadRealContent();
+  assert.match(contact.web3formsKey, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "key should be a UUID");
+  const html = buildDistWith(() => {});
+  assert.ok(html.includes(`<input type="hidden" name="access_key" value="${contact.web3formsKey}" />`));
+  assert.ok(!html.includes("YOUR_WEB3FORMS_ACCESS_KEY"));
+  assert.ok(!/\saction=/.test(html.match(/<form[^>]*>/)[0]), "the form must not have an action (JS handles submit)");
+});
+
+test("the build fails when the Web3Forms key is empty or still the placeholder", () => {
+  for (const key of ["", "   ", "YOUR_WEB3FORMS_ACCESS_KEY"]) {
+    const content = deepClone(loadRealContent());
+    content.contact.web3formsKey = key;
+    const { valid, errors } = validateContent(content, ROOT);
+    assert.equal(valid, false, `key ${JSON.stringify(key)} should fail`);
+    assert.ok(errors.some((e) => e.includes("contact.web3formsKey")), errors.join("; "));
+  }
+});
+
+test("no Content-Security-Policy blocks api.web3forms.com", () => {
+  const html = buildDistWith(() => {});
+  const headers = fs.readFileSync(path.join(ROOT, "dist", "_headers"), "utf-8");
+  const policies = [
+    ...headers.split("\n").filter((l) => /content-security-policy/i.test(l)),
+    ...(html.match(/<meta[^>]+http-equiv="Content-Security-Policy"[^>]*>/gi) || []),
+  ];
+  for (const csp of policies) {
+    const connect = csp.match(/connect-src([^;"]*)/i);
+    const fallback = csp.match(/default-src([^;"]*)/i);
+    const src = (connect || fallback)?.[1] || "*";
+    assert.ok(/\*|https:\/\/api\.web3forms\.com/.test(src), `CSP would block api.web3forms.com: ${csp}`);
+  }
+});
