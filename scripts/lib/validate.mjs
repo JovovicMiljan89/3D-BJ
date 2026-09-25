@@ -8,6 +8,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { CUSTOM_ACCENT, HEX_RE, loadPresets } from "./theme.mjs";
 
 function isNonEmptyString(v) {
   return typeof v === "string" && v.trim().length > 0;
@@ -336,12 +337,29 @@ export function validateContent(content, projectRoot) {
     }
   }
 
-  // Color theme: optional (defaults to "crnobela"), but must be a known one.
-  if (content.theme !== undefined && !THEMES.includes(content.theme)) {
-    errors.push(`"theme" is "${content.theme}" — must be one of: ${THEMES.join(", ")}`);
-  }
-  if (content.grayscalePhotos !== undefined && typeof content.grayscalePhotos !== "boolean") {
-    errors.push('"grayscalePhotos" must be true or false.');
+  // "Izgled sajta": every field is optional (build defaults: crnobela,
+  // narandzasta, both toggles on), but whatever is set must be valid.
+  const theme = content.theme;
+  if (theme !== undefined && !isObject(theme)) {
+    errors.push('"theme" must be an object (Izgled sajta: base, accent, customAccent, highlightActiveSection, grayscalePhotos).');
+  } else if (theme) {
+    if (theme.base !== undefined && !THEMES.includes(theme.base)) {
+      errors.push(`"theme.base" is "${theme.base}" — must be one of: ${THEMES.join(", ")}`);
+    }
+    const accents = [...Object.keys(loadPresets()), CUSTOM_ACCENT];
+    if (theme.accent !== undefined && !accents.includes(theme.accent)) {
+      errors.push(`"theme.accent" is "${theme.accent}" — must be one of: ${accents.join(", ")}`);
+    }
+    if (theme.accent === CUSTOM_ACCENT && !HEX_RE.test((theme.customAccent || "").trim())) {
+      errors.push(
+        `Izgled sajta → Prilagođena boja: "${theme.customAccent || ""}" nije ispravna boja. Upiši je u obliku #rrggbb, npr. #ff7a1a (tarabica + 6 znakova 0–9 / a–f).`
+      );
+    }
+    for (const flag of ["highlightActiveSection", "grayscalePhotos"]) {
+      if (theme[flag] !== undefined && typeof theme[flag] !== "boolean") {
+        errors.push(`"theme.${flag}" must be true or false.`);
+      }
+    }
   }
 
   const web3formsKey = get(content, "contact.web3formsKey");

@@ -30,20 +30,46 @@ content:
           - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
 
       - name: theme
-        label: "Boje sajta"
-        type: select
-        default: crnobela
-        description: "Boje celog sajta, logoa i ikonica. Promena se vidi posle objave (1–2 minuta)."
-        options:
-          values:
-            - { value: crnobela, label: "Crno-bela" }
-            - { value: teget, label: "Teget (crvena)" }
-
-      - name: grayscalePhotos
-        label: "Crno-bele fotografije radionice i opreme"
-        type: boolean
-        default: true
-        description: "Važi samo uz crno-belu temu. Fotografije u galeriji uvek ostaju u boji."
+        label: "Izgled sajta"
+        type: object
+        description: "Boje sajta i logoa. Promena se vidi na sajtu 1–2 minuta posle čuvanja."
+        fields:
+          - name: base
+            label: "Boje sajta"
+            type: select
+            default: crnobela
+            description: "Crno-bela sa bojom akcenta (preporučeno) ili stara teget-crvena."
+            options:
+              values:
+                - { value: crnobela, label: "Crno-bela" }
+                - { value: teget, label: "Teget (crvena)" }
+          - name: accent
+            label: "Boja akcenta"
+            type: select
+            default: narandzasta
+            description: "Boja logoa, ikonica, brojeva koraka i sitnih detalja. Važi uz crno-belu temu."
+            options:
+              values:
+                - { value: crvena, label: "Crvena" }
+                - { value: narandzasta, label: "Narandžasta" }
+                - { value: zuta, label: "Žuta" }
+                - { value: limeta, label: "Limeta" }
+                - { value: plava, label: "Plava" }
+                - { value: prilagodjena, label: "Prilagođena" }
+          - name: customAccent
+            label: "Prilagođena boja (npr. #ff7a1a)"
+            type: string
+            description: "Koristi se samo kad je Boja akcenta 'Prilagođena'. Oblik #rrggbb; izaberi svetlu boju."
+          - name: highlightActiveSection
+            label: "Istakni aktivnu sekciju u meniju"
+            type: boolean
+            default: true
+            description: "Dok posetilac skroluje, u meniju se bojom akcenta ističe sekcija koju trenutno gleda."
+          - name: grayscalePhotos
+            label: "Crno-bele fotografije radionice i opreme"
+            type: boolean
+            default: true
+            description: "Važi samo uz crno-belu temu. Fotografije u galeriji uvek ostaju u boji."
 
       - name: seo
         label: "SEO / deljenje na društvenim mrežama"

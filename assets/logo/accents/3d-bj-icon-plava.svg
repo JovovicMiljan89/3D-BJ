@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="3D-BJ"><rect width="128" height="128" rx="26" fill="#0a0a0a"/><g transform="translate(8 6) scale(0.935)">
+    <polygon points="15,34 60,60 60,112 15,86" fill="#5c5c5c"/>
+    <polygon points="60,60 105,34 105,86 60,112" fill="#262626"/>
+    <g fill="none" stroke="#0a0a0a" stroke-opacity=".55" stroke-width="3"><path d="M15 47 L60 73 L105 47" /><path d="M15 60 L60 86 L105 60" /><path d="M15 73 L60 99 L105 73" /></g>
+    <polygon points="60,8 105,34 60,60 15,34" fill="#3cbcfa"/>
+    <polygon points="60,20 84,34 60,48 36,34" fill="#1a8ac2"/>
+    <circle cx="60" cy="34" r="5" fill="#e7ecf6"/>
+  </g></svg>

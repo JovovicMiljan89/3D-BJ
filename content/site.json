@@ -4,8 +4,13 @@
     "description": "Radionica za 3D štampu, 3D skeniranje i modelovanje po meri. Prototipovi, rezervni delovi i personalizovani pokloni. Izrada od jednog komada, besplatna ponuda u roku od 24 časa.",
     "lang": "sr"
   },
-  "theme": "crnobela",
-  "grayscalePhotos": true,
+  "theme": {
+    "base": "crnobela",
+    "accent": "narandzasta",
+    "customAccent": "",
+    "highlightActiveSection": true,
+    "grayscalePhotos": true
+  },
   "seo": {
     "siteUrl": "https://3d-bj.printmodel.workers.dev/",
     "ogImage": "/assets/og/og-image-mdl.png"

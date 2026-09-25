@@ -59,12 +59,33 @@ Kad otpremiš svoju fotografiju za neku stavku:
 2. **Isključi** polje „Privremena (stock) slika…“.
 3. Sačuvaj.
 
-## Boje sajta (crno-bela ili teget)
+## Izgled sajta: boja akcenta
 
-Na vrhu forme je polje **„Boje sajta“**: izaberi **Crno-bela** ili **Teget (crvena)**
-i sačuvaj. Menjaju se boje celog sajta, a uz njih i logo, favikona i slika za deljenje
-(crno-bela tema koristi crno-bele verzije). Polje **„Crno-bele fotografije radionice i
-opreme“** važi samo uz crno-belu temu; galerija uvek ostaje u boji.
+Sajt je crno-beo, sa jednom **bojom akcenta**. U toj boji su logo, ikonice, brojevi
+koraka, sitni naslovi i aktivna stavka u meniju. Dugmad ostaju bela.
+
+**Kako promeniti boju akcenta:** **Izgled sajta → Boja akcenta** → izaberi
+(Crvena, Narandžasta, Žuta, Limeta, Plava) → **Save**. Sajt se ažurira za 1–2 minuta,
+zajedno sa logom, favikonom i slikom za deljenje linka.
+
+**Svoja boja:** u **Boja akcenta** izaberi **Prilagođena**, pa u polje
+**„Prilagođena boja“** nalepi kod boje, npr. `#ff7a1a` (tarabica + 6 znakova).
+Boju možeš da izabereš na https://htmlcolorcodes.com/color-picker/ (kopiraj
+„HEX“ vrednost). Ako kod nije ispravan, nova verzija se ne objavljuje i stara
+ostaje uživo.
+
+- Biraj **svetle, jake boje**. Vrlo tamne boje se slabo vide na crnoj pozadini.
+- Uz prilagođenu boju, ikonica za telefon i slika za deljenje ostaju crno-bele
+  (te slike postoje unapred samo za ponuđene boje).
+
+Ostala polja u **Izgled sajta**:
+
+- **Boje sajta:** **Crno-bela** (sa akcentom) ili stara **Teget (crvena)**.
+  Uz teget temu, boja akcenta se ne koristi.
+- **Istakni aktivnu sekciju u meniju:** dok posetilac skroluje, u meniju se
+  bojom akcenta ističe sekcija koju gleda.
+- **Crno-bele fotografije radionice i opreme:** važi uz crno-belu temu. Galerija
+  uvek ostaje u boji.
 
 ## Logo i naziv brenda (3D-MDL)
 
@@ -127,6 +148,6 @@ može brzo da je ispravi ili ti kaže šta da promeniš.
 - Menjaš/dodaješ sliku → Upload → Save.
 - Otpremio si svoju fotografiju umesto stock slike → isključi „Privremena (stock) slika“.
 - Logo i naziv brenda → sekcija **Brend**.
-- Boje sajta → polje **„Boje sajta“** na vrhu (Crno-bela / Teget).
+- Boja akcenta → **Izgled sajta → Boja akcenta** → Save.
 - Izmena je uživo za 1–2 minuta.
 - Ako nešto ne štima — stara verzija ostaje, javi se Miljanu.

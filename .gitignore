@@ -8,5 +8,5 @@ Thumbs.db
 # Local-only reference material used while building a UI/UX pass — never deployed
 reference/
 
-# Teget-themed build used only by the e2e suite
-dist-teget/
+# Theme-variant builds used only by the e2e suite
+dist-variants/

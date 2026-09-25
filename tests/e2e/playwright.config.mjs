@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 4173;
-export const TEGET_PORT = 4174;
+export const VARIANT_PORTS = { teget: 4174, limeta: 4175, plava: 4176 };
 
 export default defineConfig({
   testDir: "./specs",
@@ -22,13 +22,12 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
     },
-    {
-      // Same content forced to the "teget" theme, into its own folder, to prove
-      // the theme switch still works (see theme.spec.mjs).
-      command: `BUILD_THEME=teget BUILD_DIST_DIR=../../dist-teget node ../../scripts/build.mjs && BUILD_DIST_DIR=../../dist-teget PORT=${TEGET_PORT} node ../../scripts/serve.mjs`,
-      url: `http://localhost:${TEGET_PORT}`,
+    // Theme variants of the same content (see build-variant.mjs, theme.spec.mjs).
+    ...Object.entries(VARIANT_PORTS).map(([name, port]) => ({
+      command: `node build-variant.mjs ${name} && BUILD_DIST_DIR=../../dist-variants/${name} PORT=${port} node ../../scripts/serve.mjs`,
+      url: `http://localhost:${port}`,
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
-    },
+    })),
   ],
 });

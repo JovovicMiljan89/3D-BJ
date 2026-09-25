@@ -9,6 +9,7 @@ import { validateContent } from "../scripts/lib/validate.mjs";
 import { renderTemplate } from "../scripts/lib/render.mjs";
 import { escapeHtml } from "../scripts/lib/escape.mjs";
 import { bwPath, toBwSvg, BW_COLOR_MAP } from "../scripts/lib/bw.mjs";
+import { resolveAccent, accentCss, recolorSvg, loadPresets, contrastRatio, darken, textOn } from "../scripts/lib/theme.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -219,7 +220,7 @@ test("no placeholder/example text leaks into the rendered page", () => {
 // ---------- SEO: OG tags + JSON-LD ----------
 
 test("Open Graph / Twitter tags use absolute URLs built from seo.siteUrl", () => {
-  const html = buildDistWith((c) => (c.theme = "teget"));
+  const html = buildDistWith((c) => (c.theme.base = "teget"));
   const content = JSON.parse(fs.readFileSync(path.join(ROOT, "content", "site.json"), "utf-8"));
   const expectedImage = content.seo.siteUrl.replace(/\/$/, "") + content.seo.ogImage;
 
@@ -326,7 +327,7 @@ test("CSS and JS are emitted with content-hashed file names and referenced from 
 
 test("header and footer logo src equal brand.logo, with width matching the SVG's aspect ratio", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith((c) => (c.theme = "teget"));
+  const html = buildDistWith((c) => (c.theme.base = "teget"));
   const vb = fs
     .readFileSync(path.join(ROOT, brand.logo.replace(/^\//, "")), "utf-8")
     .match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/);
@@ -380,7 +381,7 @@ test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subje
 
 test("maker avatar falls back to brand.mark while no photo is set", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith((c) => (c.theme = "teget"));
+  const html = buildDistWith((c) => (c.theme.base = "teget"));
   assert.ok(html.includes(`<img class="maker__avatar" src="${brand.mark}"`));
 });
 
@@ -526,56 +527,16 @@ test("/admin redirects to this repo's Pages CMS editor", () => {
 // ---------- Color themes ----------
 
 test("data-theme on <html> matches site.json, and theme-color follows the theme's --bg", () => {
-  const bw = buildDistWith((c) => (c.theme = "crnobela"));
+  const bw = buildDistWith((c) => (c.theme.base = "crnobela"));
   assert.match(bw, /<html lang="sr" data-theme="crnobela" data-photos="grayscale">/);
   assert.ok(bw.includes('<meta name="theme-color" content="#0a0a0a" />'));
 
-  const teget = buildDistWith((c) => (c.theme = "teget"));
+  const teget = buildDistWith((c) => (c.theme.base = "teget"));
   assert.match(teget, /<html lang="sr" data-theme="teget">/, "teget never gets grayscale photos");
   assert.ok(teget.includes('<meta name="theme-color" content="#070b14" />'));
 
   const missing = buildDistWith((c) => delete c.theme);
   assert.match(missing, /data-theme="crnobela"/, "crnobela is the default");
-});
-
-test("crnobela uses the -bw logo, mark, favicon, apple icon, hero and OG image; teget the originals", () => {
-  const content = loadRealContent();
-  const bw = buildDistWith((c) => (c.theme = "crnobela"));
-  const teget = buildDistWith((c) => (c.theme = "teget"));
-  const og = (p) => content.seo.siteUrl.replace(/\/$/, "") + p;
-  const checks = [
-    (p) => `<img src="${p}" alt="${content.brand.name}" height="40"`,
-    (p) => `<link rel="icon" href="${p}"`,
-    (p) => `<link rel="apple-touch-icon" href="${p}"`,
-    (p) => `<img class="maker__avatar" src="${p}"`,
-    (p) => `<img class="hero__img" src="${p}"`,
-    (p) => `property="og:image" content="${og(p)}"`,
-    (p) => `"logo":"${og(p)}"`,
-  ];
-  const fields = [content.brand.logo, content.brand.favicon, content.brand.appleIcon, content.brand.mark, content.hero.image, content.seo.ogImage, content.brand.logoFull];
-  fields.forEach((field, i) => {
-    assert.ok(bw.includes(checks[i](bwPath(field))), `crnobela should use ${bwPath(field)}`);
-    assert.ok(teget.includes(checks[i](field)), `teget should use ${field}`);
-    assert.ok(fs.existsSync(path.join(ROOT, bwPath(field).replace(/^\//, ""))), `${bwPath(field)} must be committed`);
-  });
-});
-
-test("grayscalePhotos: false keeps workshop/equipment photos in color", () => {
-  const html = buildDistWith((c) => {
-    c.theme = "crnobela";
-    c.grayscalePhotos = false;
-  });
-  assert.match(html, /<html lang="sr" data-theme="crnobela">/);
-});
-
-test("an unknown theme or a non-boolean grayscalePhotos fails validation", () => {
-  const content = deepClone(loadRealContent());
-  content.theme = "zelena";
-  content.grayscalePhotos = "da";
-  const { valid, errors } = validateContent(content, ROOT);
-  assert.equal(valid, false);
-  assert.ok(errors.some((e) => e.includes('"theme"')));
-  assert.ok(errors.some((e) => e.includes('"grayscalePhotos"')));
 });
 
 test("built CSS: navy/red literals appear only inside the teget token block", () => {
@@ -590,17 +551,6 @@ test("built CSS: navy/red literals appear only inside the teget token block", ()
   assert.ok(tegetBlock.includes("#e11d2e"), "teget keeps its red");
 });
 
-test("text on primary-colored elements uses --on-primary, never a literal white", () => {
-  const css = fs.readFileSync(path.join(ROOT, "css", "styles.css"), "utf-8");
-  // Decorative, text-less boxes (content: "") don't need a text color.
-  const rules = (css.match(/[^{}]+\{[^}]*background:\s*var\(--primary\)[^}]*\}/g) || []).filter((r) => !/content:\s*""/.test(r));
-  assert.ok(rules.length >= 4, "expected .btn, skip-link, step numbers, featured badge");
-  for (const rule of rules) {
-    assert.match(rule, /(^|[^-])color:\s*var\(--on-primary\)/, `missing color: var(--on-primary) in: ${rule.trim().slice(0, 80)}`);
-  }
-  assert.ok(!/color:\s*#fff(fff)?\b/i.test(css), "no literal white text color left");
-});
-
 test("B&W SVG recoloring: exact mapping, dark nozzle dot, unmapped colors rejected", () => {
   assert.equal(BW_COLOR_MAP["#e11d2e"], "#ffffff");
   const out = toBwSvg('<svg><rect fill="#E11D2E"/><polygon fill="#1b2d55"/><circle cx="60" cy="34" r="5" fill="#e7ecf6"/></svg>');
@@ -610,4 +560,177 @@ test("B&W SVG recoloring: exact mapping, dark nozzle dot, unmapped colors reject
     const svg = fs.readFileSync(path.join(ROOT, f), "utf-8");
     assert.equal(svg, toBwSvg(fs.readFileSync(path.join(ROOT, f.replace("-bw", "")), "utf-8")), `${f} is stale — rerun make-bw-assets`);
   }
+});
+
+// ---------- Accent color (Izgled sajta) ----------
+
+function buildWithOutput(mutateFn) {
+  const contentPath = path.join(ROOT, "content", "site.json");
+  const backup = fs.readFileSync(contentPath, "utf-8");
+  try {
+    const c = JSON.parse(backup);
+    mutateFn(c);
+    fs.writeFileSync(contentPath, JSON.stringify(c, null, 2));
+    const out = spawnSync(process.execPath, [path.join(ROOT, "scripts", "build.mjs")], { cwd: ROOT, encoding: "utf-8" });
+    const html = out.status === 0 ? fs.readFileSync(path.join(ROOT, "dist", "index.html"), "utf-8") : "";
+    return { ...out, html };
+  } finally {
+    fs.writeFileSync(contentPath, backup);
+  }
+}
+
+test("each preset produces the expected CSS variables from akcenti.json", () => {
+  const presets = loadPresets();
+  assert.deepEqual(Object.keys(presets), ["crvena", "narandzasta", "zuta", "limeta", "plava"]);
+  for (const [key, p] of Object.entries(presets)) {
+    const css = accentCss(resolveAccent({ accent: key }, presets));
+    assert.ok(css.startsWith(':root[data-theme="crnobela"] {'), css);
+    assert.ok(css.includes(`--primary: ${p.akcenat};`), `${key} --primary`);
+    assert.ok(css.includes(`--accent: ${p.akcenat};`), `${key} --accent`);
+    assert.ok(css.includes(`--primary-dark: ${p.tamniji};`), `${key} --primary-dark`);
+    assert.ok(css.includes(`--on-accent: ${p.tekst_na_akcentu};`), `${key} --on-accent`);
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(p.akcenat.slice(i, i + 2), 16));
+    assert.ok(css.includes(`--primary-soft: rgba(${r}, ${g}, ${b}, 0.13);`), `${key} --primary-soft`);
+    assert.ok(css.includes(`--glow: rgba(${r}, ${g}, ${b}, 0.1);`), `${key} --glow`);
+  }
+});
+
+test("a preset build injects its accent inline, after the stylesheet", () => {
+  const html = buildDistWith((c) => (c.theme.accent = "plava"));
+  const style = html.match(/<style id="theme-accent">([^<]*)<\/style>/);
+  assert.ok(style, "inline accent <style> missing");
+  assert.ok(style[1].includes("--primary: #3cbcfa;"));
+  assert.ok(html.indexOf('rel="stylesheet"') < html.indexOf('id="theme-accent"'), "inline style must come after the stylesheet to win");
+});
+
+test("custom color #ff00aa gets a computed darker color and text color", () => {
+  const a = resolveAccent({ accent: "prilagodjena", customAccent: "#FF00AA" });
+  assert.equal(a.accent, "#ff00aa");
+  assert.equal(a.darker, darken("#ff00aa"));
+  assert.equal(a.darker, "#cc0088", "20% darker in HSL");
+  assert.equal(a.onAccent, "#0a0a0a", "black reads better than white on #ff00aa");
+  assert.ok(contrastRatio("#ff00aa", "#0a0a0a") > contrastRatio("#ff00aa", "#ffffff"));
+  assert.equal(textOn("#1a3cff"), "#ffffff", "dark blue gets white text");
+  assert.deepEqual(a.warnings, []);
+
+  const { status, html } = buildWithOutput((c) => {
+    c.theme.accent = "prilagodjena";
+    c.theme.customAccent = "#ff00aa";
+  });
+  assert.equal(status, 0);
+  assert.ok(html.includes("--primary: #ff00aa; --primary-dark: #cc0088;"));
+  // Custom color: SVGs recolored, rasters fall back to the neutral B&W versions.
+  assert.ok(html.includes('src="/assets/theme/3d-mdl-wordmark-ff00aa.svg"'));
+  assert.ok(html.includes('<link rel="apple-touch-icon" href="/assets/logo/3d-mdl-icon-512-bw.png"'));
+  assert.ok(html.includes("/assets/og/og-image-mdl-bw.png"));
+  const svg = fs.readFileSync(path.join(ROOT, "dist", "assets", "theme", "3d-mdl-wordmark-ff00aa.svg"), "utf-8");
+  assert.ok(svg.includes("#ff00aa") && svg.includes("#cc0088") && !svg.includes("#e11d2e"));
+});
+
+test("an invalid custom hex fails the build with a Serbian message", () => {
+  for (const bad of ["ff7a1a", "#ff7a1", "#gg0000", "narandžasta", ""]) {
+    const content = deepClone(loadRealContent());
+    content.theme.accent = "prilagodjena";
+    content.theme.customAccent = bad;
+    const { valid, errors } = validateContent(content, ROOT);
+    assert.equal(valid, false, `"${bad}" should be rejected`);
+    assert.ok(errors.some((e) => e.includes("Prilagođena boja") && e.includes("#rrggbb")), errors.join("; "));
+  }
+  const { status, stderr } = buildWithOutput((c) => {
+    c.theme.accent = "prilagodjena";
+    c.theme.customAccent = "#12345";
+  });
+  assert.notEqual(status, 0, "build must fail");
+  assert.match(stderr, /Prilagođena boja: "#12345" nije ispravna boja/);
+});
+
+test("a dark custom color (#111111) builds but prints a contrast warning", () => {
+  const { status, stderr } = buildWithOutput((c) => {
+    c.theme.accent = "prilagodjena";
+    c.theme.customAccent = "#111111";
+  });
+  assert.equal(status, 0, "a dark color is a warning, not an error");
+  assert.match(stderr, /WARNING: Boja akcenta #111111 je previše tamna za crnu pozadinu/);
+
+  const ok = buildWithOutput((c) => (c.theme.accent = "zuta"));
+  assert.ok(!/previše tamna/.test(ok.stderr), "bright presets don't warn");
+});
+
+test("logo, mark, favicon, apple icon and OG image match the preset and the brand", () => {
+  for (const accent of ["narandzasta", "limeta"]) {
+    const hex = loadPresets()[accent].akcenat.slice(1);
+    for (const [brandName, slug] of [["3D-MDL", "mdl"], ["3D-BJ", "bj"]]) {
+      const { html } = buildWithOutput((c) => {
+        c.theme.accent = accent;
+        c.brand.name = brandName;
+        if (slug === "bj") {
+          c.brand.logo = "/assets/logo/3d-bj-wordmark.svg";
+          c.brand.mark = "/assets/logo/3d-bj-mark.svg";
+          c.brand.favicon = "/assets/logo/3d-bj-icon.svg";
+        }
+      });
+      const base = slug === "bj" ? "3d-bj" : "3d-mdl";
+      assert.ok(html.includes(`<a href="#top" class="logo">\n        <img src="/assets/theme/${base}-wordmark-${hex}.svg"`), `${accent}/${brandName} header logo`);
+      assert.ok(html.includes(`<img class="maker__avatar" src="/assets/theme/${base}-mark-${hex}.svg"`), `${accent}/${brandName} mark`);
+      assert.ok(html.includes(`<link rel="icon" href="/assets/theme/${base}-icon-${hex}.svg"`), `${accent}/${brandName} favicon`);
+      assert.ok(html.includes(`<link rel="apple-touch-icon" href="/assets/logo/accents/3d-icon-${accent}-512.png"`));
+      assert.ok(html.includes(`/assets/og/accents/og-${slug}-${accent}.png"`), `${accent}/${brandName} OG`);
+    }
+  }
+});
+
+test("build-time recoloring matches the provided accent files exactly", () => {
+  const presets = loadPresets();
+  const strip = (svg) => svg.replace(/aria-label="[^"]*"/, "");
+  for (const key of Object.keys(presets)) {
+    const mine = recolorSvg(fs.readFileSync(path.join(ROOT, "assets/logo/3d-mdl-icon.svg"), "utf-8"), resolveAccent({ accent: key }, presets));
+    const provided = fs.readFileSync(path.join(ROOT, `assets/logo/accents/3d-bj-icon-${key}.svg`), "utf-8");
+    assert.equal(strip(mine), strip(provided), `icon for ${key}`);
+  }
+  const hero = recolorSvg(fs.readFileSync(path.join(ROOT, "assets/images/hero-printer.svg"), "utf-8"), resolveAccent({ accent: "plava" }, presets));
+  assert.ok(!/#e11d2e|#ff8a94|#24365c|#0a1020/i.test(hero), "no red/navy left in the hero");
+});
+
+test("the active-section script is present or absent according to the setting", () => {
+  const on = buildDistWith((c) => (c.theme.highlightActiveSection = true));
+  assert.ok(on.includes("IntersectionObserver") && on.includes('rootMargin: "-45% 0px -50% 0px"'));
+  const off = buildDistWith((c) => (c.theme.highlightActiveSection = false));
+  assert.ok(!off.includes("IntersectionObserver"));
+});
+
+test("teget ignores the accent: no inline accent style, original logos", () => {
+  const html = buildDistWith((c) => {
+    c.theme.base = "teget";
+    c.theme.accent = "limeta";
+  });
+  assert.ok(!html.includes('id="theme-accent"'));
+  assert.ok(html.includes('src="/assets/logo/3d-mdl-wordmark.svg"'));
+  assert.match(html, /<html lang="sr" data-theme="teget">/);
+});
+
+test("grayscalePhotos: false keeps workshop/equipment photos in color", () => {
+  const html = buildDistWith((c) => (c.theme.grayscalePhotos = false));
+  assert.match(html, /<html lang="sr" data-theme="crnobela">/);
+});
+
+test("invalid Izgled sajta values fail validation", () => {
+  const content = deepClone(loadRealContent());
+  content.theme = { base: "zelena", accent: "ljubicasta", highlightActiveSection: "da", grayscalePhotos: 1 };
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  for (const f of ["theme.base", "theme.accent", "theme.highlightActiveSection", "theme.grayscalePhotos"]) {
+    assert.ok(errors.some((e) => e.includes(f)), `expected an error for ${f}: ${errors.join("; ")}`);
+  }
+});
+
+test("buttons are white with black text in crnobela; accent only on hover", () => {
+  const css = fs.readFileSync(path.join(ROOT, "css", "styles.css"), "utf-8");
+  const crnobela = css.match(/:root,\s*:root\[data-theme="crnobela"\]\s*\{[^}]*\}/)[0];
+  assert.match(crnobela, /--btn-bg: #ffffff; --btn-text: #0a0a0a;/);
+  assert.match(crnobela, /--btn-hover-bg: var\(--primary\); --btn-hover-text: var\(--on-accent\);/);
+  assert.match(css, /\.btn \{[^}]*background: var\(--btn-bg\);[^}]*color: var\(--btn-text\);/);
+  // Text on any accent-filled element uses --on-accent.
+  const rules = (css.match(/[^{}]+\{[^}]*background:\s*var\(--primary\)[^}]*\}/g) || []).filter((r) => !/content:\s*""/.test(r));
+  for (const rule of rules) assert.match(rule, /color:\s*var\(--on-accent\)/, rule.trim().slice(0, 80));
+  assert.ok(!/color:\s*#fff(fff)?\b/i.test(css.replace(/:root\[data-theme="teget"\]\s*\{[^}]*\}/, "")), "no literal white text outside teget");
 });
