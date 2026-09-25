@@ -29,6 +29,22 @@ content:
           - { name: description, label: "Opis za pretragu (SEO)", type: text }
           - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
 
+      - name: theme
+        label: "Boje sajta"
+        type: select
+        default: crnobela
+        description: "Boje celog sajta, logoa i ikonica. Promena se vidi posle objave (1–2 minuta)."
+        options:
+          values:
+            - { value: crnobela, label: "Crno-bela" }
+            - { value: teget, label: "Teget (crvena)" }
+
+      - name: grayscalePhotos
+        label: "Crno-bele fotografije radionice i opreme"
+        type: boolean
+        default: true
+        description: "Važi samo uz crno-belu temu. Fotografije u galeriji uvek ostaju u boji."
+
       - name: seo
         label: "SEO / deljenje na društvenim mrežama"
         type: object

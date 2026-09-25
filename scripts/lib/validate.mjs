@@ -24,6 +24,8 @@ function get(obj, dottedPath) {
 
 export const WEB3FORMS_PLACEHOLDER_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
 
+export const THEMES = ["crnobela", "teget"];
+
 export const SERVICE_ICONS = ["gear", "wrench", "gift", "layers", "shield", "scan"];
 
 const REQUIRED_STRINGS = [
@@ -332,6 +334,14 @@ export function validateContent(content, projectRoot) {
         }
       });
     }
+  }
+
+  // Color theme: optional (defaults to "crnobela"), but must be a known one.
+  if (content.theme !== undefined && !THEMES.includes(content.theme)) {
+    errors.push(`"theme" is "${content.theme}" — must be one of: ${THEMES.join(", ")}`);
+  }
+  if (content.grayscalePhotos !== undefined && typeof content.grayscalePhotos !== "boolean") {
+    errors.push('"grayscalePhotos" must be true or false.');
   }
 
   const web3formsKey = get(content, "contact.web3formsKey");

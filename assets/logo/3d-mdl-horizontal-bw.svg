@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 120" role="img" aria-label="3D-MDL — 3D print, scan, model">
+  <g transform="translate(0 0) scale(1.0)">
+    <polygon points="15,34 60,60 60,112 15,86" fill="#5c5c5c"/>
+    <polygon points="60,60 105,34 105,86 60,112" fill="#262626"/>
+    <g fill="none" stroke="#0a0a0a" stroke-opacity=".55" stroke-width="3"><path d="M15 47 L60 73 L105 47" /><path d="M15 60 L60 86 L105 60" /><path d="M15 73 L60 99 L105 73" /></g>
+    <polygon points="60,8 105,34 60,60 15,34" fill="#ffffff"/>
+    <polygon points="60,20 84,34 60,48 36,34" fill="#d4d4d4"/>
+    <circle cx="60" cy="34" r="5" fill="#0a0a0a"/>
+  </g>
+  <g transform="translate(150 10) scale(0.8)"><path transform="translate(0 0)" d="M8 9 H60 L69 18 V41 L60 50 H26 M60 50 L69 59 V82 L60 91 H8" fill="none" stroke="#f2f2f2" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/><path transform="translate(92 0)" d="M9 9 H52 L69 26 V74 L52 91 H9 Z" fill="none" stroke="#f2f2f2" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/><path transform="translate(184 0)" d="M4 50 H30" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/><path transform="translate(234 0)" d="M9 91 V9 L39 52 L69 9 V91" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/><path transform="translate(326 0)" d="M9 9 H52 L69 26 V74 L52 91 H9 Z" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/><path transform="translate(418 0)" d="M9 9 V91 H62" fill="none" stroke="#ffffff" stroke-width="16" stroke-linejoin="miter" stroke-miterlimit="2" stroke-linecap="square"/></g>
+  <text x="151" y="112" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="13.5" font-weight="700" letter-spacing="7.2" fill="#9a9a9a">PRINT · SCAN · MODEL</text>
+</svg>

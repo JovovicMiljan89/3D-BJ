@@ -59,6 +59,13 @@ Kad otpremiš svoju fotografiju za neku stavku:
 2. **Isključi** polje „Privremena (stock) slika…“.
 3. Sačuvaj.
 
+## Boje sajta (crno-bela ili teget)
+
+Na vrhu forme je polje **„Boje sajta“**: izaberi **Crno-bela** ili **Teget (crvena)**
+i sačuvaj. Menjaju se boje celog sajta, a uz njih i logo, favikona i slika za deljenje
+(crno-bela tema koristi crno-bele verzije). Polje **„Crno-bele fotografije radionice i
+opreme“** važi samo uz crno-belu temu; galerija uvek ostaje u boji.
+
 ## Logo i naziv brenda (3D-MDL)
 
 Sve u vezi sa brendom je u sekciji **Brend**:
@@ -120,5 +127,6 @@ može brzo da je ispravi ili ti kaže šta da promeniš.
 - Menjaš/dodaješ sliku → Upload → Save.
 - Otpremio si svoju fotografiju umesto stock slike → isključi „Privremena (stock) slika“.
 - Logo i naziv brenda → sekcija **Brend**.
+- Boje sajta → polje **„Boje sajta“** na vrhu (Crno-bela / Teget).
 - Izmena je uživo za 1–2 minuta.
 - Ako nešto ne štima — stara verzija ostaje, javi se Miljanu.
