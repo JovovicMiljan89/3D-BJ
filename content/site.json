@@ -6,8 +6,7 @@
   },
   "theme": {
     "base": "crnobela",
-    "accent": "narandzasta",
-    "customAccent": "",
+    "accent": "prilagodjena",
     "highlightActiveSection": true,
     "grayscalePhotos": true
   },
@@ -303,7 +302,6 @@
     "name": "Bojan Jovović",
     "roleTag": "Vlasnik i operater štampe",
     "bio": "Lično vodim svaki projekat, od prvog razgovora, preko skeniranja i modelovanja, do završne kontrole kvaliteta. Rad sa jednom odgovornom osobom znači direktnu komunikaciju, jasne dogovore i poštovanje rokova.",
-    "photo": "",
     "buttonLabel": "Kontaktirajte Bojana"
   },
   "faqSection": {
@@ -342,12 +340,7 @@
     "phoneDisplay": "+381 60 170 5130",
     "phoneTel": "+381601705130",
     "viber": "381601705130",
-    "whatsapp": "",
     "email": "b.jovovic@yahoo.com",
-    "instagram": "",
-    "facebook": "",
-    "city": "",
-    "pib": "",
     "hours": [
       {
         "days": "Pon–Pet",
@@ -369,6 +362,7 @@
       "copyButton": "Kopiraj",
       "copiedLabel": "Kopirano!"
     },
+    "web3formsKey": "24cf8bc4-ad6d-461e-a46e-532a9c550c16",
     "fieldLabels": {
       "name": "Ime",
       "email": "Email",
@@ -395,7 +389,6 @@
       "Skeniranje + štampa",
       "Modelovanje"
     ],
-    "web3formsKey": "24cf8bc4-ad6d-461e-a46e-532a9c550c16",
     "submitLabel": "Pošaljite upit",
     "sendingLabel": "Šalje se…",
     "errorMessage": "Molimo unesite ime, ispravnu email adresu i poruku.",
