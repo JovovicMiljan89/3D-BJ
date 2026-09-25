@@ -153,7 +153,7 @@ test("no leftover placeholder text (\"0 din\" or \"example\") anywhere on the pa
 
 test("hero headline and both new sections render", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("3D-BJ | 3D štampa, skeniranje i modelovanje po meri");
+  await expect(page).toHaveTitle("3D-MDL | 3D štampa, skeniranje i modelovanje po meri");
   await expect(page.locator("h1")).toHaveText("Od ideje do gotovog predmeta.");
   await expect(page.locator("h1 .accent")).toHaveText("gotovog predmeta.");
 
@@ -226,4 +226,28 @@ test("the stylesheet is loaded from a content-hashed file name", async ({ page }
   expect(href).toMatch(/^\/css\/styles\.[0-9a-f]{10}\.css$/);
   const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
   expect(bg).toBe("rgb(7, 11, 20)");
+});
+
+test("the Web3Forms subject uses the brand name", async ({ page }) => {
+  let body = null;
+  await page.route("https://api.web3forms.com/submit", async (route) => {
+    body = route.request().postDataJSON();
+    await route.fulfill({ status: 200, contentType: "application/json", body: '{"success":true}' });
+  });
+  await page.goto("/");
+  await page.locator("#f-name").fill("Petar");
+  await page.locator("#f-email").fill("petar@test.rs");
+  await page.locator("#f-message").fill("Poruka");
+  await page.locator("#inquiryForm button[type=submit]").click();
+  await expect(page.locator("#formSuccess")).toBeVisible();
+  expect(body.subject).toBe("3D-MDL upit: Petar");
+});
+
+test("header logo is the configured wordmark and renders at 40px height", async ({ page }) => {
+  await page.goto("/");
+  const logo = page.locator(".header .logo img");
+  await expect(logo).toHaveAttribute("src", "/assets/logo/3d-mdl-wordmark.svg");
+  const box = await logo.boundingBox();
+  expect(Math.round(box.height)).toBe(40);
+  expect(await logo.evaluate((img) => img.naturalWidth > 0)).toBe(true);
 });

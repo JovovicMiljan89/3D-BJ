@@ -283,7 +283,7 @@ a:hover { text-decoration: underline; }
 .footer a:hover { color: var(--primary); }
 .footer__hours { list-style: none; display: flex; flex-direction: column; gap: 4px; }
 .footer__hours li { display: flex; justify-content: space-between; gap: 10px; }
-.footer__bottom { border-top: 1px solid var(--border); padding: 18px 0; font-size: .85rem; }
+.footer__bottom { border-top: 1px solid var(--border); padding-block: 18px; font-size: .85rem; }
 
 /* ========== Lightbox (uses the shared .modal component) ========== */
 .modal { position: fixed; inset: 0; display: none; z-index: 100; }

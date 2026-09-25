@@ -22,7 +22,10 @@ content:
         label: "Meta podaci (SEO)"
         type: object
         fields:
-          - { name: title, label: "Naslov stranice (tab u browseru)", type: string }
+          - name: title
+            label: "Naslov stranice (tab u browseru)"
+            type: string
+            description: "Naziv brenda se dodaje automatski ispred, npr. '3D-MDL | <ovaj tekst>'."
           - { name: description, label: "Opis za pretragu (SEO)", type: text }
           - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
 
@@ -43,10 +46,23 @@ content:
         label: "Brend"
         type: object
         fields:
-          - { name: name, label: "Naziv brenda", type: string }
-          - { name: logo, label: "Logo (slika u zaglavlju)", type: image }
+          - name: name
+            label: "Naziv brenda"
+            type: string
+            description: "Menja naziv svuda na sajtu: naslov stranice, deljenje linka, opis slika, podnožje i naslov emaila sa upitom."
+          - { name: logo, label: "Logo (zaglavlje i podnožje)", type: image }
+          - name: logoFull
+            label: "Pun logo (sa sloganom)"
+            type: image
+            description: "Koristi ga Google za prikaz logoa u rezultatima pretrage. Preporučeno PNG."
+          - name: mark
+            label: "Znak (samo kocka)"
+            type: image
+            description: "Prikazuje se u kartici 'O vlasniku' dok nema Bojanove fotografije."
           - { name: favicon, label: "Favikona (ikonica u tabu)", type: image }
-          - { name: touchIcon, label: "Ikonica za mobilne uređaje", type: image }
+          - name: appleIcon
+            label: "Ikonica za mobilne uređaje (PNG 512×512)"
+            type: image
           - { name: ownerName, label: "Ime vlasnika", type: string }
           - { name: ownerRole, label: "Uloga vlasnika", type: string }
 
@@ -249,11 +265,10 @@ content:
           - { name: name, label: "Ime", type: string }
           - { name: roleTag, label: "Uloga (oznaka)", type: string }
           - { name: bio, label: "Kratka biografija", type: text }
-          - { name: avatar, label: "Rezervna slika (ako nema fotografije)", type: image }
           - name: photo
             label: "Fotografija Bojana"
             type: image
-            description: "Opciono. Dok je prazno, prikazuje se logo umesto fotografije."
+            description: "Opciono. Dok je prazno, prikazuje se znak iz sekcije Brend."
           - { name: buttonLabel, label: "Tekst dugmeta", type: string }
 
       - name: faqSection

@@ -1,18 +1,20 @@
 {
   "meta": {
-    "title": "3D-BJ | 3D štampa, skeniranje i modelovanje po meri",
+    "title": "3D štampa, skeniranje i modelovanje po meri",
     "description": "Radionica za 3D štampu, 3D skeniranje i modelovanje po meri. Prototipovi, rezervni delovi i personalizovani pokloni. Izrada od jednog komada, besplatna ponuda u roku od 24 časa.",
     "lang": "sr"
   },
   "seo": {
     "siteUrl": "https://3d-bj.printmodel.workers.dev/",
-    "ogImage": "/assets/og/og-image.png"
+    "ogImage": "/assets/og/og-image-mdl.png"
   },
   "brand": {
-    "name": "3D-BJ",
-    "logo": "/assets/logo/3d-bj-wordmark.svg",
-    "favicon": "/assets/images/favicon.svg",
-    "touchIcon": "/assets/logo/3d-bj-icon-512.png",
+    "name": "3D-MDL",
+    "logo": "/assets/logo/3d-mdl-wordmark.svg",
+    "logoFull": "/assets/logo/3d-mdl-horizontal.png",
+    "mark": "/assets/logo/3d-mdl-mark.svg",
+    "favicon": "/assets/logo/3d-mdl-icon.svg",
+    "appleIcon": "/assets/logo/3d-mdl-icon-512.png",
     "ownerName": "Bojan Jovović",
     "ownerRole": "Vlasnik i operater štampe"
   },
@@ -287,7 +289,6 @@
     "name": "Bojan Jovović",
     "roleTag": "Vlasnik i operater štampe",
     "bio": "Lično vodim svaki projekat, od prvog razgovora, preko skeniranja i modelovanja, do završne kontrole kvaliteta. Rad sa jednom odgovornom osobom znači direktnu komunikaciju, jasne dogovore i poštovanje rokova.",
-    "avatar": "/assets/logo/3d-bj-mark.svg",
     "photo": "",
     "buttonLabel": "Kontaktirajte Bojana"
   },
