@@ -40,6 +40,17 @@ function copyDir(from, to) {
   fs.cpSync(from, to, { recursive: true });
 }
 
+// /admin is a shortcut to this repo's Pages CMS editor (the CMS has its own
+// login — nothing on the site itself is password-protected).
+const ADMIN_URL = "https://app.pagescms.org/JovovicMiljan89/3D-BJ/static-cms";
+
+function buildRedirects() {
+  return `/admin ${ADMIN_URL} 302
+/admin/ ${ADMIN_URL} 302
+/admin/* ${ADMIN_URL} 302
+`;
+}
+
 function buildHeaders() {
   return `/*
   X-Content-Type-Options: nosniff
@@ -259,6 +270,7 @@ function main() {
   // reference/ (local-only UI/UX reference material) is never copied — dist/
   // only ever gets css/, js/, assets/ and the rendered index.html, above.
   fs.writeFileSync(path.join(DIST_DIR, "_headers"), buildHeaders());
+  fs.writeFileSync(path.join(DIST_DIR, "_redirects"), buildRedirects());
 
   const placeholders = listPlaceholders(content);
   if (placeholders.length) {
@@ -267,7 +279,7 @@ function main() {
     console.warn("");
   }
 
-  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, _headers)`);
+  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, _headers, _redirects)`);
 }
 
 main();

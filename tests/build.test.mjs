@@ -510,3 +510,14 @@ test("no Content-Security-Policy blocks api.web3forms.com", () => {
     assert.ok(/\*|https:\/\/api\.web3forms\.com/.test(src), `CSP would block api.web3forms.com: ${csp}`);
   }
 });
+
+test("/admin redirects to this repo's Pages CMS editor", () => {
+  buildDistWith(() => {});
+  const redirects = fs.readFileSync(path.join(ROOT, "dist", "_redirects"), "utf-8");
+  for (const from of ["/admin", "/admin/", "/admin/*"]) {
+    assert.ok(
+      redirects.includes(`${from} https://app.pagescms.org/JovovicMiljan89/3D-BJ/static-cms 302\n`),
+      `missing redirect for ${from}`
+    );
+  }
+});
