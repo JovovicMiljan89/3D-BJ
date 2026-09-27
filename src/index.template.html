@@ -25,8 +25,11 @@
   <meta name="twitter:description" content="{{meta.description}}" />
   <meta name="twitter:image" content="{{seo.ogImageAbsolute}}" />
 
+  <link rel="icon" href="{{brand.faviconIco}}" sizes="16x16 32x32 48x48" />
+  <link rel="icon" href="{{brand.faviconPng}}" type="image/png" sizes="32x32" />
   <link rel="icon" href="{{brand.favicon}}" type="{{brand.faviconType}}" />
   <link rel="apple-touch-icon" href="{{brand.appleIcon}}" />
+  <link rel="manifest" href="/site.webmanifest" />
   <link rel="stylesheet" href="{{assets.css}}" />
   {{#if theme.accentCss}}
   <!-- Accent color from site.json (Izgled sajta), computed by scripts/build.mjs from a validated hex — safe to render raw.
@@ -96,7 +99,7 @@
   <header class="header">
     <div class="container header__inner">
       <a href="#top" class="logo">
-        <img src="{{brand.logo}}" alt="{{brand.name}}" height="40" width="{{brand.logoHeaderWidth}}" />
+        <img src="{{brand.logo}}" alt="{{brand.logoText}}" height="40" width="{{brand.logoWidth}}" />
       </a>
       <button type="button" class="hamburger" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Otvori meni">
         <span></span><span></span><span></span>
@@ -284,7 +287,7 @@
 
         <!-- Meet the maker -->
         <div class="maker">
-          <img class="maker__avatar" src="{{maker.avatarResolved}}" alt="" width="72" height="72" loading="lazy" />
+          <img class="maker__avatar{{#if maker.avatarIsLogo}} maker__avatar--logo{{/if}}" src="{{maker.avatarResolved}}" alt="" width="72" height="72" loading="lazy" />
           <div>
             <span class="tag">{{maker.roleTag}}</span>
             <h3>{{maker.name}}</h3>
@@ -419,7 +422,7 @@
   <footer class="footer">
     <div class="container footer__grid">
       <div class="footer__col">
-        <img src="{{brand.logo}}" alt="{{brand.name}}" height="32" width="{{brand.logoFooterWidth}}" loading="lazy" />
+        <img src="{{brand.logo}}" alt="{{brand.logoText}}" height="40" width="{{brand.logoWidth}}" loading="lazy" />
         <p class="muted">{{footer.tagline}}</p>
       </div>
       <div class="footer__col">

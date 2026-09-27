@@ -143,11 +143,3 @@ export function recolorSvg(svg, resolved) {
   const map = accentColorMap(resolved);
   return svg.replace(/#[0-9a-fA-F]{6}\b/g, (hex) => map[hex.toLowerCase()] || hex);
 }
-
-// Which pre-rendered OG image (og-{bj|mdl}-{accent}.png) matches the brand name.
-export function brandSlug(brandName) {
-  const name = (brandName || "").toUpperCase();
-  if (name.includes("MDL")) return "mdl";
-  if (name.includes("BJ")) return "bj";
-  return null;
-}

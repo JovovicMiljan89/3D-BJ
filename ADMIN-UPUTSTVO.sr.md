@@ -61,22 +61,21 @@ Kad otpremiš svoju fotografiju za neku stavku:
 
 ## Izgled sajta: boja akcenta
 
-Sajt je crno-beo, sa jednom **bojom akcenta**. U toj boji su logo, ikonice, brojevi
-koraka, sitni naslovi i aktivna stavka u meniju. Dugmad ostaju bela.
+Sajt je crno-beo, sa jednom **bojom akcenta**. U toj boji su ikonice, brojevi
+koraka, sitni naslovi i aktivna stavka u meniju. Dugmad ostaju bela. Logo se ne
+menja: uvek je u svojoj narandžastoj (`#fd6a0a`), koja je i podrazumevana boja
+akcenta (**Narandžasta**).
 
 **Kako promeniti boju akcenta:** **Izgled sajta → Boja akcenta** → izaberi
-(Crvena, Narandžasta, Žuta, Limeta, Plava) → **Save**. Sajt se ažurira za 1–2 minuta,
-zajedno sa logom, favikonom i slikom za deljenje linka.
+(Crvena, Narandžasta, Žuta, Limeta, Plava) → **Save**. Sajt se ažurira za 1–2 minuta.
 
 **Svoja boja:** u **Boja akcenta** izaberi **Prilagođena**, pa u polje
-**„Prilagođena boja“** nalepi kod boje, npr. `#ff7a1a` (tarabica + 6 znakova).
+**„Prilagođena boja“** nalepi kod boje, npr. `#fd6a0a` (tarabica + 6 znakova).
 Boju možeš da izabereš na https://htmlcolorcodes.com/color-picker/ (kopiraj
 „HEX“ vrednost). Ako kod nije ispravan, nova verzija se ne objavljuje i stara
 ostaje uživo.
 
 - Biraj **svetle, jake boje**. Vrlo tamne boje se slabo vide na crnoj pozadini.
-- Uz prilagođenu boju, ikonica za telefon i slika za deljenje ostaju crno-bele
-  (te slike postoje unapred samo za ponuđene boje).
 
 Ostala polja u **Izgled sajta**:
 
@@ -87,18 +86,22 @@ Ostala polja u **Izgled sajta**:
 - **Crno-bele fotografije radionice i opreme:** važi uz crno-belu temu. Galerija
   uvek ostaje u boji.
 
-## Logo i naziv brenda (3D-MDL)
+## Logo i naziv brenda (TrebaMi3D)
 
 Sve u vezi sa brendom je u sekciji **Brend**:
 
 | Polje | Gde se vidi |
 |---|---|
-| **Naziv brenda** (sada „3D-MDL“) | naslov u tabu browsera, pregled linka na Viberu/Facebooku, podnožje, naslov emaila sa upitom („3D-MDL upit: …“) |
-| **Logo (zaglavlje i podnožje)** | logo gore levo i u podnožju |
-| **Pun logo (sa sloganom)** | koristi ga Google u rezultatima pretrage |
-| **Znak (samo kocka)** | u kartici „O vlasniku“, dok nema tvoje fotografije |
-| **Favikona** | mala ikonica u tabu browsera |
-| **Ikonica za mobilne uređaje** | ikonica kad se sajt doda na početni ekran telefona |
+| **Naziv brenda** (sada „TrebaMi3D“) | naslov u tabu browsera, pregled linka na Viberu/Facebooku, podnožje, naslov emaila sa upitom („TrebaMi3D upit: …“), kratko ime aplikacije na telefonu |
+| **Tekst logoa** (sada „treba mi 3d“) | opis logoa za čitače ekrana, puno ime aplikacije na telefonu |
+| **Logo (zaglavlje i podnožje)** | logo gore levo i u podnožju (verzija za tamnu pozadinu) |
+| **Logo za Google** | koristi ga Google u rezultatima pretrage |
+| **Znak (samo štampač)** | u kartici „O vlasniku“, dok nema tvoje fotografije |
+| **Favikona** (SVG, ICO, PNG) | mala ikonica u tabu browsera |
+| **Ikonica za iPhone** / **Ikonica aplikacije** | ikonica kad se sajt doda na početni ekran telefona |
+
+Svi fajlovi novog logoa su u folderu `assets/logo/trebami3d/` (PNG verzije u `png/`).
+Na sajtu se koriste verzije sa `-dark` u imenu, jer je sajt taman.
 
 Slika koja se vidi kad se link ka sajtu podeli (Viber, Facebook…) je u sekciji
 **SEO / deljenje na društvenim mrežama → Slika za deljenje**.
@@ -106,9 +109,8 @@ Slika koja se vidi kad se link ka sajtu podeli (Viber, Facebook…) je u sekciji
 - **Promena naziva:** menjaš samo polje **Naziv brenda** — sajt ga sam ubacuje
   svuda. U polju **Meta podaci → Naslov stranice** naziv ne pišeš, on se dodaje
   automatski ispred.
-- **Povratak na stari 3D-BJ logo:** stari fajlovi su i dalje na sajtu. U poljima
-  slika izaberi fajlove čije ime počinje sa `3d-bj-` (npr. `3d-bj-wordmark.svg`
-  za logo, `3d-bj-mark.svg` za znak), a naziv brenda vrati na „3D-BJ“.
+- **Stari logoi (3D-BJ, 3D-MDL)** su i dalje na sajtu, u `assets/logo/` (fajlovi
+  koji počinju sa `3d-bj-` i `3d-mdl-`), ako ikad zatrebaju.
 - **Pregled linka na društvenim mrežama** se ne menja odmah jer Facebook i Viber
   pamte staru sliku. Posle promene logoa ili slike za deljenje javi Miljanu da
   osveži pregled.

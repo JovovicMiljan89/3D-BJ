@@ -325,9 +325,9 @@ test("CSS and JS are emitted with content-hashed file names and referenced from 
 
 // ---------- Brand / logo ----------
 
-test("header and footer logo src equal brand.logo, with width matching the SVG's aspect ratio", () => {
+test("header and footer logo src equal brand.logo, with width/height matching the SVG's viewBox ratio", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith((c) => (c.theme.base = "teget"));
+  const html = buildDistWith(() => {});
   const vb = fs
     .readFileSync(path.join(ROOT, brand.logo.replace(/^\//, "")), "utf-8")
     .match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/);
@@ -336,12 +336,59 @@ test("header and footer logo src equal brand.logo, with width matching the SVG's
   const header = html.match(/<a href="#top" class="logo">\s*<img src="([^"]+)" alt="([^"]+)" height="40" width="(\d+)"/);
   assert.ok(header, "header logo <img> not found");
   assert.equal(header[1], brand.logo);
-  assert.equal(header[2], brand.name);
+  assert.equal(header[2], "treba mi 3d");
+  assert.equal(header[2], brand.logoText);
   assert.equal(Number(header[3]), Math.round(40 * ratio));
 
-  const footer = html.match(/<img src="([^"]+)" alt="[^"]+" height="32" width="(\d+)" loading="lazy" \/>/);
+  const footer = html.match(/<div class="footer__col">\s*<img src="([^"]+)" alt="([^"]+)" height="40" width="(\d+)" loading="lazy" \/>/);
+  assert.ok(footer, "footer logo <img> not found");
   assert.equal(footer[1], brand.logo);
-  assert.equal(Number(footer[2]), Math.round(32 * ratio));
+  assert.equal(footer[2], brand.logoText);
+  assert.equal(Number(footer[3]), Math.round(40 * ratio));
+});
+
+test("the dark-background logo files are used for the header, footer and maker card", () => {
+  const { brand } = loadRealContent();
+  assert.equal(brand.logo, "/assets/logo/trebami3d/trebami3d-horizontal-dark.svg");
+  assert.equal(brand.mark, "/assets/logo/trebami3d/trebami3d-ikona-dark.svg");
+  const css = fs.readFileSync(path.join(ROOT, "css", "styles.css"), "utf-8");
+  assert.match(css, /\.logo img \{ height: 40px; width: auto; \}/);
+  assert.match(css, /\.footer__col img \{ height: 40px; width: auto;/);
+  assert.match(css, /\.logo img, \.footer__col img \{ height: 34px; \}/, "34px logo on mobile");
+});
+
+test("favicon, manifest, apple-touch-icon and OG files all exist in dist/", () => {
+  const html = buildDistWith(() => {});
+  const hrefs = [...html.matchAll(/<link rel="(?:icon|apple-touch-icon|manifest)" href="([^"]+)"/g)].map((m) => m[1]);
+  assert.equal(hrefs.length, 5, `expected ico, png, svg, apple-touch-icon and manifest links, got ${hrefs.join(", ")}`);
+  assert.ok(html.includes('<link rel="icon" href="/assets/logo/trebami3d/png/favicon.ico"'));
+  assert.ok(html.includes('<link rel="icon" href="/assets/logo/trebami3d/png/favicon-32.png" type="image/png" sizes="32x32" />'));
+  assert.ok(html.includes('<link rel="icon" href="/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg" type="image/svg+xml" />'));
+  assert.ok(html.includes('<link rel="apple-touch-icon" href="/assets/logo/trebami3d/png/apple-touch-icon-180.png" />'));
+  assert.ok(html.includes('<link rel="manifest" href="/site.webmanifest" />'));
+
+  const og = new URL(html.match(/property="og:image" content="([^"]+)"/)[1]).pathname;
+  const twitter = new URL(html.match(/name="twitter:image" content="([^"]+)"/)[1]).pathname;
+  assert.equal(og, "/assets/logo/trebami3d/png/og-image-trebami3d.png");
+  assert.equal(twitter, og);
+
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8"));
+  assert.equal(manifest.name, "treba mi 3d");
+  assert.equal(manifest.short_name, "TrebaMi3D");
+  assert.equal(manifest.display, "standalone");
+  assert.equal(manifest.theme_color, "#0a0a0a");
+  assert.equal(manifest.background_color, "#0a0a0a");
+  assert.deepEqual(
+    manifest.icons.map((i) => [i.src, i.sizes]),
+    [
+      ["/assets/logo/trebami3d/png/app-ikona-tamna-192.png", "192x192"],
+      ["/assets/logo/trebami3d/png/app-ikona-tamna-512.png", "512x512"],
+    ]
+  );
+
+  for (const href of [...hrefs, og, ...manifest.icons.map((i) => i.src)]) {
+    assert.ok(fs.existsSync(path.join(ROOT, "dist", href.replace(/^\//, ""))), `dist${href} should exist`);
+  }
 });
 
 test("og:image is an absolute URL whose file exists in dist/", () => {
@@ -353,18 +400,12 @@ test("og:image is an absolute URL whose file exists in dist/", () => {
   assert.ok(fs.existsSync(path.join(ROOT, "dist", rel)), `dist/${rel} should exist`);
 });
 
-test('no rendered HTML contains the old brand name "3D-BJ"', () => {
+test('no rendered HTML contains the old brand names "3D-BJ" or "3D-MDL"', () => {
   const html = buildDistWith(() => {});
   assert.ok(!html.includes("3D-BJ"), "found 3D-BJ in dist/index.html");
+  assert.ok(!html.includes("3D-MDL"), "found 3D-MDL in dist/index.html");
+  assert.ok(!fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8").includes("3D-"), "old brand in the manifest");
   assert.ok(!fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf-8").includes("3D-BJ"), "found 3D-BJ in js/main.js");
-});
-
-test("favicon and apple-touch-icon links point to files that exist in dist/", () => {
-  const html = buildDistWith(() => {});
-  for (const rel of ["icon", "apple-touch-icon"]) {
-    const href = html.match(new RegExp(`<link rel="${rel}" href="([^"]+)"`))[1];
-    assert.ok(fs.existsSync(path.join(ROOT, "dist", href.replace(/^\//, ""))), `${rel} ${href} should exist in dist/`);
-  }
 });
 
 test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subject", () => {
@@ -376,13 +417,18 @@ test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subje
   assert.ok(html.includes('data-brand-name="Test Brand"'));
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(jsonLd.name, "Test Brand");
-  assert.ok(jsonLd.logo.startsWith("http"), "JSON-LD logo must be an absolute URL");
+  assert.ok(html.includes(`© ${new Date().getFullYear()} Test Brand · Bojan Jovović.`), "footer copyright");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8")).short_name, "Test Brand");
+  const { seo } = loadRealContent();
+  assert.equal(jsonLd.logo, `${seo.siteUrl}assets/logo/trebami3d/png/app-ikona-tamna-512.png`, "JSON-LD logo must be an absolute URL");
 });
 
-test("maker avatar falls back to brand.mark while no photo is set", () => {
+test("maker avatar falls back to brand.mark (uncropped) while no photo is set", () => {
   const { brand } = loadRealContent();
-  const html = buildDistWith((c) => (c.theme.base = "teget"));
-  assert.ok(html.includes(`<img class="maker__avatar" src="${brand.mark}"`));
+  const html = buildDistWith((c) => (c.maker.photo = ""));
+  assert.ok(html.includes(`<img class="maker__avatar maker__avatar--logo" src="${brand.mark}"`));
+  const withPhoto = buildDistWith((c) => (c.maker.photo = c.workshop.photo));
+  assert.ok(withPhoto.includes('<img class="maker__avatar" src="'), "a real photo keeps the cover crop");
 });
 
 test("_headers: css/js stay immutable (hashed names), /assets/* is not immutable", () => {
@@ -619,12 +665,10 @@ test("custom color #ff00aa gets a computed darker color and text color", () => {
   });
   assert.equal(status, 0);
   assert.ok(html.includes("--primary: #ff00aa; --primary-dark: #cc0088;"));
-  // Custom color: SVGs recolored, rasters fall back to the neutral B&W versions.
-  assert.ok(html.includes('src="/assets/theme/3d-mdl-wordmark-ff00aa.svg"'));
-  assert.ok(html.includes('<link rel="apple-touch-icon" href="/assets/logo/3d-mdl-icon-512-bw.png"'));
-  assert.ok(html.includes("/assets/og/og-image-mdl-bw.png"));
-  const svg = fs.readFileSync(path.join(ROOT, "dist", "assets", "theme", "3d-mdl-wordmark-ff00aa.svg"), "utf-8");
-  assert.ok(svg.includes("#ff00aa") && svg.includes("#cc0088") && !svg.includes("#e11d2e"));
+  // Custom color: the hero SVG is recolored, the brand files are not.
+  assert.ok(html.includes('src="/assets/theme/hero-printer-ff00aa.svg"'));
+  const svg = fs.readFileSync(path.join(ROOT, "dist", "assets", "theme", "hero-printer-ff00aa.svg"), "utf-8");
+  assert.ok(svg.includes("#ff00aa") && !svg.includes("#e11d2e"));
 });
 
 test("an invalid custom hex fails the build with a Serbian message", () => {
@@ -656,38 +700,32 @@ test("a dark custom color (#111111) builds but prints a contrast warning", () =>
   assert.ok(!/previše tamna/.test(ok.stderr), "bright presets don't warn");
 });
 
-test("logo, mark, favicon, apple icon and OG image match the preset and the brand", () => {
-  for (const accent of ["narandzasta", "limeta"]) {
-    const hex = loadPresets()[accent].akcenat.slice(1);
-    for (const [brandName, slug] of [["3D-MDL", "mdl"], ["3D-BJ", "bj"]]) {
-      const { html } = buildWithOutput((c) => {
-        c.theme.accent = accent;
-        c.brand.name = brandName;
-        if (slug === "bj") {
-          c.brand.logo = "/assets/logo/3d-bj-wordmark.svg";
-          c.brand.mark = "/assets/logo/3d-bj-mark.svg";
-          c.brand.favicon = "/assets/logo/3d-bj-icon.svg";
-        }
-      });
-      const base = slug === "bj" ? "3d-bj" : "3d-mdl";
-      assert.ok(html.includes(`<a href="#top" class="logo">\n        <img src="/assets/theme/${base}-wordmark-${hex}.svg"`), `${accent}/${brandName} header logo`);
-      assert.ok(html.includes(`<img class="maker__avatar" src="/assets/theme/${base}-mark-${hex}.svg"`), `${accent}/${brandName} mark`);
-      assert.ok(html.includes(`<link rel="icon" href="/assets/theme/${base}-icon-${hex}.svg"`), `${accent}/${brandName} favicon`);
-      assert.ok(html.includes(`<link rel="apple-touch-icon" href="/assets/logo/accents/3d-icon-${accent}-512.png"`));
-      assert.ok(html.includes(`/assets/og/accents/og-${slug}-${accent}.png"`), `${accent}/${brandName} OG`);
-    }
+test("the default accent is the logo orange #fd6a0a", () => {
+  assert.equal(loadPresets().narandzasta.akcenat, "#fd6a0a");
+  assert.equal(resolveAccent({}).accent, "#fd6a0a");
+  const html = buildDistWith((c) => delete c.theme.accent);
+  assert.ok(html.includes("--primary: #fd6a0a;"));
+  const logo = fs.readFileSync(path.join(ROOT, "assets/logo/trebami3d/trebami3d-horizontal-dark.svg"), "utf-8");
+  assert.ok(logo.includes("#fd6a0a"), "the logo's own orange");
+});
+
+test("changing the accent changes UI highlights only, never the brand files", () => {
+  const { brand, seo } = loadRealContent();
+  for (const settings of [{ accent: "limeta" }, { accent: "prilagodjena", customAccent: "#3cbcfa" }, { base: "teget" }]) {
+    const html = buildDistWith((c) => Object.assign(c.theme, settings));
+    const label = JSON.stringify(settings);
+    assert.ok(html.includes(`<a href="#top" class="logo">\n        <img src="${brand.logo}"`), `${label} header logo`);
+    assert.ok(html.includes(`<img class="maker__avatar maker__avatar--logo" src="${brand.mark}"`), `${label} mark`);
+    assert.ok(html.includes(`<link rel="icon" href="${brand.favicon}" type="image/svg+xml" />`), `${label} favicon`);
+    assert.ok(html.includes(`<link rel="apple-touch-icon" href="${brand.appleIcon}" />`), `${label} apple icon`);
+    assert.ok(html.includes(`property="og:image" content="${seo.siteUrl}${seo.ogImage.slice(1)}"`), `${label} OG`);
+    assert.ok(!html.includes("/assets/logo/accents/") && !html.includes("/assets/og/accents/"), `${label} no pre-rendered accent files`);
+    assert.ok(!/src="\/assets\/theme\/trebami3d/.test(html), `${label} logo not recolored`);
   }
 });
 
-test("build-time recoloring matches the provided accent files exactly", () => {
-  const presets = loadPresets();
-  const strip = (svg) => svg.replace(/aria-label="[^"]*"/, "");
-  for (const key of Object.keys(presets)) {
-    const mine = recolorSvg(fs.readFileSync(path.join(ROOT, "assets/logo/3d-mdl-icon.svg"), "utf-8"), resolveAccent({ accent: key }, presets));
-    const provided = fs.readFileSync(path.join(ROOT, `assets/logo/accents/3d-bj-icon-${key}.svg`), "utf-8");
-    assert.equal(strip(mine), strip(provided), `icon for ${key}`);
-  }
-  const hero = recolorSvg(fs.readFileSync(path.join(ROOT, "assets/images/hero-printer.svg"), "utf-8"), resolveAccent({ accent: "plava" }, presets));
+test("build-time recoloring of the hero leaves no red/navy", () => {
+  const hero = recolorSvg(fs.readFileSync(path.join(ROOT, "assets/images/hero-printer.svg"), "utf-8"), resolveAccent({ accent: "plava" }));
   assert.ok(!/#e11d2e|#ff8a94|#24365c|#0a1020/i.test(hero), "no red/navy left in the hero");
 });
 
@@ -698,13 +736,13 @@ test("the active-section script is present or absent according to the setting", 
   assert.ok(!off.includes("IntersectionObserver"));
 });
 
-test("teget ignores the accent: no inline accent style, original logos", () => {
+test("teget ignores the accent: no inline accent style, brand logo unchanged", () => {
   const html = buildDistWith((c) => {
     c.theme.base = "teget";
     c.theme.accent = "limeta";
   });
   assert.ok(!html.includes('id="theme-accent"'));
-  assert.ok(html.includes('src="/assets/logo/3d-mdl-wordmark.svg"'));
+  assert.ok(html.includes('src="/assets/logo/trebami3d/trebami3d-horizontal-dark.svg"'));
   assert.match(html, /<html lang="sr" data-theme="teget">/);
 });
 

@@ -107,8 +107,8 @@ test("a valid submission sends the expected JSON to Web3Forms and shows the succ
   expect(request.headers()["content-type"]).toBe("application/json");
   expect(request.postDataJSON()).toEqual({
     access_key: key,
-    subject: "3D-MDL upit: Petar Test",
-    from_name: "3D-MDL sajt",
+    subject: "TrebaMi3D upit: Petar Test",
+    from_name: "TrebaMi3D sajt",
     name: "Petar Test",
     email: "petar@test.rs",
     service: "3D skeniranje",
@@ -231,7 +231,7 @@ test("no leftover placeholder text (\"0 din\" or \"example\") anywhere on the pa
 
 test("hero headline and both new sections render", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("3D-MDL | 3D štampa, skeniranje i modelovanje po meri");
+  await expect(page).toHaveTitle("TrebaMi3D | 3D štampa, skeniranje i modelovanje po meri");
   await expect(page.locator("h1")).toHaveText("Od ideje do gotovog predmeta.");
   await expect(page.locator("h1 .accent")).toHaveText("gotovog predmeta.");
 
@@ -306,14 +306,21 @@ test("the stylesheet is loaded from a content-hashed file name", async ({ page }
   expect(bg).toBe("rgb(10, 10, 10)");
 });
 
-test("header logo is the configured wordmark and renders at 40px height", async ({ page }) => {
-  await page.goto("/");
-  const logo = page.locator(".header .logo img");
-  await expect(logo).toHaveAttribute("src", "/assets/theme/3d-mdl-wordmark-ff7a1a.svg");
-  const box = await logo.boundingBox();
-  expect(Math.round(box.height)).toBe(40);
-  expect(await logo.evaluate((img) => img.naturalWidth > 0)).toBe(true);
-});
+for (const [width, height] of [[1280, 40], [375, 34]]) {
+  test(`header and footer logo is the treba mi 3d logo at ${height}px height (${width}px viewport)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    for (const logo of [page.locator(".header .logo img"), page.locator(".footer__col img")]) {
+      await logo.scrollIntoViewIfNeeded();
+      await expect(logo).toHaveAttribute("src", "/assets/logo/trebami3d/trebami3d-horizontal-dark.svg");
+      await expect(logo).toHaveAttribute("alt", "treba mi 3d");
+      await expect.poll(() => logo.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+      const box = await logo.boundingBox();
+      expect(Math.round(box.height)).toBe(height);
+      expect(box.width / box.height).toBeCloseTo(689 / 160, 1);
+    }
+  });
+}
 
 test("gallery and equipment photos all load (no broken images)", async ({ page }) => {
   await page.goto("/");
@@ -334,9 +341,9 @@ test("crnobela: buttons are dark text on white, accent step numbers, photos gray
   });
   expect(btn).toEqual(["rgb(10, 10, 10)", "rgb(255, 255, 255)"]);
   const stepNumber = await page.locator("#kako-radi .steps span").first().evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
-  expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(255, 122, 26)"]);
+  expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(253, 106, 10)"]);
   expect(await page.locator(".equip img").first().evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".workshop-hero img").evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".gallery__item img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
-  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/assets/theme/3d-mdl-icon-ff7a1a.svg");
+  await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg");
 });
