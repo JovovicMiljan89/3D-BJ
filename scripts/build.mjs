@@ -12,7 +12,7 @@ import { validateContent } from "./lib/validate.mjs";
 import { renderTemplate } from "./lib/render.mjs";
 import { getImageSize } from "./lib/image-size.mjs";
 import { bwPath } from "./lib/bw.mjs";
-import { accentCss, brandSlug, recolorSvg, resolveAccent } from "./lib/theme.mjs";
+import { accentCss, recolorSvg, resolveAccent } from "./lib/theme.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -75,6 +75,22 @@ function buildHeaders() {
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
 `;
+}
+
+// Web app manifest (dist/site.webmanifest): names and icons come from brand.*,
+// colors from the active theme's background.
+function buildWebManifest(brand, themeColor) {
+  const icon = (src, size) => ({ src, sizes: `${size}x${size}`, type: "image/png" });
+  const manifest = {
+    name: brand.logoText,
+    short_name: brand.name,
+    start_url: "/",
+    display: "standalone",
+    theme_color: themeColor,
+    background_color: themeColor,
+    icons: [icon(brand.appIcon192, 192), icon(brand.appIcon512, 512)],
+  };
+  return JSON.stringify(manifest, null, 2) + "\n";
 }
 
 // Joins a base URL with an absolute path ("/assets/x.png") without
@@ -156,7 +172,7 @@ function themeBackground(theme) {
 }
 
 // SVGs recolored to the accent at build time: written to dist/ only, under a
-// name that includes the color. Maps "/assets/theme/x-ff7a1a.svg" -> its
+// name that includes the color. Maps "/assets/theme/x-fd6a0a.svg" -> its
 // source path, so resolveDims() can read the (identical) viewBox from the source.
 const GENERATED = new Map(); // publicPath -> { source, content }
 
@@ -170,29 +186,13 @@ function recolored(sourcePath, accent) {
   return publicPath;
 }
 
-// Falls back to the neutral black & white (-bw) raster, then the original.
-function bwOrOriginal(publicPath) {
-  return exists(bwPath(publicPath)) ? bwPath(publicPath) : publicPath;
-}
-
-// Crno-bela + accent: which file each brand/hero/OG image field uses.
-//  - SVGs (logo, mark, favicon, hero): recolored from the originals with the
-//    same color map as the provided assets/logo/accents/ files (see theme.mjs).
-//  - PNGs: preset -> the pre-rendered accent PNG; custom color -> neutral B&W.
+// Crno-bela + accent: only the hero illustration follows the accent (recolored
+// from the original with the color map in theme.mjs). The brand files (logo,
+// mark, favicons, OG image) keep the logo's own orange whatever the accent.
 function applyAccentImages(data, accent) {
-  for (const [section, field] of [["brand", "logo"], ["brand", "mark"], ["brand", "favicon"], ["hero", "image"]]) {
-    const src = data[section][field];
-    data[section][field] = src.toLowerCase().endsWith(".svg") ? recolored(src, accent) : bwOrOriginal(src);
-  }
-
-  const presetIcon = `/assets/logo/accents/3d-icon-${accent.key}-512.png`;
-  data.brand.appleIcon = !accent.isCustom && exists(presetIcon) ? presetIcon : bwOrOriginal(data.brand.appleIcon);
-
-  const slug = brandSlug(data.brand.name);
-  const presetOg = `/assets/og/accents/og-${slug}-${accent.key}.png`;
-  data.seo.ogImage = !accent.isCustom && slug && exists(presetOg) ? presetOg : bwOrOriginal(data.seo.ogImage);
-
-  data.brand.logoFull = bwOrOriginal(data.brand.logoFull);
+  const src = data.hero.image;
+  if (src.toLowerCase().endsWith(".svg")) data.hero.image = recolored(src, accent);
+  else if (exists(bwPath(src))) data.hero.image = bwPath(src);
 }
 
 function applyTheme(data) {
@@ -230,8 +230,7 @@ function computeViewModel(content, assets) {
   const logoDims = resolveDims(ROOT, data.brand.logo);
   data.brand = {
     ...data.brand,
-    logoHeaderWidth: Math.round((40 * logoDims.width) / logoDims.height),
-    logoFooterWidth: Math.round((32 * logoDims.width) / logoDims.height),
+    logoWidth: Math.round((40 * logoDims.width) / logoDims.height),
     faviconType: FAVICON_TYPES[path.extname(data.brand.favicon).toLowerCase()] || "image/png",
   };
 
@@ -268,7 +267,7 @@ function computeViewModel(content, assets) {
   data.contact.hasSocial = Boolean(data.contact.instagram || data.contact.facebook);
 
   // --- Maker photo falls back to the logo mark if the admin hasn't uploaded one yet.
-  data.maker = { ...data.maker, avatarResolved: data.maker.photo || data.brand.mark };
+  data.maker = { ...data.maker, avatarResolved: data.maker.photo || data.brand.mark, avatarIsLogo: !data.maker.photo };
 
   // --- FAQ: first item open by default. The template engine can't compare
   // @index to a literal, so we precompute the flag here instead.
@@ -352,6 +351,7 @@ function main() {
   // only ever gets css/, js/, assets/ and the rendered index.html, above.
   fs.writeFileSync(path.join(DIST_DIR, "_headers"), buildHeaders());
   fs.writeFileSync(path.join(DIST_DIR, "_redirects"), buildRedirects());
+  fs.writeFileSync(path.join(DIST_DIR, "site.webmanifest"), buildWebManifest(data.brand, data.theme.color));
 
   const placeholders = listPlaceholders(content);
   if (placeholders.length) {
@@ -360,7 +360,7 @@ function main() {
     console.warn("");
   }
 
-  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, _headers, _redirects)`);
+  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, site.webmanifest, _headers, _redirects)`);
 }
 
 main();

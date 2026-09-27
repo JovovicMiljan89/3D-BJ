@@ -13,15 +13,20 @@
   },
   "seo": {
     "siteUrl": "https://3d-bj.printmodel.workers.dev/",
-    "ogImage": "/assets/og/og-image-mdl.png"
+    "ogImage": "/assets/logo/trebami3d/png/og-image-trebami3d.png"
   },
   "brand": {
-    "name": "3D-MDL",
-    "logo": "/assets/logo/3d-mdl-wordmark.svg",
-    "logoFull": "/assets/logo/3d-mdl-horizontal.png",
-    "mark": "/assets/logo/3d-mdl-mark.svg",
-    "favicon": "/assets/logo/3d-mdl-icon.svg",
-    "appleIcon": "/assets/logo/3d-mdl-icon-512.png",
+    "name": "TrebaMi3D",
+    "logoText": "treba mi 3d",
+    "logo": "/assets/logo/trebami3d/trebami3d-horizontal-dark.svg",
+    "logoFull": "/assets/logo/trebami3d/png/app-ikona-tamna-512.png",
+    "mark": "/assets/logo/trebami3d/trebami3d-ikona-dark.svg",
+    "favicon": "/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg",
+    "faviconIco": "/assets/logo/trebami3d/png/favicon.ico",
+    "faviconPng": "/assets/logo/trebami3d/png/favicon-32.png",
+    "appleIcon": "/assets/logo/trebami3d/png/apple-touch-icon-180.png",
+    "appIcon192": "/assets/logo/trebami3d/png/app-ikona-tamna-192.png",
+    "appIcon512": "/assets/logo/trebami3d/png/app-ikona-tamna-512.png",
     "ownerName": "Bojan Jovović",
     "ownerRole": "Vlasnik i operater štampe"
   },

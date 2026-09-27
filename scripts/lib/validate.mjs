@@ -36,11 +36,16 @@ const REQUIRED_STRINGS = [
   "seo.siteUrl",
   "seo.ogImage",
   "brand.name",
+  "brand.logoText",
   "brand.logo",
   "brand.logoFull",
   "brand.mark",
   "brand.favicon",
+  "brand.faviconIco",
+  "brand.faviconPng",
   "brand.appleIcon",
+  "brand.appIcon192",
+  "brand.appIcon512",
   "brand.ownerName",
   "brand.ownerRole",
   "nav.servicesLabel",
@@ -135,7 +140,11 @@ const IMAGE_FIELDS = [
   "brand.logoFull",
   "brand.mark",
   "brand.favicon",
+  "brand.faviconIco",
+  "brand.faviconPng",
   "brand.appleIcon",
+  "brand.appIcon192",
+  "brand.appIcon512",
   "hero.image",
   "workshop.photo",
   "seo.ogImage",
@@ -352,7 +361,7 @@ export function validateContent(content, projectRoot) {
     }
     if (theme.accent === CUSTOM_ACCENT && !HEX_RE.test((theme.customAccent || "").trim())) {
       errors.push(
-        `Izgled sajta → Prilagođena boja: "${theme.customAccent || ""}" nije ispravna boja. Upiši je u obliku #rrggbb, npr. #ff7a1a (tarabica + 6 znakova 0–9 / a–f).`
+        `Izgled sajta → Prilagođena boja: "${theme.customAccent || ""}" nije ispravna boja. Upiši je u obliku #rrggbb, npr. #fd6a0a (tarabica + 6 znakova 0–9 / a–f).`
       );
     }
     for (const flag of ["highlightActiveSection", "grayscalePhotos"]) {

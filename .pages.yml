@@ -25,14 +25,14 @@ content:
           - name: title
             label: "Naslov stranice (tab u browseru)"
             type: string
-            description: "Naziv brenda se dodaje automatski ispred, npr. '3D-MDL | <ovaj tekst>'."
+            description: "Naziv brenda se dodaje automatski ispred, npr. 'TrebaMi3D | <ovaj tekst>'."
           - { name: description, label: "Opis za pretragu (SEO)", type: text }
           - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
 
       - name: theme
         label: "Izgled sajta"
         type: object
-        description: "Boje sajta i logoa. Promena se vidi na sajtu 1–2 minuta posle čuvanja."
+        description: "Boje sajta. Logo uvek zadržava svoju narandžastu. Promena se vidi na sajtu 1–2 minuta posle čuvanja."
         fields:
           - name: base
             label: "Boje sajta"
@@ -47,7 +47,7 @@ content:
             label: "Boja akcenta"
             type: select
             default: narandzasta
-            description: "Boja logoa, ikonica, brojeva koraka i sitnih detalja. Važi uz crno-belu temu."
+            description: "Boja ikonica, brojeva koraka i sitnih detalja (logo se ne menja). Narandžasta je boja logoa. Važi uz crno-belu temu."
             options:
               values:
                 - { value: crvena, label: "Crvena" }
@@ -57,7 +57,7 @@ content:
                 - { value: plava, label: "Plava" }
                 - { value: prilagodjena, label: "Prilagođena" }
           - name: customAccent
-            label: "Prilagođena boja (npr. #ff7a1a)"
+            label: "Prilagođena boja (npr. #fd6a0a)"
             type: string
             description: "Koristi se samo kad je Boja akcenta 'Prilagođena'. Oblik #rrggbb; izaberi svetlu boju."
           - name: highlightActiveSection
@@ -92,19 +92,27 @@ content:
             label: "Naziv brenda"
             type: string
             description: "Menja naziv svuda na sajtu: naslov stranice, deljenje linka, opis slika, podnožje i naslov emaila sa upitom."
-          - { name: logo, label: "Logo (zaglavlje i podnožje)", type: image }
+          - name: logoText
+            label: "Tekst logoa"
+            description: "Tekst koji piše na logou (npr. 'treba mi 3d'). Opis logoa za čitače ekrana i puno ime aplikacije na telefonu."
+            type: string
+          - { name: logo, label: "Logo (zaglavlje i podnožje, za tamnu pozadinu)", type: image }
           - name: logoFull
-            label: "Pun logo (sa sloganom)"
+            label: "Logo za Google (PNG, kvadratni)"
             type: image
-            description: "Koristi ga Google za prikaz logoa u rezultatima pretrage. Preporučeno PNG."
+            description: "Koristi ga Google za prikaz logoa u rezultatima pretrage. Preporučeno PNG 512×512."
           - name: mark
-            label: "Znak (samo kocka)"
+            label: "Znak (samo štampač)"
             type: image
             description: "Prikazuje se u kartici 'O vlasniku' dok nema Bojanove fotografije."
-          - { name: favicon, label: "Favikona (ikonica u tabu)", type: image }
+          - { name: favicon, label: "Favikona SVG (ikonica u tabu)", type: image }
+          - { name: faviconIco, label: "Favikona ICO (za starije browsere)", type: image }
+          - { name: faviconPng, label: "Favikona PNG 32×32", type: image }
           - name: appleIcon
-            label: "Ikonica za mobilne uređaje (PNG 512×512)"
+            label: "Ikonica za iPhone (PNG 180×180)"
             type: image
+          - { name: appIcon192, label: "Ikonica aplikacije PNG 192×192", type: image }
+          - { name: appIcon512, label: "Ikonica aplikacije PNG 512×512", type: image }
           - { name: ownerName, label: "Ime vlasnika", type: string }
           - { name: ownerRole, label: "Uloga vlasnika", type: string }
 

@@ -13,6 +13,12 @@ const SECTIONS = [
   ["kontakt", "#kontakt"],
   ["footer", ".footer"],
 ];
+// Brand shots: the sticky header stays visible for these.
+const BRAND_SHOTS = [
+  ["logo-header", ".header"],
+  ["logo-footer", ".footer"],
+  ["logo-maker", ".maker"],
+];
 
 function collectErrors(page) {
   const errors = [];
@@ -27,6 +33,11 @@ for (const width of [1280, 375]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "crnobela");
+    await page.evaluate(() => document.querySelectorAll('img[loading="lazy"]').forEach((i) => (i.loading = "eager")));
+    await page.waitForLoadState("networkidle");
+    for (const [name, selector] of BRAND_SHOTS) {
+      await page.locator(selector).screenshot({ path: `screenshots/${name}-${width}.png` });
+    }
     // Hide the sticky header/bottom bar so they don't cover the section shots.
     await page.addStyleTag({ content: ".header,.bottombar{visibility:hidden}" });
     await page.evaluate(() => document.querySelectorAll('img[loading="lazy"]').forEach((i) => (i.loading = "eager")));
@@ -43,17 +54,18 @@ for (const width of [1280, 375]) {
   });
 }
 
-for (const [name, rgb, hex] of [
-  ["limeta", "rgb(181, 242, 61)", "b5f23d"],
-  ["plava", "rgb(60, 188, 250)", "3cbcfa"],
+for (const [name, rgb] of [
+  ["limeta", "rgb(181, 242, 61)"],
+  ["plava", "rgb(60, 188, 250)"],
 ]) {
   test(`${name} preset: eyebrow color and logo`, async ({ page }) => {
     const errors = collectErrors(page);
     await page.goto(variantUrl(name));
     expect(await page.locator(".eyebrow").evaluate((el) => getComputedStyle(el).color)).toBe(rgb);
-    await expect(page.locator(".header .logo img")).toHaveAttribute("src", `/assets/theme/3d-mdl-wordmark-${hex}.svg`);
+    // The accent never recolors the logo: it keeps its own orange.
+    await expect(page.locator(".header .logo img")).toHaveAttribute("src", "/assets/logo/trebami3d/trebami3d-horizontal-dark.svg");
     expect(await page.locator(".header .logo img").evaluate((img) => img.naturalWidth > 0)).toBe(true);
-    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute("href", `/assets/logo/accents/3d-icon-${name}-512.png`);
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute("href", "/assets/logo/trebami3d/png/apple-touch-icon-180.png");
     expect(errors).toEqual([]);
   });
 }
@@ -89,7 +101,7 @@ test("mobile menu: the active link gets the accent left border", async ({ page }
   await expect(link).toHaveClass(/is-active/);
   await page.locator("#navToggle").click();
   const border = await link.evaluate((el) => [getComputedStyle(el).borderLeftWidth, getComputedStyle(el).borderLeftColor]);
-  expect(border).toEqual(["3px", "rgb(255, 122, 26)"]);
+  expect(border).toEqual(["3px", "rgb(253, 106, 10)"]);
 });
 
 test("buttons are white with black text, and take the accent on hover", async ({ page }) => {
@@ -99,23 +111,23 @@ test("buttons are white with black text, and take the accent on hover", async ({
   const colors = () => btn.evaluate((el) => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color]);
   expect(await colors()).toEqual(["rgb(255, 255, 255)", "rgb(10, 10, 10)"]);
   await btn.hover();
-  expect(await colors()).toEqual(["rgb(255, 122, 26)", "rgb(10, 10, 10)"]);
+  expect(await colors()).toEqual(["rgb(253, 106, 10)", "rgb(10, 10, 10)"]);
 
   const ghost = page.locator(".hero .btn--ghost");
   await ghost.hover();
   expect(await ghost.evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).borderTopColor])).toEqual([
-    "rgb(255, 122, 26)",
-    "rgb(255, 122, 26)",
+    "rgb(253, 106, 10)",
+    "rgb(253, 106, 10)",
   ]);
 });
 
-test("teget build still renders the navy/red theme with the original logo", async ({ page }) => {
+test("teget build still renders the navy/red theme with the brand logo", async ({ page }) => {
   const errors = collectErrors(page);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(variantUrl("teget"));
   await expect(page.locator("html")).toHaveAttribute("data-theme", "teget");
   await expect(page.locator("#theme-accent")).toHaveCount(0);
-  await expect(page.locator(".header .logo img")).toHaveAttribute("src", "/assets/logo/3d-mdl-wordmark.svg");
+  await expect(page.locator(".header .logo img")).toHaveAttribute("src", "/assets/logo/trebami3d/trebami3d-horizontal-dark.svg");
   expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe("rgb(7, 11, 20)");
   const btn = await page.locator(".hero .btn").first().evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
   expect(btn).toEqual(["rgb(255, 255, 255)", "rgb(225, 29, 46)"]);
