@@ -1,0 +1,9 @@
+{
+  // www.trebami3d.rs -> https://trebami3d.rs (301). Deployed by hand, not by
+  // the Git build: `npx wrangler deploy -c workers/www-redirect/wrangler.jsonc`.
+  "name": "trebami3d-www",
+  "main": "index.mjs",
+  "compatibility_date": "2026-09-24",
+  "workers_dev": false,
+  "routes": [{ "pattern": "www.trebami3d.rs", "custom_domain": true }]
+}

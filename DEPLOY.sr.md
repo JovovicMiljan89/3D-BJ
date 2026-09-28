@@ -80,8 +80,9 @@ upozorava u logu). Build generiše i `sitemap.xml`, `robots.txt` i
 
 Ručna podešavanja u Cloudflare dashboardu (nisu u kodu):
 - **SSL/TLS → Edge Certificates → Always Use HTTPS** — uključeno.
-- `www.trebami3d.rs` kao Custom Domain na Worker-u + Redirect Rule
-  `www.trebami3d.rs/*` → `https://trebami3d.rs/${1}` (301, sa query stringom).
+- `www.trebami3d.rs` preusmerava mali poseban Worker `trebami3d-www`
+  (`workers/www-redirect/`, 301 na `https://trebami3d.rs` + putanja i query).
+  Ne ide kroz Git build; posle izmene: `npx wrangler deploy -c workers/www-redirect/wrangler.jsonc`.
 - Stara adresa (workers.dev): Worker → Settings → Domains & Routes → workers.dev → Disable.
 
 ## Sažetak — šta je gde
