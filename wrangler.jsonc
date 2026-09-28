@@ -4,6 +4,10 @@
   // is deterministic instead of re-running wrangler's interactive-fallback
   // auto-init from scratch each time. Deploy command: `npx wrangler deploy`.
   "name": "3d-bj",
+  // The old address 3d-bj.printmodel.workers.dev is switched off; the site
+  // lives on trebami3d.rs (Custom Domain). Without this, every deploy would
+  // turn workers.dev back on.
+  "workers_dev": false,
   "compatibility_date": "2026-09-24",
   "observability": {
     "enabled": true
