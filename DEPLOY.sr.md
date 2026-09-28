@@ -71,6 +71,19 @@ Za detalje uputstva koje šalješ Bojanu, vidi `ADMIN-UPUTSTVO.sr.md`.
 3. Ako je domen već na Cloudflare-u (DNS), povezivanje je automatsko. Ako nije, Cloudflare će tražiti da dodaš CNAME/A zapis kod tvog registrara domena.
 4. HTTPS sertifikat se izdaje automatski, besplatno.
 
+**Trenutno stanje:** sajt je uživo na **https://trebami3d.rs/** (Custom Domain na
+Worker-u `3d-bj`). Stara adresa je `3d-bj.printmodel.workers.dev` — ne treba je
+nigde koristiti. `seo.siteUrl` u `content/site.json` mora biti tačno
+`https://trebami3d.rs/` (build ionako pretvara `http://` u `https://` i
+upozorava u logu). Build generiše i `sitemap.xml`, `robots.txt` i
+`manifest.webmanifest`.
+
+Ručna podešavanja u Cloudflare dashboardu (nisu u kodu):
+- **SSL/TLS → Edge Certificates → Always Use HTTPS** — uključeno.
+- `www.trebami3d.rs` kao Custom Domain na Worker-u + Redirect Rule
+  `www.trebami3d.rs/*` → `https://trebami3d.rs/${1}` (301, sa query stringom).
+- Stara adresa (workers.dev): Worker → Settings → Domains & Routes → workers.dev → Disable.
+
 ## Sažetak — šta je gde
 
 | Alat | Uloga | Nalog treba |

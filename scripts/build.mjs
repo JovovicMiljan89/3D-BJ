@@ -13,6 +13,7 @@ import { renderTemplate } from "./lib/render.mjs";
 import { getImageSize } from "./lib/image-size.mjs";
 import { bwPath } from "./lib/bw.mjs";
 import { accentCss, recolorSvg, resolveAccent } from "./lib/theme.mjs";
+import { absoluteUrl, normalizeSiteUrl } from "./lib/site-url.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -74,17 +75,22 @@ function buildHeaders() {
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/manifest.webmanifest
+  Content-Type: application/manifest+json
 `;
 }
 
-// Web app manifest (dist/site.webmanifest): names and icons come from brand.*,
-// colors from the active theme's background.
-function buildWebManifest(brand, themeColor) {
+// Web app manifest (dist/manifest.webmanifest): names and icons come from
+// brand.*, colors from the active theme's background.
+function buildWebManifest(brand, lang, themeColor) {
   const icon = (src, size) => ({ src, sizes: `${size}x${size}`, type: "image/png" });
   const manifest = {
-    name: brand.logoText,
+    name: brand.name,
     short_name: brand.name,
+    lang,
     start_url: "/",
+    scope: "/",
     display: "standalone",
     theme_color: themeColor,
     background_color: themeColor,
@@ -93,12 +99,26 @@ function buildWebManifest(brand, themeColor) {
   return JSON.stringify(manifest, null, 2) + "\n";
 }
 
-// Joins a base URL with an absolute path ("/assets/x.png") without
-// double/missing slashes. Assumes seo.siteUrl already ends with "/".
-function absoluteUrl(siteUrl, absPath) {
-  const base = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
-  const p = absPath.startsWith("/") ? absPath : `/${absPath}`;
-  return base + p;
+// The site is a single page; /admin is only a redirect to the CMS.
+function buildSitemap(siteUrl, lastmod) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${siteUrl}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </url>
+</urlset>
+`;
+}
+
+// Cloudflare's managed robots.txt (if enabled on the zone) is prepended to
+// this one, so the Sitemap line survives either way.
+function buildRobots(siteUrl) {
+  return `User-agent: *
+Allow: /
+
+Sitemap: ${absoluteUrl(siteUrl, "/sitemap.xml")}
+`;
 }
 
 // Prevents a JSON-LD string value from being able to prematurely close the
@@ -333,6 +353,10 @@ function main() {
   }
   const template = fs.readFileSync(TEMPLATE_PATH, "utf-8");
 
+  const siteUrl = normalizeSiteUrl(content.seo.siteUrl);
+  for (const w of siteUrl.warnings) console.warn(`[build] WARNING: ${w} Correct it in Pages CMS (SEO → Adresa sajta).`);
+  content.seo.siteUrl = siteUrl.url;
+
   fs.rmSync(DIST_DIR, { recursive: true, force: true });
   fs.mkdirSync(DIST_DIR, { recursive: true });
 
@@ -351,7 +375,9 @@ function main() {
   // only ever gets css/, js/, assets/ and the rendered index.html, above.
   fs.writeFileSync(path.join(DIST_DIR, "_headers"), buildHeaders());
   fs.writeFileSync(path.join(DIST_DIR, "_redirects"), buildRedirects());
-  fs.writeFileSync(path.join(DIST_DIR, "site.webmanifest"), buildWebManifest(data.brand, data.theme.color));
+  fs.writeFileSync(path.join(DIST_DIR, "manifest.webmanifest"), buildWebManifest(data.brand, data.meta.lang, data.theme.color));
+  fs.writeFileSync(path.join(DIST_DIR, "sitemap.xml"), buildSitemap(siteUrl.url, new Date().toISOString().slice(0, 10)));
+  fs.writeFileSync(path.join(DIST_DIR, "robots.txt"), buildRobots(siteUrl.url));
 
   const placeholders = listPlaceholders(content);
   if (placeholders.length) {
@@ -360,7 +386,7 @@ function main() {
     console.warn("");
   }
 
-  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, site.webmanifest, _headers, _redirects)`);
+  console.log(`[build] OK — wrote ${path.relative(ROOT, DIST_DIR)}/ (index.html, ${assets.css}, ${assets.js}, assets/, manifest.webmanifest, sitemap.xml, robots.txt, _headers, _redirects)`);
 }
 
 main();

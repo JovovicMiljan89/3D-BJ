@@ -10,7 +10,7 @@ se — ne treba ti nikakav poseban nalog niti lozinka koju pamtiš, samo pristup
 tom emailu.
 
 Kasnije, za sledeća logovanja, najlakše je da otvoriš
-**https://3d-bj.printmodel.workers.dev/admin** — ta adresa te vodi pravo na
+**https://trebami3d.rs/admin** — ta adresa te vodi pravo na
 uređivanje sajta u Pages CMS-u. Ako nisi ulogovan, prijaviš se istim putem
 (preko emaila). Sačuvaj je u omiljene (bookmark).
 
@@ -145,7 +145,7 @@ može brzo da je ispravi ili ti kaže šta da promeniš.
 
 ## Kratak podsetnik
 
-- Admin: **3d-bj.printmodel.workers.dev/admin** → prijava preko email linka, bez lozinke.
+- Admin: **trebami3d.rs/admin** → prijava preko email linka, bez lozinke.
 - Menjaš tekst → kucaš → Save.
 - Menjaš/dodaješ sliku → Upload → Save.
 - Otpremio si svoju fotografiju umesto stock slike → isključi „Privremena (stock) slika“.
