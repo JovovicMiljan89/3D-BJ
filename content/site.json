@@ -106,10 +106,10 @@
   },
   "gallery": [
     {
-      "image": "/assets/uploads/stock/galerija-zupcanik.webp",
+      "image": "/assets/uploads/viber_image_2026-09-27_18-29-19-463.jpg",
       "alt": "Odštampani mehanizam sa zupčanicima u beloj, plavoj i narandžastoj boji, izmenjeno u 12:42",
       "caption": "Set zupčanika · PETG MILJAN",
-      "placeholder": true
+      "placeholder": false
     },
     {
       "image": "/assets/uploads/stock/galerija-vaza.webp",
