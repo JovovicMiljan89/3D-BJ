@@ -83,7 +83,7 @@ Ručna podešavanja u Cloudflare dashboardu (nisu u kodu):
 - `www.trebami3d.rs` preusmerava mali poseban Worker `trebami3d-www`
   (`workers/www-redirect/`, 301 na `https://trebami3d.rs` + putanja i query).
   Ne ide kroz Git build; posle izmene: `npx wrangler deploy -c workers/www-redirect/wrangler.jsonc`.
-- Stara adresa (workers.dev): Worker → Settings → Domains & Routes → workers.dev → Disable.
+- Stara adresa (workers.dev) je isključena, i u dashboardu i sa `"workers_dev": false` u `wrangler.jsonc` (inače bi je svaki deploy ponovo uključio).
 
 ## Sažetak — šta je gde
 
