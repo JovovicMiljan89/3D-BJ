@@ -78,7 +78,7 @@ content:
           - name: siteUrl
             label: "Adresa sajta (sa kosom crtom na kraju)"
             type: string
-            description: "Ne menjati bez dogovora sa Miljanom — mora da odgovara stvarnoj adresi sajta."
+            description: "Uvek sa https://, npr. https://trebami3d.rs/ — ne menjati bez dogovora sa Miljanom, mora da odgovara stvarnoj adresi sajta."
           - name: ogImage
             label: "Slika za deljenje (Open Graph)"
             type: image
@@ -94,7 +94,7 @@ content:
             description: "Menja naziv svuda na sajtu: naslov stranice, deljenje linka, opis slika, podnožje i naslov emaila sa upitom."
           - name: logoText
             label: "Tekst logoa"
-            description: "Tekst koji piše na logou (npr. 'treba mi 3d'). Opis logoa za čitače ekrana i puno ime aplikacije na telefonu."
+            description: "Tekst koji piše na logou (npr. 'treba mi 3d'). Opis logoa za čitače ekrana."
             type: string
           - { name: logo, label: "Logo (zaglavlje i podnožje, za tamnu pozadinu)", type: image }
           - name: logoFull

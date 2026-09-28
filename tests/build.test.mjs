@@ -10,6 +10,7 @@ import { renderTemplate } from "../scripts/lib/render.mjs";
 import { escapeHtml } from "../scripts/lib/escape.mjs";
 import { bwPath, toBwSvg, BW_COLOR_MAP } from "../scripts/lib/bw.mjs";
 import { resolveAccent, accentCss, recolorSvg, loadPresets, contrastRatio, darken, textOn } from "../scripts/lib/theme.mjs";
+import { normalizeSiteUrl, absoluteUrl } from "../scripts/lib/site-url.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -365,16 +366,19 @@ test("favicon, manifest, apple-touch-icon and OG files all exist in dist/", () =
   assert.ok(html.includes('<link rel="icon" href="/assets/logo/trebami3d/png/favicon-32.png" type="image/png" sizes="32x32" />'));
   assert.ok(html.includes('<link rel="icon" href="/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg" type="image/svg+xml" />'));
   assert.ok(html.includes('<link rel="apple-touch-icon" href="/assets/logo/trebami3d/png/apple-touch-icon-180.png" />'));
-  assert.ok(html.includes('<link rel="manifest" href="/site.webmanifest" />'));
+  assert.ok(html.includes('<link rel="manifest" href="/manifest.webmanifest" />'));
 
   const og = new URL(html.match(/property="og:image" content="([^"]+)"/)[1]).pathname;
   const twitter = new URL(html.match(/name="twitter:image" content="([^"]+)"/)[1]).pathname;
   assert.equal(og, "/assets/logo/trebami3d/png/og-image-trebami3d.png");
   assert.equal(twitter, og);
 
-  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8"));
-  assert.equal(manifest.name, "treba mi 3d");
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "manifest.webmanifest"), "utf-8"));
+  assert.equal(manifest.name, "TrebaMi3D");
   assert.equal(manifest.short_name, "TrebaMi3D");
+  assert.equal(manifest.lang, "sr");
+  assert.equal(manifest.start_url, "/");
+  assert.equal(manifest.scope, "/");
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.theme_color, "#0a0a0a");
   assert.equal(manifest.background_color, "#0a0a0a");
@@ -404,7 +408,7 @@ test('no rendered HTML contains the old brand names "3D-BJ" or "3D-MDL"', () => 
   const html = buildDistWith(() => {});
   assert.ok(!html.includes("3D-BJ"), "found 3D-BJ in dist/index.html");
   assert.ok(!html.includes("3D-MDL"), "found 3D-MDL in dist/index.html");
-  assert.ok(!fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8").includes("3D-"), "old brand in the manifest");
+  assert.ok(!fs.readFileSync(path.join(ROOT, "dist", "manifest.webmanifest"), "utf-8").includes("3D-"), "old brand in the manifest");
   assert.ok(!fs.readFileSync(path.join(ROOT, "js", "main.js"), "utf-8").includes("3D-BJ"), "found 3D-BJ in js/main.js");
 });
 
@@ -418,7 +422,7 @@ test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subje
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   assert.equal(jsonLd.name, "Test Brand");
   assert.ok(html.includes(`© ${new Date().getFullYear()} Test Brand · Bojan Jovović.`), "footer copyright");
-  assert.equal(JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "site.webmanifest"), "utf-8")).short_name, "Test Brand");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "manifest.webmanifest"), "utf-8")).short_name, "Test Brand");
   const { seo } = loadRealContent();
   assert.equal(jsonLd.logo, `${seo.siteUrl}assets/logo/trebami3d/png/app-ikona-tamna-512.png`, "JSON-LD logo must be an absolute URL");
 });
@@ -771,4 +775,96 @@ test("buttons are white with black text in crnobela; accent only on hover", () =
   const rules = (css.match(/[^{}]+\{[^}]*background:\s*var\(--primary\)[^}]*\}/g) || []).filter((r) => !/content:\s*""/.test(r));
   for (const rule of rules) assert.match(rule, /color:\s*var\(--on-accent\)/, rule.trim().slice(0, 80));
   assert.ok(!/color:\s*#fff(fff)?\b/i.test(css.replace(/:root\[data-theme="teget"\]\s*\{[^}]*\}/, "")), "no literal white text outside teget");
+});
+
+// ---------- Domain: https siteUrl, sitemap, robots, manifest ----------
+
+test("normalizeSiteUrl: http -> https, exactly one trailing slash, warns on every fix", () => {
+  assert.deepEqual(normalizeSiteUrl("https://trebami3d.rs/"), { url: "https://trebami3d.rs/", warnings: [] });
+
+  const http = normalizeSiteUrl("http://trebami3d.rs");
+  assert.equal(http.url, "https://trebami3d.rs/");
+  assert.equal(http.warnings.length, 2, "one warning for http, one for the missing slash");
+
+  const doubled = normalizeSiteUrl("https://trebami3d.rs//");
+  assert.equal(doubled.url, "https://trebami3d.rs/");
+  assert.equal(doubled.warnings.length, 1);
+
+  assert.equal(normalizeSiteUrl("  HTTP://trebami3d.rs/ ").url, "https://trebami3d.rs/");
+  assert.equal(normalizeSiteUrl("trebami3d.rs").url, "https://trebami3d.rs/");
+  assert.equal(absoluteUrl("https://trebami3d.rs/", "/assets/x.png"), "https://trebami3d.rs/assets/x.png");
+});
+
+test("an http:// siteUrl in the CMS is built as https:// with a build warning", () => {
+  const { stderr, html } = buildWithOutput((c) => (c.seo.siteUrl = "http://trebami3d.rs//"));
+  assert.match(stderr, /WARNING: seo\.siteUrl "http:\/\/trebami3d\.rs\/\/" uses http:\/\//);
+  assert.ok(html.includes('<link rel="canonical" href="https://trebami3d.rs/" />'));
+  assert.ok(!html.includes("http://trebami3d"));
+});
+
+function distFiles(dir = path.join(ROOT, "dist"), out = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, entry.name);
+    if (entry.isDirectory()) distFiles(p, out);
+    else out.push(p);
+  }
+  return out;
+}
+
+test("no file in dist/ contains http://trebami3d or workers.dev", () => {
+  buildDistWith(() => {});
+  for (const file of distFiles()) {
+    const text = fs.readFileSync(file).toString("latin1");
+    assert.ok(!text.includes("http://trebami3d"), `${path.relative(ROOT, file)} contains http://trebami3d`);
+    assert.ok(!text.includes("workers.dev"), `${path.relative(ROOT, file)} contains workers.dev`);
+  }
+});
+
+test("canonical, og:url, og:image, twitter:image and JSON-LD URLs are all under https://trebami3d.rs/", () => {
+  const html = buildDistWith(() => {});
+  const SITE = "https://trebami3d.rs/";
+  assert.equal(html.match(/<link rel="canonical" href="([^"]+)"/)[1], SITE);
+  assert.equal(html.match(/property="og:url" content="([^"]+)"/)[1], SITE);
+  assert.ok(html.match(/property="og:image" content="([^"]+)"/)[1].startsWith(SITE));
+  assert.ok(html.match(/name="twitter:image" content="([^"]+)"/)[1].startsWith(SITE));
+  const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.equal(jsonLd.url, SITE);
+  assert.ok(jsonLd.logo.startsWith(SITE));
+  assert.ok(jsonLd.image.startsWith(SITE));
+});
+
+test("sitemap.xml is well-formed and lists https://trebami3d.rs/ with today's lastmod", () => {
+  buildDistWith(() => {});
+  const xml = fs.readFileSync(path.join(ROOT, "dist", "sitemap.xml"), "utf-8");
+  assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>\n<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+  assert.match(xml, /<\/urlset>\n$/);
+  // Tags are balanced and properly nested (no XML parser in Node core).
+  const stack = [];
+  for (const [, close, name] of xml.replace(/^<\?xml[^>]*\?>/, "").matchAll(/<(\/?)([a-z]+)[^>]*>/g)) {
+    if (close) assert.equal(stack.pop(), name, `mismatched </${name}>`);
+    else stack.push(name);
+  }
+  assert.equal(stack.length, 0, "unclosed tags in sitemap.xml");
+  assert.deepEqual([...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]), ["https://trebami3d.rs/"]);
+  assert.ok(xml.includes(`<lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>`));
+});
+
+test("robots.txt allows everything and points at the sitemap", () => {
+  buildDistWith(() => {});
+  const robots = fs.readFileSync(path.join(ROOT, "dist", "robots.txt"), "utf-8");
+  assert.match(robots, /^User-agent: \*$/m);
+  assert.match(robots, /^Allow: \/$/m);
+  assert.match(robots, /^Sitemap: https:\/\/trebami3d\.rs\/sitemap\.xml$/m);
+});
+
+test("manifest.webmanifest is valid JSON, served as application/manifest+json, icons exist", () => {
+  buildDistWith(() => {});
+  const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "dist", "manifest.webmanifest"), "utf-8"));
+  assert.ok(manifest.icons.length >= 2);
+  for (const icon of manifest.icons) {
+    assert.ok(fs.existsSync(path.join(ROOT, "dist", icon.src.replace(/^\//, ""))), `dist${icon.src} is missing`);
+  }
+  assert.ok(!fs.existsSync(path.join(ROOT, "dist", "site.webmanifest")), "old site.webmanifest should be gone");
+  const headers = fs.readFileSync(path.join(ROOT, "dist", "_headers"), "utf-8");
+  assert.match(headers, /\n\/manifest\.webmanifest\n  Content-Type: application\/manifest\+json\n/);
 });
