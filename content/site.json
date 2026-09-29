@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "3D štampanje",
-    "description": "Radionica za 3D štampu, 3D skeniranje i modelovanje po meri. Prototipovi, rezervni delovi i personalizovani pokloni. Izrada od jednog komada, besplatna ponuda u roku od 24 časa. ",
+    "title": "3D štampa i skeniranje po meri – Crvenka",
+    "description": "Radionica za 3D štampu, 3D skeniranje i modelovanje po meri u Crvenki. Prototipovi, rezervni delovi i personalizovani pokloni, izrada od jednog komada. Dostava kurirskom službom širom Srbije.",
     "lang": "sr"
   },
   "theme": {
@@ -12,7 +12,12 @@
   },
   "seo": {
     "siteUrl": "https://trebami3d.rs/",
-    "ogImage": "/assets/logo/trebami3d/png/og-image-trebami3d.png"
+    "ogImage": "/assets/logo/trebami3d/png/og-image-trebami3d.png",
+    "address": {
+      "locality": "Crvenka",
+      "postalCode": "25220"
+    },
+    "areaServed": "RS"
   },
   "brand": {
     "name": "TrebaMi3D",
@@ -38,10 +43,10 @@
     "contactLabel": "Kontakt"
   },
   "hero": {
-    "eyebrow": "3D štampa · skeniranje · modelovanje",
+    "eyebrow": "3D štampa · skeniranje · modelovanje · Crvenka",
     "headline": "Od ideje do",
     "headlineAccent": "gotovog predmeta.",
-    "lead": "Izrađujemo prototipove, rezervne delove, personalizovane poklone i dekorativne predmete, u jednoj ili više boja i u materijalima prilagođenim nameni.",
+    "lead": "Izrađujemo prototipove, rezervne delove, personalizovane poklone i dekorativne predmete, u jednoj ili više boja i u materijalima prilagođenim nameni. Radionica je u Crvenki, a šaljemo kurirskom službom na teritoriji cele Srbije.",
     "primaryButton": "Zatražite ponudu",
     "secondaryButton": "Pogledajte radove",
     "image": "/assets/images/hero-printer.svg",
@@ -93,6 +98,16 @@
     "tag": "Za firme",
     "heading": "Vaš logo, u bojama Vašeg brenda.",
     "text": "Izrađujemo promotivne predmete, natpise i logotipe u do četiri boje, kao i prototipove i manje serije delova za razvoj proizvoda.",
+    "examples": [
+      {
+        "title": "Logo u 4 boje",
+        "text": "za pult, izlog ili sajam"
+      },
+      {
+        "title": "Natpisi i držači",
+        "text": "sa imenom firme (vizitkarte, telefoni, cenovnici)"
+      }
+    ],
     "points": [
       "Manje serije po povoljnijoj ceni",
       "Izrada prema Vašem fajlu ili skici",
@@ -284,6 +299,7 @@
         ]
       }
     ],
+    "sizeNote": "Staje li Vaš predmet? Do 25 × 25 × 25 cm iz jednog dela, veće delimo i spajamo.",
     "stats": [
       {
         "value": "3",
@@ -316,6 +332,10 @@
     {
       "q": "Koji format fajla je potreban?",
       "a": "Najbolje STL, 3MF ili OBJ. Ukoliko nemate 3D model, dovoljna je skica sa merama ili fotografija predmeta, a model izrađujemo mi."
+    },
+    {
+      "q": "Da li moj predmet staje u štampač?",
+      "a": "Iz jednog dela štampamo predmete do 25 × 25 × 25 cm. Veće predmete delimo na više delova koje posle spajamo, tako da je gornja granica uglavnom stvar dogovora. Ako niste sigurni, pošaljite mere ili fotografiju predmeta pored metra."
     },
     {
       "q": "Da li je moguće naručiti samo jedan komad?",
@@ -395,6 +415,7 @@
       "Modelovanje"
     ],
     "submitLabel": "Pošaljite upit",
+    "privacyNote": "Podatke iz forme koristimo isključivo za odgovor na Vaš upit i ne prosleđujemo ih trećim licima.",
     "sendingLabel": "Šalje se…",
     "errorMessage": "Molimo unesite ime, ispravnu email adresu i poruku.",
     "networkErrorMessage": "Slanje trenutno nije uspelo. Pokušajte ponovo ili nas kontaktirajte telefonom.",
@@ -407,6 +428,7 @@
   },
   "footer": {
     "tagline": "3D štampa, skeniranje i modelovanje po meri.",
+    "location": "Crvenka · dostava širom Srbije.",
     "kontaktHeading": "Kontakt",
     "hoursHeading": "Radno vreme",
     "socialHeading": "Društvene mreže",

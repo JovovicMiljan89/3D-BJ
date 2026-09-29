@@ -25,7 +25,7 @@ content:
           - name: title
             label: "Naslov stranice (tab u browseru)"
             type: string
-            description: "Naziv brenda se dodaje automatski ispred, npr. 'TrebaMi3D | <ovaj tekst>'."
+            description: "Naziv brenda se dodaje automatski na kraj, npr. '<ovaj tekst> | TrebaMi3D'."
           - { name: description, label: "Opis za pretragu (SEO)", type: text }
           - { name: lang, label: "Jezik stranice (npr. sr)", type: string }
 
@@ -83,6 +83,17 @@ content:
             label: "Slika za deljenje (Open Graph)"
             type: image
             description: "Slika koja se vidi kad se link ka sajtu podeli na Viberu/Facebooku/itd. Preporučeno 1200×630px."
+          - name: address
+            label: "Adresa za Google (ne prikazuje se na sajtu)"
+            type: object
+            description: "Koristi je Google (strukturisani podaci). Ako je Mesto prazno, uzima se Grad iz sekcije Kontakt."
+            fields:
+              - { name: locality, label: "Mesto (npr. Crvenka)", type: string }
+              - { name: postalCode, label: "Poštanski broj (npr. 25220)", type: string }
+          - name: areaServed
+            label: "Područje na kom radimo (kod zemlje, npr. RS)"
+            type: string
+            description: "Za Google: RS znači cela Srbija. Ne prikazuje se na sajtu."
 
       - name: brand
         label: "Brend"
@@ -186,8 +197,16 @@ content:
           - { name: tag, label: "Oznaka iznad naslova", type: string }
           - { name: heading, label: "Naslov", type: string }
           - { name: text, label: "Tekst", type: text }
+          - name: examples
+            label: "Primeri (stavke sa kvačicom ispod teksta)"
+            type: object
+            list: true
+            description: "Npr. podebljano 'Logo u 4 boje' + običan tekst 'za pult, izlog ili sajam'. Može ostati prazno."
+            fields:
+              - { name: title, label: "Podebljani deo", type: string }
+              - { name: text, label: "Ostatak rečenice", type: string }
           - name: points
-            label: "Stavke sa kvačicom"
+            label: "Stavke sa kvačicom (desna kolona)"
             type: string
             list: true
           - { name: buttonLabel, label: "Tekst dugmeta", type: string }
@@ -308,6 +327,10 @@ content:
                 fields:
                   - { name: label, label: "Naziv karakteristike", type: string }
                   - { name: value, label: "Vrednost", type: string }
+          - name: sizeNote
+            label: "Napomena o veličini (ispod kartica opreme)"
+            type: string
+            description: "Npr. 'Staje li Vaš predmet? Do 25 × 25 × 25 cm iz jednog dela…'. Ostavi prazno da se ne prikazuje."
           - name: stats
             label: "Brojke (statistika)"
             type: object
@@ -424,6 +447,10 @@ content:
             type: string
             list: true
           - { name: submitLabel, label: "Tekst dugmeta: Pošalji", type: string }
+          - name: privacyNote
+            label: "Napomena o zaštiti podataka (ispod dugmeta)"
+            type: text
+            description: "Sitan tekst ispod dugmeta Pošalji. Ostavi prazno da se ne prikazuje."
           - { name: sendingLabel, label: "Tekst dugmeta dok se šalje", type: string }
           - { name: errorMessage, label: "Poruka greške (nepopunjena forma)", type: string }
           - { name: networkErrorMessage, label: "Poruka greške (slanje nije uspelo)", type: string }
@@ -442,6 +469,10 @@ content:
         type: object
         fields:
           - { name: tagline, label: "Kratak slogan ispod loga", type: string }
+          - name: location
+            label: "Lokacija ispod slogana"
+            type: string
+            description: "Npr. 'Crvenka · dostava širom Srbije.' Ostavi prazno da se ne prikazuje."
           - { name: kontaktHeading, label: "Naslov kolone: Kontakt", type: string }
           - { name: hoursHeading, label: "Naslov kolone: Radno vreme", type: string }
           - { name: socialHeading, label: "Naslov kolone: Društvene mreže", type: string }

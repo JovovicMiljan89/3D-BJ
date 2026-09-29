@@ -416,7 +416,7 @@ test("brand.name drives the title, og:site_name, JSON-LD and the Web3Forms subje
   const html = buildDistWith((c) => {
     c.brand.name = "Test Brand";
   });
-  assert.ok(html.includes("<title>Test Brand | "));
+  assert.ok(html.includes(" | Test Brand</title>"));
   assert.ok(html.includes('property="og:site_name" content="Test Brand"'));
   assert.ok(html.includes('data-brand-name="Test Brand"'));
   const jsonLd = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);

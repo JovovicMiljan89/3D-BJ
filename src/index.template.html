@@ -165,6 +165,13 @@
             <span class="tag">{{business.tag}}</span>
             <h2>{{business.heading}}</h2>
             <p class="muted">{{business.text}}</p>
+            {{#if business.examples}}
+            <ul class="checklist band__examples">
+              {{#each business.examples}}
+              <li><svg class="trust__icon" aria-hidden="true"><use href="#icon-check"></use></svg><span><strong>{{title}}</strong> {{text}}</span></li>
+              {{/each}}
+            </ul>
+            {{/if}}
           </div>
           <div class="band__aside">
             <ul class="checklist">
@@ -278,6 +285,10 @@
           </article>
           {{/each}}
         </div>
+
+        {{#if workshop.sizeNote}}
+        <p class="muted workshop__note">{{workshop.sizeNote}}</p>
+        {{/if}}
 
         <div class="stats">
           {{#each workshop.stats}}
@@ -411,6 +422,7 @@
             <p class="form__error" id="formError" hidden>{{contact.errorMessage}}</p>
             <p class="form__error" id="formNetworkError" hidden>{{contact.networkErrorMessage}}</p>
             <button type="submit" class="btn btn--full" id="submitBtn">{{contact.submitLabel}}</button>
+            {{#if contact.privacyNote}}<p class="form__note muted">{{contact.privacyNote}}</p>{{/if}}
           </form>
         </div>
         <p class="form__success" id="formSuccess" hidden>{{contact.successMessage}}</p>
@@ -424,6 +436,7 @@
       <div class="footer__col">
         <img src="{{brand.logo}}" alt="{{brand.logoText}}" height="40" width="{{brand.logoWidth}}" loading="lazy" />
         <p class="muted">{{footer.tagline}}</p>
+        {{#if footer.location}}<p class="muted">{{footer.location}}</p>{{/if}}
       </div>
       <div class="footer__col">
         <h3>{{footer.kontaktHeading}}</h3>

@@ -108,7 +108,7 @@ Slika koja se vidi kad se link ka sajtu podeli (Viber, Facebook…) je u sekciji
 
 - **Promena naziva:** menjaš samo polje **Naziv brenda** — sajt ga sam ubacuje
   svuda. U polju **Meta podaci → Naslov stranice** naziv ne pišeš, on se dodaje
-  automatski ispred.
+  automatski na kraj.
 - **Stari logoi (3D-BJ, 3D-MDL)** su i dalje na sajtu, u `assets/logo/` (fajlovi
   koji počinju sa `3d-bj-` i `3d-mdl-`), ako ikad zatrebaju.
 - **Pregled linka na društvenim mrežama** se ne menja odmah jer Facebook i Viber

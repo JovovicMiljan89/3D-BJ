@@ -141,13 +141,15 @@ function buildLocalBusinessJsonLd(content) {
 
   if (contact.phoneTel) jsonLd.telephone = contact.phoneTel;
   if (contact.email) jsonLd.email = contact.email;
-  if (contact.city) {
-    jsonLd.address = {
-      "@type": "PostalAddress",
-      addressLocality: contact.city,
-      addressCountry: "RS",
-    };
+  // Address for Google: SEO → Adresa (not shown on the page); falls back to
+  // the visible Kontakt → Grad.
+  const locality = seo.address?.locality || contact.city;
+  if (locality) {
+    jsonLd.address = { "@type": "PostalAddress", addressLocality: locality };
+    if (seo.address?.postalCode) jsonLd.address.postalCode = seo.address.postalCode;
+    jsonLd.address.addressCountry = "RS";
   }
+  if (seo.areaServed) jsonLd.areaServed = seo.areaServed;
 
   const sameAs = [contact.instagram, contact.facebook].filter(Boolean);
   if (sameAs.length) jsonLd.sameAs = sameAs;
@@ -244,9 +246,9 @@ function computeViewModel(content, assets) {
   data.spareParts = { ...data.spareParts, enabled: isSectionEnabled(data.spareParts) };
 
   // --- Image dimensions, read from the actual files (see resolveDims above).
-  // --- Brand: the name is edited once (brand.name) and composed into the
+  // --- Brand: the name is edited once (brand.name) and appended to the
   // <title>/og:title here; logo widths follow the logo's real aspect ratio.
-  data.meta = { ...data.meta, fullTitle: `${data.brand.name} | ${data.meta.title}` };
+  data.meta = { ...data.meta, fullTitle: `${data.meta.title} | ${data.brand.name}` };
   const logoDims = resolveDims(ROOT, data.brand.logo);
   data.brand = {
     ...data.brand,
