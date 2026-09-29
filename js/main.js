@@ -188,26 +188,54 @@
   });
 
   // ---------- Gallery lightbox [#13] ----------
+  // Prev/next buttons, arrow keys and swipe cycle through the gallery (last ->
+  // first); Tab stays inside the dialog; closing returns focus to the clicked item.
+  const galleryItems = Array.from(document.querySelectorAll(".gallery__item"));
   const lightbox = document.createElement("div");
   lightbox.className = "modal modal--image";
   lightbox.setAttribute("aria-hidden", "true");
   lightbox.innerHTML = `
     <div class="modal__backdrop" data-close-modal></div>
     <div class="modal__dialog" role="dialog" aria-modal="true" aria-label="Uvećana slika">
-      <button class="modal__close" aria-label="Zatvori" data-close-modal>&times;</button>
-      <img alt="" />
-      <p class="muted" style="margin-top:8px"></p>
+      <button type="button" class="modal__close" aria-label="Zatvori" data-close-modal>&times;</button>
+      <div class="lightbox__stage">
+        <img alt="" />
+        <button type="button" class="btn lightbox__nav lightbox__nav--prev" aria-label="Prethodna slika" data-step="-1">&larr;</button>
+        <button type="button" class="btn lightbox__nav lightbox__nav--next" aria-label="Sledeća slika" data-step="1">&rarr;</button>
+      </div>
+      <div class="lightbox__footer">
+        <p class="muted"></p>
+        <span class="lightbox__counter" aria-live="polite"></span>
+      </div>
     </div>`;
   document.body.appendChild(lightbox);
 
+  const lightboxImg = lightbox.querySelector("img");
+  const lightboxCaption = lightbox.querySelector(".lightbox__footer p");
+  const lightboxCounter = lightbox.querySelector(".lightbox__counter");
+  if (galleryItems.length < 2) lightbox.classList.add("modal--single");
+
   let lastGalleryTrigger = null;
+  let currentIndex = 0;
+
+  function isLightboxOpen() {
+    return lightbox.classList.contains("is-open");
+  }
+
+  function showImage(index) {
+    const count = galleryItems.length;
+    currentIndex = (index + count) % count;
+    const item = galleryItems[currentIndex];
+    const img = item.querySelector("img");
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightboxCaption.textContent = item.querySelector("figcaption").textContent;
+    lightboxCounter.textContent = `${currentIndex + 1} / ${count}`;
+  }
 
   function openLightbox(item) {
-    const img = item.querySelector("img");
-    lightbox.querySelector("img").src = img.src;
-    lightbox.querySelector("img").alt = img.alt;
-    lightbox.querySelector("p").textContent = item.querySelector("figcaption").textContent;
     lastGalleryTrigger = item;
+    showImage(galleryItems.indexOf(item));
     openModal(lightbox);
     lightbox.querySelector(".modal__close").focus();
   }
@@ -223,6 +251,46 @@
   lightbox.querySelectorAll("[data-close-modal]").forEach((el) =>
     el.addEventListener("click", closeLightbox)
   );
+  lightbox.querySelectorAll("[data-step]").forEach((btn) =>
+    btn.addEventListener("click", () => showImage(currentIndex + Number(btn.dataset.step)))
+  );
+
+  document.addEventListener("keydown", (e) => {
+    if (!isLightboxOpen()) return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      showImage(currentIndex + (e.key === "ArrowRight" ? 1 : -1));
+    } else if (e.key === "Tab") {
+      const focusable = Array.from(lightbox.querySelectorAll("button")).filter((b) => b.offsetParent !== null);
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!lightbox.contains(document.activeElement)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  // Swipe: a mostly-horizontal drag of 40px+ moves one image.
+  const stage = lightbox.querySelector(".lightbox__stage");
+  let touchStart = null;
+  stage.addEventListener("touchstart", (e) => {
+    touchStart = e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+  }, { passive: true });
+  stage.addEventListener("touchend", (e) => {
+    if (!touchStart || galleryItems.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchStart.x;
+    const dy = e.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) showImage(currentIndex + (dx < 0 ? 1 : -1));
+  });
+
   // ---------- FAQ: only one answer open at a time ----------
   // name="faq" on the <details> does this natively; this covers older browsers.
   const faqItems = document.querySelectorAll(".faq__item");
@@ -242,7 +310,7 @@
     else closeNav();
   });
 
-  document.querySelectorAll(".gallery__item").forEach((item) => {
+  galleryItems.forEach((item) => {
     item.addEventListener("click", () => openLightbox(item));
     item.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {

@@ -351,6 +351,24 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
   font-size: 1.8rem; line-height: 1; cursor: pointer; color: var(--muted);
 }
 .modal--image .modal__dialog { width: min(720px, calc(100% - 32px)); padding: 16px; }
+.modal--image .modal__close {
+  z-index: 2; width: 40px; height: 40px; top: 24px; right: 24px; border-radius: 50%;
+  background: rgba(0, 0, 0, .6); color: var(--text);
+}
+.modal--image .modal__close:hover { color: var(--primary); }
+.lightbox__stage { position: relative; touch-action: pan-y; }
+.lightbox__stage img { width: 100%; max-height: calc(100vh - 150px); max-height: calc(100dvh - 150px); object-fit: contain; border-radius: 10px; }
+.lightbox__nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; padding: 0; display: grid; place-items: center; font-size: 1.3rem; line-height: 1;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .5);
+}
+.lightbox__nav:active { transform: translateY(-50%) scale(.96); }
+.lightbox__nav--prev { left: 10px; }
+.lightbox__nav--next { right: 10px; }
+.lightbox__footer { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 10px; }
+.lightbox__counter { flex: none; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--muted); }
+.modal--single .lightbox__nav, .modal--single .lightbox__counter { display: none; }
 
 /* ========== Mobile bottom bar [#2] ========== */
 .bottombar { display: none; }
@@ -400,6 +418,16 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
   .bottombar__item svg { width: 21px; height: 21px; }
 
   body { padding-bottom: calc(var(--bottombar-h) + env(safe-area-inset-bottom)); }
+}
+/* Gallery on phones: one swipeable row, the next card peeks in from the side */
+@media (max-width: 640px) {
+  .gallery {
+    display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    margin-inline: -16px; padding: 4px 16px 12px; scroll-padding-inline: 16px; scrollbar-width: none;
+  }
+  .gallery::-webkit-scrollbar { display: none; }
+  .gallery__item { flex: 0 0 80vw; scroll-snap-align: start; }
+  .gallery__item:hover { transform: none; }
 }
 @media (max-width: 480px) {
   .form__row { grid-template-columns: 1fr; }
