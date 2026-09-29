@@ -305,7 +305,7 @@
         <h2>{{faqSection.heading}}</h2>
         <div class="faq">
           {{#each faq}}
-          <details class="faq__item"{{#if isFirst}} open{{/if}}>
+          <details class="faq__item" name="faq"{{#if isFirst}} open{{/if}}>
             <summary>{{q}}</summary>
             <p>{{a}}</p>
           </details>

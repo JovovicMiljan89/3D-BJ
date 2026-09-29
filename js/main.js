@@ -5,6 +5,7 @@
 // 3) Copy-email button                          [#3]
 // 4) Inquiry form -> Web3Forms                  [#4]
 // 5) Gallery lightbox (keyboard + focus-return) [#13]
+// 6) FAQ accordion: one answer open at a time
 //
 // Everything the page needs (labels, options, messages, the Web3Forms access key)
 // is already rendered into the static HTML at build time — this file never fetches
@@ -222,6 +223,18 @@
   lightbox.querySelectorAll("[data-close-modal]").forEach((el) =>
     el.addEventListener("click", closeLightbox)
   );
+  // ---------- FAQ: only one answer open at a time ----------
+  // name="faq" on the <details> does this natively; this covers older browsers.
+  const faqItems = document.querySelectorAll(".faq__item");
+  faqItems.forEach((item) =>
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    })
+  );
+
   // ---------- Escape: close the lightbox if open, otherwise close the mobile nav ----------
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
