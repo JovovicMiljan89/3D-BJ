@@ -280,13 +280,14 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; margin-top: 28px; align-items: start; }
 .contact-channels { display: flex; flex-direction: column; gap: 12px; }
 .channel {
-  display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px;
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text);
   word-break: break-word;
 }
 .channel:hover { border-color: var(--highlight); text-decoration: none; background: var(--highlight-soft); color: var(--text); }
 .channel__icon { width: 22px; height: 22px; color: var(--highlight); flex: none; display: block; }
-.channel small { color: var(--muted); display: block; }
+.channel > span, .channel--email a > span { display: flex; flex-direction: column; gap: 2px; line-height: 1.25; font-weight: 600; }
+.channel small { color: var(--muted); font-size: .72rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; line-height: 1.2; }
 .channel--email { justify-content: space-between; gap: 8px; }
 .channel--email a { display: flex; align-items: center; gap: 12px; color: var(--text); flex: 1; min-width: 0; }
 .channel-meta { color: var(--muted); font-size: .9rem; padding-left: 4px; }

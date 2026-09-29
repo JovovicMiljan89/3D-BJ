@@ -522,8 +522,8 @@ test("Viber/WhatsApp show the formatted phone number when it's the same number, 
     c.contact.viber = "381659738702";
     c.contact.whatsapp = "381601234567";
   });
-  assert.ok(html.includes("<small>Viber</small><br />+381 65 973 8702</span>"));
-  assert.ok(html.includes("<small>WhatsApp</small><br />+381601234567</span>"));
+  assert.ok(html.includes("<small>Viber</small>+381 65 973 8702</span>"));
+  assert.ok(html.includes("<small>WhatsApp</small>+381601234567</span>"));
   assert.ok(html.includes('href="viber://chat?number=%2B381659738702"'), "link still uses the bare digits");
 });
 

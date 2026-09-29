@@ -325,26 +325,26 @@
             {{#if contact.phoneTel}}
             <a class="channel" href="tel:{{contact.phoneTel}}">
               <svg class="channel__icon" aria-hidden="true"><use href="#icon-call"></use></svg>
-              <span><small>{{contact.channelLabels.phone}}</small><br />{{contact.phoneDisplay}}</span>
+              <span><small>{{contact.channelLabels.phone}}</small>{{contact.phoneDisplay}}</span>
             </a>
             {{/if}}
             {{#if contact.viber}}
             <a class="channel" href="viber://chat?number=%2B{{contact.viber}}">
               <svg class="channel__icon" aria-hidden="true"><use href="#icon-viber"></use></svg>
-              <span><small>{{contact.channelLabels.viber}}</small><br />{{contact.viberDisplay}}</span>
+              <span><small>{{contact.channelLabels.viber}}</small>{{contact.viberDisplay}}</span>
             </a>
             {{/if}}
             {{#if contact.whatsapp}}
             <a class="channel" href="https://wa.me/{{contact.whatsapp}}">
               <svg class="channel__icon" aria-hidden="true"><use href="#icon-message"></use></svg>
-              <span><small>{{contact.channelLabels.whatsapp}}</small><br />{{contact.whatsappDisplay}}</span>
+              <span><small>{{contact.channelLabels.whatsapp}}</small>{{contact.whatsappDisplay}}</span>
             </a>
             {{/if}}
             {{#if contact.email}}
             <div class="channel channel--email">
               <a href="mailto:{{contact.email}}">
                 <svg class="channel__icon" aria-hidden="true"><use href="#icon-message"></use></svg>
-                <span><small>{{contact.channelLabels.email}}</small><br />{{contact.email}}</span>
+                <span><small>{{contact.channelLabels.email}}</small>{{contact.email}}</span>
               </a>
               <button type="button" class="copy-btn" data-copy-text="{{contact.email}}" data-copied-label="{{contact.channelLabels.copiedLabel}}" aria-label="Kopiraj email adresu">
                 <svg aria-hidden="true"><use href="#icon-copy"></use></svg>
@@ -354,7 +354,7 @@
             {{/if}}
             {{#if contact.instagram}}
             <a class="channel" href="{{contact.instagram}}" target="_blank" rel="noopener">
-              <span><small>{{contact.channelLabels.instagram}}</small><br />Instagram</span>
+              <span><small>{{contact.channelLabels.instagram}}</small>Instagram</span>
             </a>
             {{/if}}
             {{#if contact.city}}
