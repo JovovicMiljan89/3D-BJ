@@ -194,7 +194,10 @@
         <div class="gallery">
           {{#each gallery}}
           <figure class="gallery__item" tabindex="0" role="button" aria-label="Uvećaj: {{caption}}">
-            <img src="{{image}}" alt="{{alt}}" width="{{width}}" height="{{height}}" loading="lazy" />
+            <div class="gallery__media">
+              <img class="gallery__bg" src="{{image}}" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+              <img class="gallery__img" src="{{image}}" alt="{{alt}}" width="{{width}}" height="{{height}}" loading="lazy" decoding="async" />
+            </div>
             <figcaption>{{caption}}</figcaption>
           </figure>
           {{/each}}

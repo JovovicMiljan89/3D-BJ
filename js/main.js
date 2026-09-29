@@ -226,7 +226,7 @@
     const count = galleryItems.length;
     currentIndex = (index + count) % count;
     const item = galleryItems[currentIndex];
-    const img = item.querySelector("img");
+    const img = item.querySelector(".gallery__img");
     lightboxImg.src = img.currentSrc || img.src;
     lightboxImg.alt = img.alt;
     lightboxCaption.textContent = item.querySelector("figcaption").textContent;

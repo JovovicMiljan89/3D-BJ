@@ -324,7 +324,7 @@ for (const [width, height] of [[1280, 40], [375, 34]]) {
 
 test("gallery and equipment photos all load (no broken images)", async ({ page }) => {
   await page.goto("/");
-  const imgs = page.locator(".gallery__item img, .equip img");
+  const imgs = page.locator(".gallery__img, .equip img");
   await expect(imgs).toHaveCount(7);
   for (const img of await imgs.all()) {
     await img.scrollIntoViewIfNeeded();
@@ -344,6 +344,6 @@ test("crnobela: buttons are dark text on white, accent step numbers, photos gray
   expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(253, 106, 10)"]);
   expect(await page.locator(".equip img").first().evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".workshop-hero img").evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
-  expect(await page.locator(".gallery__item img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
+  expect(await page.locator(".gallery__img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
   await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg");
 });
