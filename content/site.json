@@ -143,6 +143,12 @@
       "alt": "Sova",
       "caption": "Sova",
       "placeholder": false
+    },
+    {
+      "image": "/assets/uploads/sova-sa-pismom-tamna-1.webp",
+      "alt": "Owl",
+      "caption": "Owl",
+      "placeholder": false
     }
   ],
   "howSection": {
@@ -217,7 +223,6 @@
     ]
   },
   "workshop": {
-    "enabled": false,
     "heading": "Naša radionica",
     "subheading": "Oprema i mogućnosti kojima raspolažemo.",
     "photo": "/assets/images/workshop.jpg",
