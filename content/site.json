@@ -139,10 +139,12 @@
       "placeholder": true
     },
     {
-      "image": "/assets/uploads/stock/galerija-spiralni-element.webp",
       "alt": "Beli dekorativni spiralni element u rukama",
       "caption": "Dekorativni spiralni element · PLA",
       "placeholder": true
+    },
+    {
+      "placeholder": false
     }
   ],
   "howSection": {
@@ -222,83 +224,6 @@
     "photo": "/assets/images/workshop.jpg",
     "photoAlt": "Radionica sa dva otvorena 3D štampača, jedinicama za višebojni filament i zatvorenim 3D štampačem",
     "photoCaption": "Štamparski kutak — 3 štampača rade jedan pored drugog.",
-    "equipment": [
-      {
-        "image": "/assets/uploads/stock/oprema-a2l.webp",
-        "imageAlt": "3D štampač tokom izrade predmeta",
-        "placeholder": true,
-        "tag": "FDM · Višebojno",
-        "title": "2× Bambu Lab A1 + AMS lite",
-        "specs": [
-          {
-            "label": "Zapremina štampe",
-            "value": "256 × 256 × 256 mm"
-          },
-          {
-            "label": "Boja po štampi",
-            "value": "do 4"
-          },
-          {
-            "label": "Materijali",
-            "value": "PLA, PETG, TPU"
-          },
-          {
-            "label": "Najbolje za",
-            "value": "Dekoracija, pokloni, natpisi, prototipovi"
-          }
-        ]
-      },
-      {
-        "image": "/assets/uploads/stock/oprema-corexy.webp",
-        "imageAlt": "Mehanizam 3D štampača izbliza",
-        "placeholder": true,
-        "tag": "FDM · Zatvoreni CoreXY",
-        "title": "Brzi zatvoreni štampač",
-        "specs": [
-          {
-            "label": "Zapremina štampe",
-            "value": "~256 × 256 × 256 mm"
-          },
-          {
-            "label": "Brzina",
-            "value": "do 500 mm/s"
-          },
-          {
-            "label": "Materijali",
-            "value": "ABS, ASA, PETG-CF, PLA"
-          },
-          {
-            "label": "Najbolje za",
-            "value": "Funkcionalni i spoljni delovi"
-          }
-        ]
-      },
-      {
-        "image": "/assets/uploads/stock/oprema-skener.webp",
-        "imageAlt": "3D skener na stativu",
-        "placeholder": true,
-        "tag": "3D skeniranje",
-        "title": "3D skener + rotaciona platforma",
-        "specs": [
-          {
-            "label": "Veličina predmeta",
-            "value": "~2 cm – 1 m"
-          },
-          {
-            "label": "Preciznost",
-            "value": "~0.05 mm"
-          },
-          {
-            "label": "Izlaz",
-            "value": "STL / OBJ / PLY"
-          },
-          {
-            "label": "Najbolje za",
-            "value": "Rezervni delovi, replike, reverzni inženjering"
-          }
-        ]
-      }
-    ],
     "sizeNote": "Staje li Vaš predmet? Do 25 × 25 × 25 cm iz jednog dela, veće delimo i spajamo.",
     "stats": [
       {
