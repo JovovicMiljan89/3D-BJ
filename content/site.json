@@ -217,6 +217,7 @@
     ]
   },
   "workshop": {
+    "enabled": false,
     "heading": "Naša radionica",
     "subheading": "Oprema i mogućnosti kojima raspolažemo.",
     "photo": "/assets/images/workshop.jpg",

@@ -244,6 +244,7 @@ function computeViewModel(content, assets) {
 
   data.business = { ...data.business, enabled: isSectionEnabled(data.business) };
   data.spareParts = { ...data.spareParts, enabled: isSectionEnabled(data.spareParts) };
+  data.workshop = { ...data.workshop, enabled: isSectionEnabled(data.workshop) };
 
   // --- Image dimensions, read from the actual files (see resolveDims above).
   // --- Brand: the name is edited once (brand.name) and appended to the
@@ -260,14 +261,16 @@ function computeViewModel(content, assets) {
   data.hero.imageWidth = heroDims.width;
   data.hero.imageHeight = heroDims.height;
 
-  const workshopDims = resolveDims(ROOT, data.workshop.photo);
-  data.workshop.photoWidth = workshopDims.width;
-  data.workshop.photoHeight = workshopDims.height;
+  if (data.workshop.enabled) {
+    const workshopDims = resolveDims(ROOT, data.workshop.photo);
+    data.workshop.photoWidth = workshopDims.width;
+    data.workshop.photoHeight = workshopDims.height;
 
-  data.workshop.equipment = data.workshop.equipment.map((item) => ({
-    ...item,
-    ...resolveDims(ROOT, item.image),
-  }));
+    data.workshop.equipment = data.workshop.equipment.map((item) => ({
+      ...item,
+      ...resolveDims(ROOT, item.image),
+    }));
+  }
 
   data.gallery = data.gallery.map((item) => ({
     ...item,
@@ -330,7 +333,8 @@ function copyHashed(relPath) {
 // uploads his own; list them after every build so they don't get forgotten.
 function listPlaceholders(content) {
   const found = [];
-  (content.workshop?.equipment || []).forEach((item, i) => {
+  const equipment = isSectionEnabled(content.workshop) ? content.workshop?.equipment || [] : [];
+  equipment.forEach((item, i) => {
     if (item.placeholder === true) found.push(`workshop.equipment[${i}] "${item.title}" — ${item.image}`);
   });
   (content.gallery || []).forEach((item, i) => {

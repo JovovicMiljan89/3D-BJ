@@ -108,7 +108,7 @@
         <a href="#usluge">{{nav.servicesLabel}}</a>
         <a href="#galerija">{{nav.galleryLabel}}</a>
         {{#if prices.visible}}<a href="#cene">{{nav.pricesLabel}}</a>{{/if}}
-        <a href="#radionica">{{nav.workshopLabel}}</a>
+        {{#if workshop.enabled}}<a href="#radionica">{{nav.workshopLabel}}</a>{{/if}}
         <a href="#pitanja">{{nav.faqLabel}}</a>
         <a href="#kontakt">{{nav.contactLabel}}</a>
       </nav>
@@ -261,9 +261,10 @@
     </section>
     {{/if}}
 
-    <!-- ===== Workshop / Equipment ===== -->
-    <section id="radionica" class="section">
+    <!-- ===== Workshop / Equipment (hideable via workshop.enabled; the maker card stays) ===== -->
+    <section{{#if workshop.enabled}} id="radionica"{{/if}} class="section">
       <div class="container">
+        {{#if workshop.enabled}}
         <h2>{{workshop.heading}}</h2>
         <p class="muted">{{workshop.subheading}}</p>
 
@@ -298,6 +299,7 @@
           <div><strong>{{value}}</strong><span>{{label}}</span></div>
           {{/each}}
         </div>
+        {{/if}}
 
         <!-- Meet the maker -->
         <div class="maker">

@@ -188,7 +188,16 @@ export function validateContent(content, projectRoot) {
     return { valid: false, errors: ["content/site.json must contain a JSON object."] };
   }
 
+  // Radionica can be switched off with workshop.enabled; while it's hidden its
+  // own fields aren't required (the maker card lives outside it).
+  const workshopEnabled = content.workshop?.enabled;
+  if (workshopEnabled !== undefined && typeof workshopEnabled !== "boolean") {
+    errors.push('"workshop.enabled" must be true or false.');
+  }
+  const skip = (fieldPath) => workshopEnabled === false && fieldPath.startsWith("workshop.");
+
   for (const fieldPath of REQUIRED_STRINGS) {
+    if (skip(fieldPath)) continue;
     const value = get(content, fieldPath);
     if (!isNonEmptyString(value)) {
       errors.push(`Missing or empty required text field: "${fieldPath}"`);
@@ -196,7 +205,7 @@ export function validateContent(content, projectRoot) {
   }
 
   for (const [arrayPath, itemFields] of Object.entries(REQUIRED_ARRAY_ITEM_FIELDS)) {
-    if (!itemFields) continue;
+    if (!itemFields || skip(arrayPath)) continue;
     const arr = get(content, arrayPath);
     if (!isArray(arr) || arr.length === 0) {
       errors.push(`Missing or empty required list: "${arrayPath}"`);
@@ -253,7 +262,7 @@ export function validateContent(content, projectRoot) {
 
   // Nested specs[] inside each workshop.equipment item.
   const equipment = get(content, "workshop.equipment");
-  if (isArray(equipment)) {
+  if (isArray(equipment) && !skip("workshop.equipment")) {
     equipment.forEach((item, i) => {
       const specs = item?.specs;
       if (!isArray(specs) || specs.length === 0) {

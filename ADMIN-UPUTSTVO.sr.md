@@ -20,11 +20,12 @@ Vidiš listu sekcija sajta — sve na srpskom: Brend, Meni, Naslovna sekcija, Us
 Za firme, Galerija, Kako radi, Rezervni delovi, Radionica, O vlasniku, Kontakt i
 forma za upit, Podnožje. Klikneš na sekciju, menjaš tekst u poljima, i sačuvaš.
 
-## Kako sakrijem sekciju „Za firme“ ili „Rezervni delovi“?
+## Kako sakrijem sekciju „Za firme“, „Rezervni delovi“ ili „Radionica“?
 
-Obe sekcije imaju polje **„Prikaži sekciju na sajtu“**. Isključi ga i sačuvaj —
+Sve tri sekcije imaju polje **„Prikaži sekciju na sajtu“**. Isključi ga i sačuvaj —
 sekcija nestaje sa sajta, a tekst ostaje sačuvan za kasnije. Uključi ga ponovo
-da se sekcija vrati.
+da se sekcija vrati. Kad je Radionica isključena, nestaje i njen link u meniju,
+a kartica „O vlasniku“ ostaje na sajtu.
 
 ## Kako menjam tekst?
 

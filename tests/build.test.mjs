@@ -64,6 +64,7 @@ test("an empty required list fails validation", () => {
 
 test("a nested list (equipment specs) is validated too", () => {
   const content = deepClone(loadRealContent());
+  content.workshop.enabled = true;
   content.workshop.equipment[0].specs = [];
 
   const { valid, errors } = validateContent(content, ROOT);
@@ -295,6 +296,28 @@ test("an enabled new section with a missing required field fails validation", ()
   assert.ok(errors.some((e) => e.includes("spareParts.items[1]")), errors.join("; "));
 });
 
+test("workshop.enabled: false hides Radionica and its nav link but keeps the maker card", () => {
+  const html = buildDistWith((content) => {
+    content.workshop = { enabled: false, heading: "", equipment: [], stats: [] };
+  });
+  assert.ok(!html.includes('id="radionica"'), "#radionica must not render when disabled");
+  assert.ok(!html.includes('href="#radionica"'), "nav link must not render when disabled");
+  assert.ok(!html.includes('class="equip"'));
+  assert.ok(html.includes('class="maker"'), "maker card stays");
+});
+
+test("workshop.enabled: true shows Radionica and requires its fields", () => {
+  const html = buildDistWith((content) => (content.workshop.enabled = true));
+  assert.ok(html.includes('id="radionica"'));
+  assert.ok(html.includes('href="#radionica"'));
+  const content = deepClone(loadRealContent());
+  content.workshop.enabled = true;
+  content.workshop.equipment = [];
+  const { valid, errors } = validateContent(content, ROOT);
+  assert.equal(valid, false);
+  assert.ok(errors.some((e) => e.includes("workshop.equipment")), errors.join("; "));
+});
+
 test("a non-boolean enabled flag fails validation", () => {
   const content = deepClone(loadRealContent());
   content.spareParts.enabled = "da";
@@ -484,6 +507,7 @@ test("placeholder: true is never shown on the page, and the build warns about ea
   const backup = fs.readFileSync(contentPath, "utf-8");
   try {
     const c = JSON.parse(backup);
+    c.workshop.enabled = true;
     c.gallery.forEach((g, i) => (g.placeholder = i === 0));
     c.workshop.equipment.forEach((e, i) => (e.placeholder = i === 1));
     fs.writeFileSync(contentPath, JSON.stringify(c, null, 2));

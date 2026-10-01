@@ -303,6 +303,11 @@ content:
         label: "Radionica"
         type: object
         fields:
+          - name: enabled
+            label: "Prikaži sekciju na sajtu"
+            type: boolean
+            default: true
+            description: "Isključi da se cela sekcija Radionica (i link u meniju) ne prikazuje. Kartica 'O vlasniku' ostaje. Sadržaj ispod se čuva."
           - { name: heading, label: "Naslov sekcije", type: string }
           - { name: subheading, label: "Podnaslov", type: string }
           - { name: photo, label: "Velika fotografija radionice", type: image }
