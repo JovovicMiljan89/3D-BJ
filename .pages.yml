@@ -157,7 +157,7 @@ content:
       - name: trust
         label: "Red poverenja (ispod dugmadi na naslovnoj sekciji)"
         type: string
-        list: true
+        list: { min: 1 }
         description: "Kratke rečenice sa kvačicom, npr. 'Odgovor u kratkom roku'."
 
       - name: servicesSection
@@ -170,9 +170,10 @@ content:
       - name: services
         label: "Usluge (kartice)"
         type: object
-        list: true
+        list: { min: 1 }
         fields:
           - name: icon
+            required: true
             label: "Ikonica"
             type: select
             options:
@@ -183,8 +184,8 @@ content:
                 - { name: layers, label: "Slojevi (višebojna štampa)" }
                 - { name: shield, label: "Štit (izdržljivi materijali)" }
                 - { name: scan, label: "Skener" }
-          - { name: title, label: "Naslov", type: string }
-          - { name: text, label: "Opis", type: text }
+          - { name: title, label: "Naslov", type: string, required: true }
+          - { name: text, label: "Opis", type: text, required: true }
 
       - name: business
         label: "Sekcija: Za firme"
@@ -221,11 +222,11 @@ content:
       - name: gallery
         label: "Galerija (radovi)"
         type: object
-        list: true
+        list: { min: 1 }
         fields:
-          - { name: image, label: "Slika", type: image }
-          - { name: alt, label: "Opis slike (alt tekst)", type: string }
-          - { name: caption, label: "Natpis ispod slike", type: string }
+          - { name: image, label: "Slika", type: image, required: true }
+          - { name: alt, label: "Opis slike (alt tekst)", type: string, required: true }
+          - { name: caption, label: "Natpis ispod slike", type: string, required: true }
           - name: placeholder
             label: "Privremena (stock) slika: zameniti pravom fotografijom"
             type: boolean
@@ -242,10 +243,10 @@ content:
       - name: steps
         label: "Koraci (Kako radi)"
         type: object
-        list: true
+        list: { min: 1 }
         fields:
-          - { name: title, label: "Naslov koraka", type: string }
-          - { name: text, label: "Opis koraka", type: text }
+          - { name: title, label: "Naslov koraka", type: string, required: true }
+          - { name: text, label: "Opis koraka", type: text, required: true }
 
       - name: spareParts
         label: "Sekcija: Rezervni delovi (3D skeniranje)"
@@ -285,10 +286,10 @@ content:
           - name: items
             label: "Cenovne kartice"
             type: object
-            list: true
+            list: { min: 1 }
             fields:
-              - { name: title, label: "Naziv paketa", type: string }
-              - { name: hint, label: "Kratak opis", type: text }
+              - { name: title, label: "Naziv paketa", type: string, required: true }
+              - { name: hint, label: "Kratak opis", type: text, required: true }
               - name: from
                 label: "Cena od (u dinarima)"
                 type: number
@@ -310,23 +311,23 @@ content:
           - name: equipment
             label: "Oprema (kartice)"
             type: object
-            list: true
+            list: { min: 1 }
             fields:
-              - { name: image, label: "Slika opreme", type: image }
-              - { name: imageAlt, label: "Opis slike (alt tekst)", type: string }
+              - { name: image, label: "Slika opreme", type: image, required: true }
+              - { name: imageAlt, label: "Opis slike (alt tekst)", type: string, required: true }
               - name: placeholder
                 label: "Privremena (stock) slika: zameniti pravom fotografijom"
                 type: boolean
                 description: "Uključeno dok je ovde stock fotografija. Kad otpremiš pravu fotografiju, isključi ovo polje."
-              - { name: tag, label: "Oznaka (npr. FDM · Multicolor)", type: string }
-              - { name: title, label: "Naziv opreme", type: string }
+              - { name: tag, label: "Oznaka (npr. FDM · Multicolor)", type: string, required: true }
+              - { name: title, label: "Naziv opreme", type: string, required: true }
               - name: specs
                 label: "Specifikacije"
                 type: object
-                list: true
+                list: { min: 1 }
                 fields:
-                  - { name: label, label: "Naziv karakteristike", type: string }
-                  - { name: value, label: "Vrednost", type: string }
+                  - { name: label, label: "Naziv karakteristike", type: string, required: true }
+                  - { name: value, label: "Vrednost", type: string, required: true }
           - name: sizeNote
             label: "Napomena o veličini (ispod kartica opreme)"
             type: string
@@ -334,10 +335,10 @@ content:
           - name: stats
             label: "Brojke (statistika)"
             type: object
-            list: true
+            list: { min: 1 }
             fields:
-              - { name: value, label: "Broj", type: string }
-              - { name: label, label: "Opis broja", type: string }
+              - { name: value, label: "Broj", type: string, required: true }
+              - { name: label, label: "Opis broja", type: string, required: true }
 
       - name: maker
         label: "O vlasniku"
@@ -361,10 +362,10 @@ content:
       - name: faq
         label: "Česta pitanja"
         type: object
-        list: true
+        list: { min: 1 }
         fields:
-          - { name: q, label: "Pitanje", type: string }
-          - { name: a, label: "Odgovor", type: text }
+          - { name: q, label: "Pitanje", type: string, required: true }
+          - { name: a, label: "Odgovor", type: text, required: true }
 
       - name: contact
         label: "Kontakt i forma za upit"
@@ -403,10 +404,10 @@ content:
           - name: hours
             label: "Radno vreme"
             type: object
-            list: true
+            list: { min: 1 }
             fields:
-              - { name: days, label: "Dani (npr. Pon–Pet)", type: string }
-              - { name: time, label: "Vreme (npr. 9–18h)", type: string }
+              - { name: days, label: "Dani (npr. Pon–Pet)", type: string, required: true }
+              - { name: time, label: "Vreme (npr. 9–18h)", type: string, required: true }
           - name: channelLabels
             label: "Labele za kontakt kanale"
             type: object
@@ -441,11 +442,11 @@ content:
           - name: materialOptions
             label: "Opcije: Materijal"
             type: string
-            list: true
+            list: { min: 1 }
           - name: serviceOptions
             label: "Opcije: Usluga"
             type: string
-            list: true
+            list: { min: 1 }
           - { name: submitLabel, label: "Tekst dugmeta: Pošalji", type: string }
           - name: privacyNote
             label: "Napomena o zaštiti podataka (ispod dugmeta)"
