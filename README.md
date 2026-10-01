@@ -1,113 +1,70 @@
-# 3D-BJ — Static Site with Pages CMS Admin
+# TrebaMi3D — 3D printing service website
 
-A single-page marketing site for **3D-BJ**, a 3D print / scan / model service run
-by **Bojan Jovović**. Same dark navy/black/red design as the original mockup —
-now content-driven and free to host.
+**Live:** [trebami3d.rs](https://trebami3d.rs)
 
-- **Public site**: fully static HTML, generated at build time. No server, no
-  database, no login on the public site.
-- **Admin editing**: Bojan edits everything (texts, prices/specs, services,
-  equipment, gallery photos) through [Pages CMS](https://pagescms.org), a
-  hosted admin UI that commits straight to this GitHub repo — no code, no
-  GitHub account needed for him.
-- **Hosting**: Cloudflare (Compute / Workers static assets) free plan — `*.workers.dev` in practice; Cloudflare routes new Git-connected static-site projects there instead of classic Pages now, though both work the same way.
-  Every commit (including Bojan's edits) triggers a rebuild; live in ~1–2 min.
-- **Contact form**: [Web3Forms](https://web3forms.com) free plan — submits
-  go straight to email, no backend to run.
+Production website for **TrebaMi3D**, a local 3D printing, scanning and modeling service in Crvenka, Serbia, run by Bojan Jovović. I designed, built, tested and deployed it, and set it up so the owner can edit all content himself, with no code and no developer in the loop.
 
-> Looking for the previous approach (Node/Express server with a session-login
-> admin panel and a JSON-file database)? That's the `master` branch — kept
-> intentionally separate so both approaches exist side by side.
-
-## How content becomes a page
+## How it works
 
 ```
-content/site.json  +  src/index.template.html
-        │                      │
-        └────────► scripts/build.mjs ────────► dist/  (deploy this)
-                    (validates, then
-                     renders + copies
-                     css/ js/ assets/)
+Pages CMS (owner edits content)
+        │  commits to this repo
+        ▼
+GitHub ──► Cloudflare build ──► scripts/build.mjs ──► dist/ ──► trebami3d.rs
 ```
 
-`content/site.json` is the **single source of truth** for every piece of
-user-facing text and every image path — edited either by hand or through
-Pages CMS (`.pages.yml` defines that admin UI). `src/index.template.html` is
-the page with `{{placeholders}}` and `{{#each}}` blocks. The build script
-HTML-escapes everything, checks that every referenced image actually exists,
-and writes a fully rendered `dist/index.html` — no client-side fetch of JSON,
-so the page is immediately indexable, has no layout flash, and works without
-JavaScript except for the contact modal, the contact form, and the gallery
-lightbox.
+- **Content** lives in a single file, `content/site.json`, edited through [Pages CMS](https://pagescms.org) (`.pages.yml`). Every save is a Git commit, which triggers a new deploy.
+- **Build:** a zero-dependency Node.js static site generator (`scripts/`) renders `src/index.template.html` with the content. It validates the content first and fails the build with a clear message if something is missing, such as a required field or an image file.
+- **Hosting:** Cloudflare Workers static assets (`wrangler.jsonc`), with a custom domain. A separate small Worker (`workers/www-redirect`) sends `www.trebami3d.rs` to the bare domain with a 301 redirect.
+- **Contact form:** submits to Web3Forms, so no backend server is needed.
 
-## Run it locally
+## Features
 
-No install needed for the site itself (zero npm dependencies):
+- Single-page site with services, gallery with a lightbox, equipment, pricing, FAQ and a contact form
+- Theme system: a black-and-white base with a selectable accent color (presets or a custom hex color) plus a legacy navy/red theme. The owner switches themes from the CMS.
+- SEO: Open Graph and Twitter tags, LocalBusiness JSON-LD, and a web manifest with favicons
+- Content-hashed CSS/JS file names with cache headers set accordingly
+- Optional sections and contact channels that disappear when left empty, so no placeholder text ever reaches production
+- Mobile-first layout with a bottom contact bar
+
+## Testing
+
+Testing is the core of this project. The site has two layers of tests.
+
+**Build and unit tests: 71 tests, using Node's built-in `node:test` with no dependencies.** They cover:
+- content validation and template rendering, including HTML escaping, nested loops and conditionals
+- the theme engine and SVG recoloring, including contrast warnings for dark custom colors
+- SEO output, and that every referenced image exists and stays under 300 KB
+- that no placeholder text or old brand names leak into the build
+- the `www` redirect Worker
+
+**End-to-end tests: Playwright, run against the real build served locally.** They cover:
+- no console errors and no horizontal scroll at a 375px viewport width
+- the mobile menu, the FAQ and keyboard access to the gallery lightbox
+- the contact form: validation, the success path, an HTTP 500 response, `success: false`, and the loading state, with Web3Forms mocked
+- that every CSS class used on the page actually exists in the stylesheet
+- theme variants, each built and served on its own port and checked side by side
+
+## Run locally
+
+Requires Node.js 20 or newer.
 
 ```bash
-npm run build   # content/site.json -> dist/
-npm run dev     # build, then serve dist/ at http://localhost:8080
-npm test        # node:test — content validation + template engine
-```
+npm run dev      # build + serve locally
+npm test         # build/unit tests
 
-Optional end-to-end smoke test (kept in its own `tests/e2e/` so the root
-project stays dependency-free):
-
-```bash
 cd tests/e2e
 npm install
-npx playwright install chromium   # first time only
-npm test
+npm run install-browsers
+npm test         # Playwright E2E
 ```
 
-## Project structure
+## Docs (Serbian)
 
-```
-print3d-mockup/
-├── content/
-│   └── site.json              # ALL editable content — edit this or use Pages CMS
-├── src/
-│   └── index.template.html    # page template ({{placeholders}}, {{#each}})
-├── scripts/
-│   ├── build.mjs               # validate -> render -> dist/ (+ dist/_headers)
-│   ├── serve.mjs                # zero-dependency static server for `npm run dev`
-│   └── lib/
-│       ├── validate.mjs         # required fields, types, image files exist
-│       ├── render.mjs            # tiny {{ }} / {{#each}} template engine
-│       └── escape.mjs             # HTML-escaping
-├── css/styles.css              # built as dist/css/styles.<hash>.css
-├── js/main.js                  # nav, CTAs/prefill, Web3Forms submit, lightbox (built as main.<hash>.js)
-├── assets/
-│   ├── logo/, images/           # original logo + seed illustrations
-│   └── uploads/                  # photos Bojan uploads via Pages CMS land here
-├── tests/
-│   ├── build.test.mjs           # node:test — validation + template engine
-│   └── e2e/                       # optional Playwright smoke test (own package.json)
-├── .pages.yml                   # Pages CMS admin UI config (Serbian labels)
-├── .node-version                 # pins the Cloudflare build image's Node version
-├── wrangler.jsonc                 # Cloudflare deploy config (Workers static assets)
-├── dist/                          # build output — deploy this (gitignored)
-├── DEPLOY.sr.md                  # (Serbian) deploy steps for Miljan
-├── ADMIN-UPUTSTVO.sr.md           # (Serbian) how-to guide for Bojan
-└── SPEC.md                        # functional spec & acceptance criteria
-```
+- [`ADMIN-UPUTSTVO.sr.md`](ADMIN-UPUTSTVO.sr.md): guide for the owner on editing content in Pages CMS
+- [`DEPLOY.sr.md`](DEPLOY.sr.md): deployment setup
+- [`SPEC.md`](SPEC.md): the original specification
 
-## Where to change things
+---
 
-| What | Where |
-|---|---|
-| Any text on the site | `content/site.json` (or Pages CMS — same file, friendlier UI) |
-| Product/gallery photos, equipment photos, logos | `content/site.json` image fields → files in `assets/` or `assets/uploads/` |
-| Page structure / HTML | `src/index.template.html` |
-| Color theme + accent | `theme` in `content/site.json` (CMS: "Izgled sajta"): `base` crnobela/teget, `accent` preset or `prilagodjena` + `customAccent`. Palettes: the `:root[data-theme=…]` token blocks in `css/styles.css`; accent presets: `scripts/data/akcenti.json`; the build injects the accent as an inline `<style>` and recolors the hero SVG (`scripts/lib/theme.mjs`). The brand files (`assets/logo/trebami3d/`) keep the logo's own orange `#fd6a0a` whatever the accent. `assets/logo/accents/`, `assets/og/accents/` and the `*-bw.*` files belong to the old 3D-BJ/3D-MDL logos and are no longer used. |
-| Colors / layout | `css/styles.css` (the build emits it under a content-hashed name, so the 1-year immutable cache never serves a stale copy) |
-| Contact form behavior | `js/main.js` |
-| What fields Bojan sees in the admin UI | `.pages.yml` |
-
-## Deploying
-
-See **`DEPLOY.sr.md`** (Serbian, step by step): GitHub repo, Cloudflare
-build settings, connecting Pages CMS and inviting Bojan, creating the
-Web3Forms key, optional custom domain.
-
-See **`ADMIN-UPUTSTVO.sr.md`** (Serbian) for the short guide handed to Bojan.
+Built by [Miljan Jovović](https://www.linkedin.com/in/miljan-jovovic-467702239), QA Automation Engineer.
