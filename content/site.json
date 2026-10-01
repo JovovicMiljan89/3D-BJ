@@ -6,9 +6,9 @@
   },
   "theme": {
     "base": "crnobela",
-    "accent": "narandzasta",
+    "accent": "crvena",
     "highlightActiveSection": true,
-    "grayscalePhotos": true
+    "grayscalePhotos": false
   },
   "seo": {
     "siteUrl": "https://trebami3d.rs/",
@@ -36,7 +36,7 @@
   },
   "nav": {
     "servicesLabel": "Usluge",
-    "galleryLabel": "Galerija Meni",
+    "galleryLabel": "Galerija",
     "pricesLabel": "Cene",
     "workshopLabel": "Radionica",
     "faqLabel": "Česta pitanja",
