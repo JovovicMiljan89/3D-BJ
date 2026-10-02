@@ -157,7 +157,7 @@ content:
       - name: trust
         label: "Red poverenja (ispod dugmadi na naslovnoj sekciji)"
         type: string
-        list: { min: 1 }
+        list: { min: 1, collapsible: true }
         description: "Kratke rečenice sa kvačicom, npr. 'Odgovor u kratkom roku'."
 
       - name: servicesSection
@@ -170,7 +170,7 @@ content:
       - name: services
         label: "Usluge (kartice)"
         type: object
-        list: { min: 1 }
+        list: { min: 1, collapsible: true }
         fields:
           - name: icon
             required: true
@@ -222,7 +222,7 @@ content:
       - name: gallery
         label: "Galerija (radovi)"
         type: object
-        list: { min: 1 }
+        list: { min: 1, collapsible: true }
         fields:
           - { name: image, label: "Slika", type: image, required: true }
           - { name: alt, label: "Opis slike (alt tekst)", type: string, required: true }
@@ -243,7 +243,7 @@ content:
       - name: steps
         label: "Koraci (Kako radi)"
         type: object
-        list: { min: 1 }
+        list: { min: 1, collapsible: true }
         fields:
           - { name: title, label: "Naslov koraka", type: string, required: true }
           - { name: text, label: "Opis koraka", type: text, required: true }
@@ -286,7 +286,7 @@ content:
           - name: items
             label: "Cenovne kartice"
             type: object
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
             fields:
               - { name: title, label: "Naziv paketa", type: string, required: true }
               - { name: hint, label: "Kratak opis", type: text, required: true }
@@ -316,7 +316,7 @@ content:
           - name: equipment
             label: "Oprema (kartice)"
             type: object
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
             fields:
               - { name: image, label: "Slika opreme", type: image, required: true }
               - { name: imageAlt, label: "Opis slike (alt tekst)", type: string, required: true }
@@ -329,7 +329,7 @@ content:
               - name: specs
                 label: "Specifikacije"
                 type: object
-                list: { min: 1 }
+                list: { min: 1, collapsible: true }
                 fields:
                   - { name: label, label: "Naziv karakteristike", type: string, required: true }
                   - { name: value, label: "Vrednost", type: string, required: true }
@@ -340,7 +340,7 @@ content:
           - name: stats
             label: "Brojke (statistika)"
             type: object
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
             fields:
               - { name: value, label: "Broj", type: string, required: true }
               - { name: label, label: "Opis broja", type: string, required: true }
@@ -367,7 +367,7 @@ content:
       - name: faq
         label: "Česta pitanja"
         type: object
-        list: { min: 1 }
+        list: { min: 1, collapsible: true }
         fields:
           - { name: q, label: "Pitanje", type: string, required: true }
           - { name: a, label: "Odgovor", type: text, required: true }
@@ -409,7 +409,7 @@ content:
           - name: hours
             label: "Radno vreme"
             type: object
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
             fields:
               - { name: days, label: "Dani (npr. Pon–Pet)", type: string, required: true }
               - { name: time, label: "Vreme (npr. 9–18h)", type: string, required: true }
@@ -447,11 +447,11 @@ content:
           - name: materialOptions
             label: "Opcije: Materijal"
             type: string
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
           - name: serviceOptions
             label: "Opcije: Usluga"
             type: string
-            list: { min: 1 }
+            list: { min: 1, collapsible: true }
           - { name: submitLabel, label: "Tekst dugmeta: Pošalji", type: string }
           - name: privacyNote
             label: "Napomena o zaštiti podataka (ispod dugmeta)"
