@@ -306,6 +306,26 @@ test("workshop.enabled: false hides Radionica and its nav link but keeps the mak
   assert.ok(html.includes('class="maker"'), "maker card stays");
 });
 
+test("workshop without enabled stays hidden (opt-in) and its fields aren't required", () => {
+  const html = buildDistWith((content) => {
+    content.workshop = { heading: "", equipment: [], stats: [] };
+    delete content.nav.workshopLabel;
+  });
+  assert.ok(!html.includes('id="radionica"'));
+  assert.ok(!html.includes('href="#radionica"'));
+  assert.ok(html.includes('class="maker"'), "maker card stays");
+});
+
+test("workshop.anchor renames the section id and its nav link", () => {
+  const html = buildDistWith((content) => {
+    content.workshop.enabled = true;
+    content.workshop.anchor = " Materijali i Boje ";
+  });
+  assert.ok(html.includes('id="materijali-i-boje"'));
+  assert.ok(html.includes('href="#materijali-i-boje"'));
+  assert.ok(!html.includes('id="radionica"'));
+});
+
 test("workshop.enabled: true shows Radionica and requires its fields", () => {
   const html = buildDistWith((content) => (content.workshop.enabled = true));
   assert.ok(html.includes('id="radionica"'));

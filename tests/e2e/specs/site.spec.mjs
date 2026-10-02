@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import fs from "node:fs";
 
 test("page loads with no console errors", async ({ page }) => {
   const consoleErrors = [];
@@ -322,17 +323,19 @@ for (const [width, height] of [[1280, 40], [375, 34]]) {
   });
 }
 
-test("gallery and equipment photos all load (no broken images)", async ({ page }) => {
+test("gallery photos all load (no broken images); hidden Radionica renders nothing", async ({ page }) => {
   await page.goto("/");
-  const imgs = page.locator(".gallery__img, .equip img");
-  await expect(imgs).toHaveCount(7);
+  await expect(page.locator("#radionica, .equip, .workshop-hero")).toHaveCount(0);
+  await expect(page.locator('#siteNav a[href="#radionica"]')).toHaveCount(0);
+  const imgs = page.locator(".gallery__img");
+  await expect(imgs).toHaveCount(JSON.parse(fs.readFileSync(new URL("../../../content/site.json", import.meta.url))).gallery.length);
   for (const img of await imgs.all()) {
     await img.scrollIntoViewIfNeeded();
     await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBe(true);
   }
 });
 
-test("crnobela: buttons are dark text on white, accent step numbers, photos grayscale, gallery in color", async ({ page }) => {
+test("crnobela: buttons are dark text on white, accent step numbers, gallery in color", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "crnobela");
   const btn = await page.locator(".hero .btn").first().evaluate((el) => {
@@ -342,8 +345,6 @@ test("crnobela: buttons are dark text on white, accent step numbers, photos gray
   expect(btn).toEqual(["rgb(10, 10, 10)", "rgb(255, 255, 255)"]);
   const stepNumber = await page.locator("#kako-radi .steps span").first().evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
   expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(253, 106, 10)"]);
-  expect(await page.locator(".equip img").first().evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
-  expect(await page.locator(".workshop-hero img").evaluate((el) => getComputedStyle(el).filter)).toContain("grayscale(1)");
   expect(await page.locator(".gallery__img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
   await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg");
 });

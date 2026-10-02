@@ -9,7 +9,7 @@ const variantUrl = (name) => `http://localhost:${VARIANT_PORTS[name]}/`;
 const SECTIONS = [
   ["hero", ".hero"],
   ["usluge", "#usluge"],
-  ["radionica", "#radionica"],
+  ["galerija", "#galerija"],
   ["kontakt", "#kontakt"],
   ["footer", ".footer"],
 ];
@@ -94,10 +94,10 @@ test("mobile menu: the active link gets the accent left border", async ({ page }
   await page.setViewportSize({ width: 375, height: 800 });
   await page.goto("/");
   await page.evaluate(() => {
-    const s = document.getElementById("radionica");
+    const s = document.getElementById("galerija");
     window.scrollTo({ top: s.offsetTop + 200, behavior: "instant" });
   });
-  const link = page.locator('#siteNav a[href="#radionica"]');
+  const link = page.locator('#siteNav a[href="#galerija"]');
   await expect(link).toHaveClass(/is-active/);
   await page.locator("#navToggle").click();
   const border = await link.evaluate((el) => [getComputedStyle(el).borderLeftWidth, getComputedStyle(el).borderLeftColor]);

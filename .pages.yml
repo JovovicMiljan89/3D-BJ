@@ -134,7 +134,7 @@ content:
           - { name: servicesLabel, label: "Labela: Usluge", type: string }
           - { name: galleryLabel, label: "Labela: Galerija", type: string }
           - { name: pricesLabel, label: "Labela: Cene", type: string }
-          - { name: workshopLabel, label: "Labela: Radionica", type: string }
+          - { name: workshopLabel, label: "Labela: Radionica (rezervna sekcija, vidi se samo kad je uključena)", type: string }
           - { name: faqLabel, label: "Labela: Česta pitanja", type: string }
           - { name: contactLabel, label: "Labela: Kontakt", type: string }
 
@@ -300,14 +300,18 @@ content:
                 description: "Uključi za jedan paket koji želiš da bude posebno istaknut."
 
       - name: workshop
-        label: "Radionica"
+        label: "Radionica (rezervna sekcija, trenutno skrivena)"
         type: object
         fields:
           - name: enabled
             label: "Prikaži sekciju na sajtu"
             type: boolean
-            default: true
-            description: "Isključi da se cela sekcija Radionica (i link u meniju) ne prikazuje. Kartica 'O vlasniku' ostaje. Sadržaj ispod se čuva."
+            default: false
+            description: "Sekcija je skrivena dok ovo ne uključiš. Može se preimenovati i iskoristiti za nešto drugo: promeni naslov, labelu u meniju (Meni → Labela: Radionica) i oznaku u adresi. Kartica 'O vlasniku' je uvek na sajtu."
+          - name: anchor
+            label: "Oznaka u adresi (npr. radionica)"
+            type: string
+            description: "Deo adrese za link iz menija, npr. trebami3d.rs/#radionica. Samo mala slova, brojevi i crtice. Prazno = radionica."
           - { name: heading, label: "Naslov sekcije", type: string }
           - { name: subheading, label: "Podnaslov", type: string }
           - { name: photo, label: "Velika fotografija radionice", type: image }

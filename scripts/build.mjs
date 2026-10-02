@@ -184,6 +184,18 @@ function isSectionEnabled(section) {
   return section?.enabled !== false;
 }
 
+function isWorkshopEnabled(workshop) {
+  return workshop?.enabled === true;
+}
+
+function workshopAnchor(workshop) {
+  const slug = String(workshop?.anchor || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "radionica";
+}
+
 // <meta name="theme-color"> follows the active theme's --bg, read straight
 // from the CSS so there's a single source of truth for the palette.
 function themeBackground(theme) {
@@ -244,7 +256,14 @@ function computeViewModel(content, assets) {
 
   data.business = { ...data.business, enabled: isSectionEnabled(data.business) };
   data.spareParts = { ...data.spareParts, enabled: isSectionEnabled(data.spareParts) };
-  data.workshop = { ...data.workshop, enabled: isSectionEnabled(data.workshop) };
+  // Radionica is opt-in (shown only when enabled is exactly true), so a CMS
+  // save that drops the key can't bring it back. anchor lets it be reused
+  // under another name; it's the #id and the nav link target.
+  data.workshop = {
+    ...data.workshop,
+    enabled: isWorkshopEnabled(data.workshop),
+    anchor: workshopAnchor(data.workshop),
+  };
 
   // --- Image dimensions, read from the actual files (see resolveDims above).
   // --- Brand: the name is edited once (brand.name) and appended to the
@@ -333,7 +352,7 @@ function copyHashed(relPath) {
 // uploads his own; list them after every build so they don't get forgotten.
 function listPlaceholders(content) {
   const found = [];
-  const equipment = isSectionEnabled(content.workshop) ? content.workshop?.equipment || [] : [];
+  const equipment = isWorkshopEnabled(content.workshop) ? content.workshop?.equipment || [] : [];
   equipment.forEach((item, i) => {
     if (item.placeholder === true) found.push(`workshop.equipment[${i}] "${item.title}" — ${item.image}`);
   });

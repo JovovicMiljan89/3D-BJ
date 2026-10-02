@@ -20,12 +20,28 @@ Vidiš listu sekcija sajta — sve na srpskom: Brend, Meni, Naslovna sekcija, Us
 Za firme, Galerija, Kako radi, Rezervni delovi, Radionica, O vlasniku, Kontakt i
 forma za upit, Podnožje. Klikneš na sekciju, menjaš tekst u poljima, i sačuvaš.
 
-## Kako sakrijem sekciju „Za firme“, „Rezervni delovi“ ili „Radionica“?
+## Kako sakrijem sekciju „Za firme“ ili „Rezervni delovi“?
 
-Sve tri sekcije imaju polje **„Prikaži sekciju na sajtu“**. Isključi ga i sačuvaj —
+Obe sekcije imaju polje **„Prikaži sekciju na sajtu“**. Isključi ga i sačuvaj —
 sekcija nestaje sa sajta, a tekst ostaje sačuvan za kasnije. Uključi ga ponovo
-da se sekcija vrati. Kad je Radionica isključena, nestaje i njen link u meniju,
-a kartica „O vlasniku“ ostaje na sajtu.
+da se sekcija vrati.
+
+## Radionica (rezervna sekcija)
+
+Sekcija **Radionica** je sklonjena sa sajta, ali je ostala u CMS-u da se može
+vratiti ili iskoristiti za nešto drugo. Skrivena je sve dok ne uključiš
+**„Prikaži sekciju na sajtu“**. Kad je skrivena, nema ni njenog linka u meniju,
+a kartica „O vlasniku“ uvek ostaje na sajtu.
+
+Da je iskoristiš kao neku drugu sekciju (npr. „Materijali“):
+
+1. U sekciji **Radionica** promeni naslov, podnaslov, fotografiju, kartice i
+   brojke.
+2. Upiši **„Oznaka u adresi“**, npr. `materijali` (link će biti
+   `trebami3d.rs/#materijali`).
+3. U sekciji **Meni** promeni **„Labela: Radionica“** u naziv koji treba da
+   piše u meniju.
+4. Uključi **„Prikaži sekciju na sajtu“** i sačuvaj.
 
 ## Kako menjam tekst?
 

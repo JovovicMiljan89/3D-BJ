@@ -263,7 +263,7 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
   background: linear-gradient(120deg, var(--surface) 0%, var(--navy) 100%);
   border: 1px solid var(--border); border-left: 4px solid var(--highlight);
 }
-/* Radionica hidden (workshop.enabled: false): the card opens its own section. */
+/* Radionica hidden (workshop.enabled not true): the card opens its own section. */
 .container > .maker:first-child { margin-top: 0; }
 .maker__avatar { width: 72px; height: 72px; padding: 8px; border-radius: 50%; background: var(--bg); border: 2px solid var(--highlight); object-fit: cover; }
 /* Logo fallback (no photo yet): show the whole printer, not a cropped middle. */

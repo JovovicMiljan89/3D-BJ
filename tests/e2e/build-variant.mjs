@@ -8,7 +8,11 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 
 export const VARIANTS = {
-  teget: (c) => (c.theme.base = "teget"),
+  // Radionica switched on here so its markup and photo filters stay covered.
+  teget: (c) => {
+    c.theme.base = "teget";
+    c.workshop.enabled = true;
+  },
   // A real price so the #cene section (and its menu link) exists.
   limeta: (c) => {
     c.theme.accent = "limeta";

@@ -188,13 +188,15 @@ export function validateContent(content, projectRoot) {
     return { valid: false, errors: ["content/site.json must contain a JSON object."] };
   }
 
-  // Radionica can be switched off with workshop.enabled; while it's hidden its
-  // own fields aren't required (the maker card lives outside it).
+  // Radionica is opt-in: it renders only with workshop.enabled === true. While
+  // it's hidden its own fields (and its nav label) aren't required; the maker
+  // card lives outside it.
   const workshopEnabled = content.workshop?.enabled;
   if (workshopEnabled !== undefined && typeof workshopEnabled !== "boolean") {
     errors.push('"workshop.enabled" must be true or false.');
   }
-  const skip = (fieldPath) => workshopEnabled === false && fieldPath.startsWith("workshop.");
+  const skip = (fieldPath) =>
+    workshopEnabled !== true && (fieldPath.startsWith("workshop.") || fieldPath === "nav.workshopLabel");
 
   for (const fieldPath of REQUIRED_STRINGS) {
     if (skip(fieldPath)) continue;
