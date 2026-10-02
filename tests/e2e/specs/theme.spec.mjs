@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { VARIANT_PORTS } from "../playwright.config.mjs";
+import { themeColor } from "./helpers.mjs";
 
 // Default build = content/site.json as shipped (crnobela + narandzasta).
 // Variants (teget / limeta / plava) come from build-variant.mjs.
@@ -101,7 +102,7 @@ test("mobile menu: the active link gets the accent left border", async ({ page }
   await expect(link).toHaveClass(/is-active/);
   await page.locator("#navToggle").click();
   const border = await link.evaluate((el) => [getComputedStyle(el).borderLeftWidth, getComputedStyle(el).borderLeftColor]);
-  expect(border).toEqual(["3px", "rgb(253, 106, 10)"]);
+  expect(border).toEqual(["3px", await themeColor(page, "--primary")]);
 });
 
 test("buttons are white with black text, and take the accent on hover", async ({ page }) => {
@@ -110,15 +111,13 @@ test("buttons are white with black text, and take the accent on hover", async ({
   const btn = page.locator(".hero .btn:not(.btn--ghost)");
   const colors = () => btn.evaluate((el) => [getComputedStyle(el).backgroundColor, getComputedStyle(el).color]);
   expect(await colors()).toEqual(["rgb(255, 255, 255)", "rgb(10, 10, 10)"]);
+  const accent = await themeColor(page, "--primary");
   await btn.hover();
-  expect(await colors()).toEqual(["rgb(253, 106, 10)", "rgb(10, 10, 10)"]);
+  expect(await colors()).toEqual([accent, await themeColor(page, "--on-accent")]);
 
   const ghost = page.locator(".hero .btn--ghost");
   await ghost.hover();
-  expect(await ghost.evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).borderTopColor])).toEqual([
-    "rgb(253, 106, 10)",
-    "rgb(253, 106, 10)",
-  ]);
+  expect(await ghost.evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).borderTopColor])).toEqual([accent, accent]);
 });
 
 test("teget build still renders the navy/red theme with the brand logo", async ({ page }) => {

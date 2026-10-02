@@ -506,12 +506,19 @@ test("every image referenced in site.json exists in dist/", () => {
   }
 });
 
-test("no gallery or equipment image is larger than 300 KB", () => {
+// Animated WebP (an "ANIM" chunk) is a short clip: lossy re-encoding only makes
+// it bigger, so it gets its own, higher limit.
+function isAnimatedWebp(buf) {
+  return buf.toString("ascii", 8, 12) === "WEBP" && buf.includes("ANIM");
+}
+
+test("no gallery or equipment photo is larger than 300 KB (animations 1 MB)", () => {
   const content = loadRealContent();
   const images = [...content.gallery.map((g) => g.image), ...content.workshop.equipment.map((e) => e.image)];
   for (const img of images) {
-    const size = fs.statSync(path.join(ROOT, img.replace(/^\//, ""))).size;
-    assert.ok(size <= 300 * 1024, `${img} is ${Math.round(size / 1024)} KB (max 300 KB)`);
+    const buf = fs.readFileSync(path.join(ROOT, img.replace(/^\//, "")));
+    const maxKb = isAnimatedWebp(buf) ? 1024 : 300;
+    assert.ok(buf.length <= maxKb * 1024, `${img} is ${Math.round(buf.length / 1024)} KB (max ${maxKb} KB)`);
   }
 });
 
@@ -621,7 +628,10 @@ test("/admin redirects to this repo's Pages CMS editor", () => {
 // ---------- Color themes ----------
 
 test("data-theme on <html> matches site.json, and theme-color follows the theme's --bg", () => {
-  const bw = buildDistWith((c) => (c.theme.base = "crnobela"));
+  const bw = buildDistWith((c) => {
+    c.theme.base = "crnobela";
+    c.theme.grayscalePhotos = true;
+  });
   assert.match(bw, /<html lang="sr" data-theme="crnobela" data-photos="grayscale">/);
   assert.ok(bw.includes('<meta name="theme-color" content="#0a0a0a" />'));
 

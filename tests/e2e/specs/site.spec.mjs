@@ -1,5 +1,9 @@
 import { test, expect } from "@playwright/test";
 import fs from "node:fs";
+import { themeColor } from "./helpers.mjs";
+
+// Texts are edited in the CMS, so content checks read content/site.json.
+const content = JSON.parse(fs.readFileSync(new URL("../../../content/site.json", import.meta.url)));
 
 test("page loads with no console errors", async ({ page }) => {
   const consoleErrors = [];
@@ -232,18 +236,19 @@ test("no leftover placeholder text (\"0 din\" or \"example\") anywhere on the pa
 
 test("hero headline and both new sections render", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("TrebaMi3D | 3D štampa, skeniranje i modelovanje po meri");
-  await expect(page.locator("h1")).toHaveText("Od ideje do gotovog predmeta.");
-  await expect(page.locator("h1 .accent")).toHaveText("gotovog predmeta.");
+  const { meta, brand, hero, business: biz, spareParts } = content;
+  await expect(page).toHaveTitle(`${meta.title} | ${brand.name}`);
+  await expect(page.locator("h1")).toHaveText(`${hero.headline} ${hero.headlineAccent}`);
+  await expect(page.locator("h1 .accent")).toHaveText(hero.headlineAccent);
 
   const business = page.locator("#za-firme");
-  await expect(business.locator(".tag")).toHaveText("Za firme");
-  await expect(business.locator("h2")).toHaveText("Vaš logo, u bojama Vašeg brenda.");
-  await expect(business.locator(".checklist li")).toHaveCount(3);
+  await expect(business.locator(".tag")).toHaveText(biz.tag);
+  await expect(business.locator("h2")).toHaveText(biz.heading);
+  await expect(business.locator(".band__aside .checklist li")).toHaveCount(biz.points.length);
 
   const spare = page.locator("#rezervni-delovi");
-  await expect(spare.locator("h2")).toHaveText("Skeniramo. Ispravljamo. Izrađujemo.");
-  await expect(spare.locator(".steps li")).toHaveCount(3);
+  await expect(spare.locator("h2")).toHaveText(spareParts.heading);
+  await expect(spare.locator(".steps li")).toHaveCount(spareParts.items.length);
 });
 
 test("the 'Za firme' CTA scrolls to the form without pre-selecting anything", async ({ page }) => {
@@ -328,7 +333,7 @@ test("gallery photos all load (no broken images); hidden Radionica renders nothi
   await expect(page.locator("#radionica, .equip, .workshop-hero")).toHaveCount(0);
   await expect(page.locator('#siteNav a[href="#radionica"]')).toHaveCount(0);
   const imgs = page.locator(".gallery__img");
-  await expect(imgs).toHaveCount(JSON.parse(fs.readFileSync(new URL("../../../content/site.json", import.meta.url))).gallery.length);
+  await expect(imgs).toHaveCount(content.gallery.length);
   for (const img of await imgs.all()) {
     await img.scrollIntoViewIfNeeded();
     await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0)).toBe(true);
@@ -344,7 +349,7 @@ test("crnobela: buttons are dark text on white, accent step numbers, gallery in 
   });
   expect(btn).toEqual(["rgb(10, 10, 10)", "rgb(255, 255, 255)"]);
   const stepNumber = await page.locator("#kako-radi .steps span").first().evaluate((el) => [getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
-  expect(stepNumber).toEqual(["rgb(10, 10, 10)", "rgb(253, 106, 10)"]);
+  expect(stepNumber).toEqual([await themeColor(page, "--on-accent"), await themeColor(page, "--primary")]);
   expect(await page.locator(".gallery__img").first().evaluate((el) => getComputedStyle(el).filter)).not.toContain("grayscale");
   await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute("href", "/assets/logo/trebami3d/trebami3d-app-ikona-tamna.svg");
 });
