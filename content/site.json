@@ -133,21 +133,9 @@
       "placeholder": false
     },
     {
-      "image": "/assets/uploads/stock/galerija-sitni-delovi.webp",
-      "alt": "Ploča štampača sa serijom sitnih odštampanih delova",
-      "caption": "Serija sitnih delova · PLA",
-      "placeholder": true
-    },
-    {
-      "image": "/assets/uploads/IMG-2f4e0a55e2b4abeace8be21673a311f2-V-1.jpg",
-      "alt": "Sova",
-      "caption": "Sova",
-      "placeholder": false
-    },
-    {
-      "image": "/assets/uploads/lampa-1.jpg",
+      "image": "/assets/uploads/lampa-2.jpg",
       "alt": "Dekorativna lampa",
-      "caption": "Owl",
+      "caption": "Lampa",
       "placeholder": false
     }
   ],
