@@ -143,6 +143,12 @@
       "alt": "Kućni broj ",
       "caption": "House plate",
       "placeholder": false
+    },
+    {
+      "image": "/assets/uploads/20261003_171900.jpg",
+      "alt": "Privesci ",
+      "caption": "Key chain",
+      "placeholder": false
     }
   ],
   "howSection": {
