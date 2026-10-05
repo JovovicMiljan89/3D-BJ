@@ -149,6 +149,12 @@
       "alt": "Privesci ",
       "caption": "Key chain",
       "placeholder": false
+    },
+    {
+      "image": "/assets/uploads/20261004_133015(1).gif",
+      "alt": "Pravoslavna figura",
+      "caption": "Put stradanja – Hristos sa krstom",
+      "placeholder": false
     }
   ],
   "howSection": {
@@ -227,7 +233,6 @@
     "anchor": "radionica",
     "heading": "Naša radionica",
     "subheading": "Oprema i mogućnosti kojima raspolažemo.",
-    "photo": "/assets/images/workshop.jpg",
     "photoAlt": "Radionica sa dva otvorena 3D štampača, jedinicama za višebojni filament i zatvorenim 3D štampačem",
     "photoCaption": "Štamparski kutak — 3 štampača rade jedan pored drugog.",
     "equipment": [
