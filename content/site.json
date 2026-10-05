@@ -44,9 +44,9 @@
   },
   "hero": {
     "eyebrow": "3D štampa · skeniranje · modelovanje · Crvenka",
-    "headline": "Od ideje do",
-    "headlineAccent": "gotovog predmeta.",
-    "lead": "Izrađujemo prototipove, rezervne delove, personalizovane poklone i dekorativne predmete, u jednoj ili više boja i u materijalima prilagođenim nameni. Radionica je u Crvenki, a šaljemo kurirskom službom na teritoriji cele Srbije.",
+    "headline": "3D štampa po meri — od jednog dela do male serije.",
+    "headlineAccent": "od jednog dela do male serije.",
+    "lead": "Pošaljite model, skicu ili fotografiju. Dobićete cenu, predlog materijala i rok izrade.",
     "primaryButton": "Zatražite ponudu",
     "secondaryButton": "Pogledajte radove",
     "image": "/assets/images/hero-printer.svg",
