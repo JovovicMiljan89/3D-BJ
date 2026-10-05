@@ -137,6 +137,12 @@
       "alt": "Dekorativna lampa",
       "caption": "Lampa",
       "placeholder": false
+    },
+    {
+      "image": "/assets/uploads/20261003_140342.jpg",
+      "alt": "Kućni broj ",
+      "caption": "House plate",
+      "placeholder": false
     }
   ],
   "howSection": {
